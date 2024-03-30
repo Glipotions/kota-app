@@ -1,0 +1,118 @@
+name: cp_base_project
+
+packages:
+  - apps/*
+  - resources/*
+
+sdkPath: .fvm/flutter_sdk
+
+command:
+  bootstrap:
+    runPubGetInParallel: false
+    usePubspecOverrides: true
+
+scripts:
+
+  # [Bootstrap] -----------------------------------------------------------------------------------------------------------
+  cab:
+    run: melos clean;
+         melos bs 
+    description: Clean and Bootstrap all packages.
+
+  
+  # [Format] -----------------------------------------------------------------------------------------------------------
+  format:
+    run: melos run format:dart --no-select && melos run format:flutter --no-select
+    description: Run Dart/Flutter formats in all packages.
+
+  format:dart:
+    run: melos exec --concurrency=1 -- "dart format --output=none --set-exit-if-changed ."
+    description: Run Dart format in all dart packages.
+    
+
+  format:flutter:
+    run: melos exec --concurrency=1 -- "dart format --output=none --set-exit-if-changed ."
+    description: Run Flutter format in all flutter packages.
+
+  fix:dart:
+    run: melos exec --concurrency=1 -- "dart fix --apply"
+    description: Run Flutter format in all flutter packages.
+
+# [BUILD] ---------------------------------------------------------------------------------------------------------------
+  build:all:
+    run: |
+      melos run build:bb_example_app_build_apk_dev && \
+      melos run build:bb_example_app_build_apk_prod && \
+      melos run build:bb_example_app_build_apb_dev && \
+      melos run build:bb_example_app_build_apb_prod
+    description: Build apk and appbundle for all apps and for all flavors..  
+
+  build:bb_example_app_build_apk_dev:
+    run: melos exec -- flutter build apk --release --flavor development lib/main_development.dart --no-tree-shake-icons
+    packageFilters:
+      scope: 'bb_example_app'
+
+  build:bb_example_app_build_apk_prod:
+    run: melos exec -- flutter build apk --release --flavor product lib/main_production.dart --no-tree-shake-icons
+    packageFilters:
+      scope: '*bb_example_app*'
+
+  build:bb_example_app_build_apb_dev:
+    run: melos exec -- flutter build appbundle --release --flavor development lib/main_development.dart --no-tree-shake-icons
+    packageFilters:
+      scope: 'bb_example_app'
+
+  build:bb_example_app_build_apb_prod:
+    run: melos exec -- flutter build appbundle --release --flavor product lib/main_production.dart --no-tree-shake-icons
+    packageFilters:
+      scope: '*bb_example_app*'
+
+  run:bb_example_admin_panel_run_apb_prod:
+    run: melos exec -- flutter run lib/main_production.dart -d chrome
+    packageFilters:
+      scope: '*bb_example_admin_panel*'
+
+  run:bb_example_admin_panel_run_apb_dev:
+    run: melos exec -- flutter run lib/main_development.dart -d chrome
+    packageFilters:
+      scope: '*bb_example_admin_panel*'
+
+  # [Analyze] ----------------------------------------------------------------------------------------------------------
+
+  analyze:
+    run: melos run analyze:dart --no-select && melos run analyze:flutter --no-select
+    description: Run Dart/Flutter analyzes in all packages.
+
+  analyze:dart:
+    run: melos exec --concurrency=1 -- "dart analyze ."
+    description: Run Dart analyze in all dart packages.
+
+  analyze:flutter:
+    run: melos exec --concurrency=1 -- "flutter analyze ."
+    description: Run Flutter analyze in all flutter packages.
+
+
+  # [Flavor] -----------------------------------------------------------------------------------------------------------
+
+  dev:
+    run: melos run qa:development --no-select
+    description: Run Dev environment.
+
+  prod:
+    run: melos run qa:product --no-select
+    description: Run Product environment.
+
+  qa:production:
+    run: melos exec -- "flutter run --flavor product lib/main_development.dart"
+    description: Run with Production flavor in Production environment.
+    packageFilters:
+      scope: "bb_example_app"
+
+  qa:development:
+    run: melos exec -- "flutter run --flavor development lib/main_development.dart"
+    description: Run with QA flavor in Dev environment.
+    packageFilters:
+      scope: "bb_example_app"
+
+  # [Test] -------------------------------------------------------------------------------------------------------------
+

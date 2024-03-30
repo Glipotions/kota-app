@@ -1,0 +1,21 @@
+name: api
+description: "API Module"
+version: 0.0.1
+
+
+environment:
+  sdk: '>=3.2.2 <4.0.0'
+  flutter: ">=1.17.0"
+
+dependencies:
+  dio: ^5.4.0
+  flutter:
+    sdk: flutter
+  universal_io: ^2.2.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  very_good_analysis: ^5.1.0
+  
+flutter:

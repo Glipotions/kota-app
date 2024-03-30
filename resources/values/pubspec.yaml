@@ -1,0 +1,45 @@
+name: values
+description: "A new Flutter package project."
+version: 0.0.1
+publish_to: none
+
+environment:
+  sdk: '>=3.2.2 <4.0.0'
+  flutter: ">=1.17.0"
+
+dependencies:
+  common:
+    path: ../../resources/common
+  flutter:
+    sdk: flutter
+  flutter_svg: ^2.0.9
+  intl: any
+  url_launcher: ^6.2.1
+  widgets:
+    path: ../../resources/widgets
+  
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  very_good_analysis: ^5.1.0
+
+
+flutter:
+  assets:
+    - assets/images/
+    - assets/icons/
+
+  fonts:
+    - family: GreycliffCF
+      fonts:
+        - asset: assets/fonts/GreycliffCF-Light.ttf
+          weight: 300
+        - asset: assets/fonts/GreycliffCF-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/GreycliffCF-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/GreycliffCF-DemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/GreycliffCF-Bold.ttf
+          weight: 700

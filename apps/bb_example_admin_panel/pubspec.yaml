@@ -1,0 +1,70 @@
+name: bb_example_admin_panel
+description: A new Flutter project.
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.1.5 <4.0.0'
+
+dependencies:
+  api:
+    path: ../../resources/api
+  common:
+    path: ../../resources/common
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  get: ^4.6.6
+  go_router: ^13.0.1
+  logger: ^2.0.2+1
+  responsive_framework: ^1.1.1
+  values:
+    path: ../../resources/values
+  widgets:
+    path: ../../resources/widgets
+  
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  very_good_analysis: ^5.1.0
+
+flutter:
+  uses-material-design: true
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

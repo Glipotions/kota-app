@@ -1,0 +1,102 @@
+part of '../cart.dart';
+
+class _ProductCard extends StatelessWidget {
+  const _ProductCard({required this.item, this.onTapRemove, this.onTap});
+  final VoidCallback? onTap;
+  final VoidCallback? onTapRemove;
+  final CartProductModel item;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Card(
+        child: IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(
+                flex: 2,
+                child: BorderedImage(
+                  radius: BorderRadius.only(
+                    bottomLeft: Radius.circular(ModuleRadius.m.value),
+                    topLeft: Radius.circular(ModuleRadius.m.value),
+                  ),
+                  aspectRatio: 164 / 80,
+                  imageUrl: 'https://thispersondoesnotexist.com/',
+                ),
+              ),
+              SizedBox(
+                width: ModulePadding.xxs.value,
+              ),
+              Expanded(
+                flex: 3,
+                child: Padding(
+                  padding: EdgeInsets.all(ModulePadding.s.value)
+                      .copyWith(left: ModulePadding.xs.value),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '${item.code} - ${item.name} ',
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: context.bodyLarge,
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            '${item.quantity}x',
+                            style: context.titleSmall,
+                          ),
+                          Text(
+                            item.price.formatPrice(),
+                            style: context.titleSmall,
+                            textAlign: TextAlign.end,
+                          ),
+                          const Spacer(),
+                          Text(
+                            '=',
+                            style: context.titleSmall,
+                            textAlign: TextAlign.start,
+                          ),
+                          Text(
+                            (item.price * item.quantity).formatPrice(),
+                            style: context.titleSmall,
+                            textAlign: TextAlign.end,
+                          ),
+                        ],
+                      ),
+                      // Row(
+                      //   children: [
+                      //     Text(
+                      //       'Toplam:',
+                      //       style: context.titleMedium,
+                      //       textAlign: TextAlign.start,
+                      //     ),
+                      //     const Spacer(),
+                      //     Text(
+                      //       (item.price * item.quantity).formatPrice(),
+                      //       style: context.titleMedium,
+                      //       textAlign: TextAlign.end,
+                      //     ),
+                      //   ],
+                      // ),
+                      SizedBox(
+                        height: ModulePadding.xxxs.value,
+                      ),
+                      ClickableText(
+                        text: 'Ürünü Kaldır',
+                        onTap: onTapRemove,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

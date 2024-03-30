@@ -1,0 +1,9 @@
+name: cp_advanced_flutter_boilerplate
+
+environment:
+  sdk: '>=2.18.0 <4.0.0'
+
+dev_dependencies:
+  melos: ^4.0.0
+  very_good_analysis: ^5.1.0
+

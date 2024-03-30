@@ -1,0 +1,15 @@
+{
+    "dart.flutterSdkPath": ".fvm/flutter_sdk",
+    "outputPanel.maxOutput": 5000,
+    // Remove .fvm files from search
+    "search.exclude": {
+        "**/.fvm": true,
+        "**/apps/bb_example_admin_panel": true
+    },
+    // Remove from file watching
+    "files.watcherExclude": {
+        "**/.fvm": true
+    },
+    "editor.accessibilityPageSize": 15,
+    "editor.fontSize": 15
+}

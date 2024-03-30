@@ -1,0 +1,23 @@
+name: widgets
+description: "A new Flutter package project."
+version: 0.0.1
+
+
+environment:
+  sdk: '>=3.2.2 <4.0.0'
+  flutter: ">=1.17.0"
+
+dependencies:
+  cached_network_image: ^3.3.0
+  flutter:
+    sdk: flutter
+  overlay_kit: ^1.0.8
+  responsive_framework: ^1.1.1
+  
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  very_good_analysis: ^5.1.0
+
+flutter:

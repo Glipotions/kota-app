@@ -1,0 +1,30 @@
+name: common
+description: "Common Module"
+version: 0.0.1
+
+environment:
+  sdk: '>=3.2.2 <4.0.0'
+  flutter: ">=1.17.0"
+
+dependencies:
+  device_info_plus: ^9.1.1
+  firebase_core: ^2.24.0
+  firebase_dynamic_links: ^5.4.6
+  firebase_messaging: ^14.7.6
+  flutter:
+    sdk: flutter
+  go_router: ^13.0.1
+  local_auth: ^2.1.7
+  package_info_plus: ^5.0.1
+  rxdart: ^0.27.7
+  shared_preferences: ^2.2.2
+  socket_io_client: ^2.0.3+1
+  universal_io: ^2.2.2
+  
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  very_good_analysis: ^5.1.0
+
+flutter:

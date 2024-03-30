@@ -1,0 +1,71 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "dev bb_example_app",
+            "request": "launch",
+            "type": "dart",
+            "program": "apps/bb_example_app/lib/main_development.dart",
+            "args": [
+                "--flavor", 
+               "development"
+            ]
+        },
+        {
+            "name": "prod bb_example_app",
+            "request": "launch",
+            "type": "dart",
+            "program": "apps/bb_example_app/lib/main_production.dart",
+            "args": [
+                "--flavor",
+               "product",
+            ]
+        },
+        {
+            "name": "dev preview bb_example_app",
+            "request": "launch",
+            "type": "dart",
+            "program": "apps/bb_example_app/lib/development/main_preview_development.dart",
+            "args": [
+                "--flavor", 
+               "development"
+            ]
+        },
+        {
+            "name": "prod preview bb_example_app",
+            "request": "launch",
+            "type": "dart",
+            "program": "apps/bb_example_app/lib/development/main_preview_production.dart",
+            "args": [
+                "--flavor", 
+               "product"
+            ]
+        },
+        {
+            "name": "prod bb_example_admin_panel",
+            "request": "launch",
+            "type": "dart",
+            "program": "apps/bb_example_admin_panel/lib/main_production.dart",
+            "args": [
+                "-d",
+                "chrome",
+                "--web-renderer",
+                "canvaskit",
+                "--web-port=8081"
+            ]
+        },
+        {
+            "name": "dev bb_example_admin_panel",
+            "request": "launch",
+            "type": "dart",
+            "program": "apps/bb_example_admin_panel/lib/main_development.dart",
+            "args": [
+                "-d",
+                "chrome",
+                "--web-renderer",
+                "canvaskit",
+                "--web-port=8081"
+            ]
+        },
+    ]
+}
