@@ -12,7 +12,7 @@ void main() {
     EnvironmentConfigModel(
       appName: 'Dev App',
       environment: AppEnvironment.development,
-      apiBaseUrl: 'glipotions.azurewebsites.net',
+      apiBaseUrl: '78.186.131.20:8200',
       socketUrl: 'Socket Url',
     ),
   );

@@ -9,7 +9,7 @@ class ImageAssets {
 
 
   AssetGeneralImage get exampleImage =>
-      const AssetGeneralImage('${baseImagePath}example.webp');
+      const AssetGeneralImage('${baseImagePath}kota-main-logo.webp');
 
   /// List of all assets
   List<AssetGeneralImage> get values => [exampleImage];

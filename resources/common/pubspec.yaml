@@ -7,7 +7,7 @@ environment:
   flutter: ">=1.17.0"
 
 dependencies:
-  device_info_plus: ^9.1.1
+  device_info_plus: ^9.1.2
   firebase_core: ^2.24.0
   firebase_dynamic_links: ^5.4.6
   firebase_messaging: ^14.7.6
