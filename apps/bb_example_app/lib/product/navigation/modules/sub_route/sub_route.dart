@@ -11,22 +11,22 @@ class SubRoute {
   /// Initial Router
   static final route = [
     GoRoute(
-    name: SubRouteEnums.orderHistory.name,
-    path: SubRouteEnums.orderHistory.path,
-    builder: (context, state) => const OrderHistoryScreen(),
-  ),
-    GoRoute(
-    name: SubRouteEnums.transactionHistory.name,
-    path: SubRouteEnums.transactionHistory.path,
-    builder: (context, state) => const TransactionHistoryScreen(),
-  ),
-    GoRoute(
-    name: SubRouteEnums.productDetail.name,
-    path: '${SubRouteEnums.productDetail.path}:id',
-    builder: (context, state) => ProductDetailScreen(
-      id: state.pathParameters.values.first,
+      name: SubRouteEnums.orderHistory.name,
+      path: SubRouteEnums.orderHistory.path,
+      builder: (context, state) => const OrderHistoryScreen(),
     ),
-
-  ),
+    GoRoute(
+      name: SubRouteEnums.transactionHistory.name,
+      path: SubRouteEnums.transactionHistory.path,
+      builder: (context, state) => const TransactionHistoryScreen(),
+    ),
+    GoRoute(
+      name: SubRouteEnums.productDetail.name,
+      path: '${SubRouteEnums.productDetail.path}/:id/:productCode',
+      builder: (context, state) => ProductDetailScreen(
+        id: state.pathParameters['id']!,
+        productCode: state.pathParameters['productCode']!,
+      ),
+    ),
   ];
 }

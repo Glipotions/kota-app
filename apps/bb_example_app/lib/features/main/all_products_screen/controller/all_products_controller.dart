@@ -97,7 +97,7 @@ class AllProductsController extends BaseControllerInterface {
     if (productGroupItem != null) {
       await context.pushNamed(
         SubRouteEnums.productDetail.name,
-        pathParameters: {'id': productGroupItem!.code!},
+        pathParameters: {'id': productGroupItem!.code!, 'productCode': productGroupItem!.name!},
       );
     }
   }
@@ -113,8 +113,9 @@ class AllProductsController extends BaseControllerInterface {
     }
   }
 
-  void onTapProductDetail(String code) => context.pushNamed(
+  void onTapProductDetail(String code, String? productCode) =>
+      context.pushNamed(
         SubRouteEnums.productDetail.name,
-        pathParameters: {'id': code},
+        pathParameters: {'id': code, 'productCode': productCode!},
       );
 }

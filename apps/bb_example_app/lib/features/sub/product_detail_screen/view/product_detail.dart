@@ -3,6 +3,7 @@
 import 'package:bb_example_app/features/main/all_products_screen/view/components/add_to_cart_text.dart';
 import 'package:bb_example_app/features/sub/product_detail_screen/controller/product_detail_controller.dart';
 import 'package:bb_example_app/product/base/base_view.dart';
+import 'package:bb_example_app/product/consts/general.dart';
 import 'package:bb_example_app/product/managers/cart_controller.dart';
 import 'package:bb_example_app/product/utility/enums/module_padding_enums.dart';
 import 'package:bb_example_app/product/widgets/button/clickable_text.dart';
@@ -96,10 +97,12 @@ class ProductDetail extends StatelessWidget {
                           cartCont.onTapRemoveProduct(
                             CartProductModel(
                               id: controller.selectedProductVariant!.productId!,
-                              code: controller.productCode,
-                              name: controller.productCode,
+                              code: controller.code,
+                              name: controller.code,
                               price: controller.selectedUnitPrice!.value,
                               quantity: int.parse(controller.cQty.text),
+                              pictureUrl: controller.product.pictureUrl ??
+                                  baseLogoUrl,
                             ),
                           );
                         },
@@ -130,11 +133,15 @@ class ProductDetail extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const BorderedImage(
-              radius: BorderRadius.zero,
-              aspectRatio: 343 / 300,
-              imageUrl: 'https://kota-app.b-cdn.net/1000-1.jpg',
-              // imageUrl: 'https://thispersondoesnotexist.com/',
+            Obx(
+              () => BorderedImage(
+                radius: BorderRadius.zero,
+                aspectRatio: 343 / 300,
+                imageUrl: controller.product.pictureUrl ??
+                    baseLogoUrl,
+                // imageUrl: 'https://kota-app.b-cdn.net/1000-1.jpg',
+                // imageUrl: 'https://thispersondoesnotexist.com/',
+              ),
             ),
             SizedBox(height: ModulePadding.l.value),
             Padding(

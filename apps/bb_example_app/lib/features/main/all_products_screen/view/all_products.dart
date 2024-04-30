@@ -54,7 +54,10 @@ class AllProducts extends StatelessWidget {
                     itemBuilder: (context, index) {
                       final item = controller.products[index];
                       return ProductCard(
-                        onTap: () => controller.onTapProductDetail(item.code!),
+                        onTap: () => controller.onTapProductDetail(
+                          item.code!,
+                          item.name,
+                        ),
                         item: item,
                       );
                     },
@@ -152,7 +155,10 @@ class CustomSearchDelegate extends SearchDelegate<ProductGroupItem?> {
               itemBuilder: (context, index) {
                 final item = filteredProducts[index];
                 return ProductCard(
-                  onTap: () => controller.onTapProductDetail(item.code!),
+                  onTap: () => controller.onTapProductDetail(
+                    item.code!,
+                    item.name,
+                  ),
                   item: item,
                 );
               },

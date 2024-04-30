@@ -16,10 +16,11 @@ class ProductCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const AspectRatio(
+              AspectRatio(
                 aspectRatio: 311 / 140,
                 child: BorderedImage(
-                  imageUrl: 'https://kota-app.b-cdn.net/1000-1.jpg',
+                  aspectRatio: 4,
+                  imageUrl: item.pictureUrl!=''?item.pictureUrl!:'https://kota-app.b-cdn.net/logo.jpg',
                 ),
                 // imageUrl: 'https://thispersondoesnotexist.com/'),
               ),

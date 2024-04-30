@@ -87,6 +87,7 @@ class CartProductModel {
     required this.price,
     required this.quantity,
     this.name,
+    this.pictureUrl,
   });
 
   int id;
@@ -94,6 +95,7 @@ class CartProductModel {
   String? name;
   double price;
   int quantity;
+  String? pictureUrl;
 
   CartProductModel copyWith({
     int? id,
@@ -101,6 +103,7 @@ class CartProductModel {
     String? name,
     double? price,
     int? quantity,
+    String? pictureUrl,
   }) {
     return CartProductModel(
       id: id ?? this.id,
@@ -108,6 +111,7 @@ class CartProductModel {
       name: name ?? this.name,
       price: price ?? this.price,
       quantity: quantity ?? this.quantity,
+      pictureUrl: pictureUrl??this.pictureUrl,
     );
   }
 }

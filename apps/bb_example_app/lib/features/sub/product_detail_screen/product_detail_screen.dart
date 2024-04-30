@@ -6,17 +6,19 @@ import 'package:get/get.dart';
 class ProductDetailScreen extends StatelessWidget {
   const ProductDetailScreen({
     required this.id,
+    required this.productCode,
     super.key,
   });
 
   final String id;
+  final String productCode;
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder(
       tag: UniqueKey().toString(),
-      init: ProductDetailController(productCode: id),
-      builder: (controller) => ProductDetail(controller:controller),
+      init: ProductDetailController(code: id, productCode: productCode),
+      builder: (controller) => ProductDetail(controller: controller),
     );
   }
 }

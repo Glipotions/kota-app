@@ -23,7 +23,7 @@ class _ProductCard extends StatelessWidget {
                     topLeft: Radius.circular(ModuleRadius.m.value),
                   ),
                   aspectRatio: 164 / 80,
-                  imageUrl: 'https://thispersondoesnotexist.com/',
+                  imageUrl: item.pictureUrl!,
                 ),
               ),
               SizedBox(

@@ -9,10 +9,12 @@ class ProductVariantResponseModel
     this.productVariants,
     this.sizes,
     this.colors,
+    this.pictureUrl,
   });
   List<ProductVariant>? productVariants;
   List<String>? sizes;
   List<String>? colors;
+  String? pictureUrl;
 
   @override
   ProductVariantResponseModel fromJson(Map<String, dynamic> json) =>
@@ -28,6 +30,7 @@ class ProductVariantResponseModel
         colors: json['colors'] == null
             ? []
             : List<String>.from(json['colors']!.map((x) => x)),
+            pictureUrl: json['pictureUrl'],
       );
 
   @override
@@ -41,6 +44,7 @@ class ProductVariantResponseModel
             : List<dynamic>.from(
                 colors!.map((x) => x),
               ),
+        'pictureUrl':pictureUrl,
       };
 }
 
