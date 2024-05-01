@@ -1,6 +1,6 @@
-import 'package:kota_app/features/navigation/bottom_navigation_bar/controller/bottom_navigation_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:kota_app/features/navigation/bottom_navigation_bar/controller/bottom_navigation_controller.dart';
 
 ///General View for all bottom bar views
 class BottomNavigationBarView extends GetView<BottomNavigationController> {

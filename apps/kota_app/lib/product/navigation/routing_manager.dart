@@ -50,13 +50,23 @@ class RoutingManager extends AbstractRoutingManager {
       final authHandler = SessionHandler.instance;
       if (authHandler.userAuthStatus == UserAuthStatus.notInitialized) {
         return InitialRouteScreens.splashScreen.path;
-      } else if (_instance
+      } else if (_instance.isUnauthorizedAndNotAuthScreenAndNotInitRoute(
+        state.matchedLocation,
+      )) {
+        if (SessionHandler.instance.isInitRoute &&
+            SessionHandler.instance.isInitRoute2 == true) {
+          SessionHandler.instance.isInitRoute2 = false;
+        } else {
+          SessionHandler.instance.isInitRoute = false;
+        }
+        return BottomNavigationRouteEnum.allProductsScreen.path;
+        // return AuthRouteScreens.loginScreen.path;
+      }
+      else if (_instance
           .isUnauthorizedAndNotAuthScreen(state.matchedLocation)) {
-
-        // return BottomNavigationRouteEnum.allProductsScreen.path;
-
         return AuthRouteScreens.loginScreen.path;
-      } else if (_instance.isAuthorizedAndAuthScreen(state.matchedLocation)) {
+      }
+      else if (_instance.isAuthorizedAndAuthScreen(state.matchedLocation)) {
         return BottomNavigationRouteEnum.allProductsScreen.path;
       }
       return null;
@@ -77,6 +87,18 @@ class RoutingManager extends AbstractRoutingManager {
   RouteInformationParser<Object> get routeInformationParser =>
       _router.routeInformationParser;
 
+  bool isUnauthorizedAndNotAuthScreenAndNotInitRoute(String currentName) {
+    final isUnauthorized =
+        SessionHandler.instance.userAuthStatus == UserAuthStatus.unAuthorized;
+    final isNotAuthScreen = AuthRouteScreens.values
+                .indexWhere((element) => element.path == currentName) ==
+            -1 ||
+        currentName == InitialRouteScreens.splashScreen.path;
+    final isInitRoute = SessionHandler.instance.isInitRoute;
+
+    return isUnauthorized && isNotAuthScreen && isInitRoute;
+  }
+
   bool isUnauthorizedAndNotAuthScreen(String currentName) {
     final isUnauthorized =
         SessionHandler.instance.userAuthStatus == UserAuthStatus.unAuthorized;
@@ -95,7 +117,6 @@ class RoutingManager extends AbstractRoutingManager {
                 .indexWhere((element) => element.path == currentName) !=
             -1 ||
         currentName == InitialRouteScreens.splashScreen.path;
-
     return isAuthorized && isAuthScreen;
   }
 }

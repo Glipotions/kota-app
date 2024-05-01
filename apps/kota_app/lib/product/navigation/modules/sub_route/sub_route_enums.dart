@@ -9,11 +9,18 @@ enum SubRouteEnums {
     '/transaction-history',
     'transactionScreen',
   ),
+    manageAccount(
+    '/manage-account',
+    'manageAccountScreen',
+  ),
   productDetail(
     '/product',
     'productDetailScreen',
   ),
-
+  loginSubScreen(
+    '/loginSub',
+    'loginSubScreen',
+  ),
   ;
 
   /// Gets the path value for [SubRouteEnums] enum.

@@ -18,6 +18,9 @@ class SessionHandler extends ChangeNotifier {
 
   UserAuthStatus _userAuthStatus = UserAuthStatus.notInitialized;
   UserAuthStatus get userAuthStatus => _userAuthStatus;
+  bool isInitRoute=true;
+  bool isInitRoute2=true;
+
   set userAuthStatus(UserAuthStatus value) {
     _userAuthStatus = value;
     onAuthStatusChanged();

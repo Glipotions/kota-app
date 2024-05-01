@@ -19,6 +19,8 @@ class AuthRoute {
       GoRoute(
         name: AuthRouteScreens.loginScreen.name,
         path: AuthRouteScreens.loginScreen.path,
+        // builder: (context, state) => const LoginScreen(),
+
         pageBuilder: (context, state) {
           return const NoTransitionPage(
             child: LoginScreen(),

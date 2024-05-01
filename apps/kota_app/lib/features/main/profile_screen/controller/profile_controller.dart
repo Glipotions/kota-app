@@ -5,6 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:kota_app/features/main/profile_screen/view/profile.dart';
 import 'package:kota_app/product/base/controller/base_controller.dart';
 import 'package:kota_app/product/managers/session_handler.dart';
+import 'package:kota_app/product/navigation/modules/auth_route/auth_route.dart';
+import 'package:kota_app/product/navigation/modules/auth_route/auth_route_enums.dart';
 import 'package:kota_app/product/navigation/modules/sub_route/sub_route_enums.dart';
 import 'package:values/values.dart';
 
@@ -22,13 +24,19 @@ class ProfileController extends BaseControllerInterface {
     });
   }
 
-  Future<void> _getBalance() async => client.appService
-      .balanceInformation(
-        id: SessionHandler.instance.currentUser!.currentAccountId!,
-      )
-      .handleRequest(
-        onSuccess: (res) => balance = res!,
-      );
+  Future<void> _getBalance() async {
+    if (SessionHandler.instance.currentUser == null) {
+     await context.pushNamed(SubRouteEnums.loginSubScreen.name);
+    } else {
+      await client.appService
+          .balanceInformation(
+            id: SessionHandler.instance.currentUser!.currentAccountId!,
+          )
+          .handleRequest(
+            onSuccess: (res) => balance = res!,
+          );
+    }
+  }
 
   Future<void> onTapSupport() async {
     try {
@@ -42,6 +50,9 @@ class ProfileController extends BaseControllerInterface {
 
   void onTapPastTransactions() =>
       context.pushNamed(SubRouteEnums.transactionHistory.name);
+
+  void onTapManageAccount() =>
+      context.pushNamed(SubRouteEnums.manageAccount.name);
 
   void onTapLogout() => SessionHandler.instance.logOut();
 
@@ -64,11 +75,11 @@ class ProfileController extends BaseControllerInterface {
           icon: const Icon(Icons.call),
           onTap: onTapSupport,
         ),
-                OptionTileModel(
+        OptionTileModel(
           title: 'Kullanıcı Bilgilerim',
           subTitle: 'Hesap bilgilerinizi görüntüleyebilirsiniz.',
           icon: const Icon(Icons.manage_accounts),
-          onTap: onTapLogout,
+          onTap: onTapManageAccount,
         ),
         OptionTileModel(
           title: 'Çıkış Yap',
