@@ -41,31 +41,31 @@ scripts:
 # [BUILD] ---------------------------------------------------------------------------------------------------------------
   build:all:
     run: |
-      melos run build:bb_example_app_build_apk_dev && \
-      melos run build:bb_example_app_build_apk_prod && \
-      melos run build:bb_example_app_build_apb_dev && \
-      melos run build:bb_example_app_build_apb_prod
+      melos run build:kota_app_build_apk_dev && \
+      melos run build:kota_app_build_apk_prod && \
+      melos run build:kota_app_build_apb_dev && \
+      melos run build:kota_app_build_apb_prod
     description: Build apk and appbundle for all apps and for all flavors..  
 
-  build:bb_example_app_build_apk_dev:
+  build:kota_app_build_apk_dev:
     run: melos exec -- flutter build apk --release --flavor development lib/main_development.dart --no-tree-shake-icons
     packageFilters:
-      scope: 'bb_example_app'
+      scope: 'kota_app'
 
-  build:bb_example_app_build_apk_prod:
+  build:kota_app_build_apk_prod:
     run: melos exec -- flutter build apk --release --flavor product lib/main_production.dart --no-tree-shake-icons
     packageFilters:
-      scope: '*bb_example_app*'
+      scope: '*kota_app*'
 
-  build:bb_example_app_build_apb_dev:
+  build:kota_app_build_apb_dev:
     run: melos exec -- flutter build appbundle --release --flavor development lib/main_development.dart --no-tree-shake-icons
     packageFilters:
-      scope: 'bb_example_app'
+      scope: 'kota_app'
 
-  build:bb_example_app_build_apb_prod:
+  build:kota_app_build_apb_prod:
     run: melos exec -- flutter build appbundle --release --flavor product lib/main_production.dart --no-tree-shake-icons
     packageFilters:
-      scope: '*bb_example_app*'
+      scope: '*kota_app*'
 
   run:bb_example_admin_panel_run_apb_prod:
     run: melos exec -- flutter run lib/main_production.dart -d chrome
@@ -106,13 +106,13 @@ scripts:
     run: melos exec -- "flutter run --flavor product lib/main_development.dart"
     description: Run with Production flavor in Production environment.
     packageFilters:
-      scope: "bb_example_app"
+      scope: "kota_app"
 
   qa:development:
     run: melos exec -- "flutter run --flavor development lib/main_development.dart"
     description: Run with QA flavor in Dev environment.
     packageFilters:
-      scope: "bb_example_app"
+      scope: "kota_app"
 
   # [Test] -------------------------------------------------------------------------------------------------------------
 

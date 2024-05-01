@@ -2,40 +2,40 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "dev bb_example_app",
+            "name": "dev kota_app",
             "request": "launch",
             "type": "dart",
-            "program": "apps/bb_example_app/lib/main_development.dart",
+            "program": "apps/kota_app/lib/main_development.dart",
             "args": [
                 "--flavor", 
                "development"
             ]
         },
         {
-            "name": "prod bb_example_app",
+            "name": "prod kota_app",
             "request": "launch",
             "type": "dart",
-            "program": "apps/bb_example_app/lib/main_production.dart",
+            "program": "apps/kota_app/lib/main_production.dart",
             "args": [
                 "--flavor",
                "product",
             ]
         },
         {
-            "name": "dev preview bb_example_app",
+            "name": "dev preview kota_app",
             "request": "launch",
             "type": "dart",
-            "program": "apps/bb_example_app/lib/development/main_preview_development.dart",
+            "program": "apps/kota_app/lib/development/main_preview_development.dart",
             "args": [
                 "--flavor", 
                "development"
             ]
         },
         {
-            "name": "prod preview bb_example_app",
+            "name": "prod preview kota_app",
             "request": "launch",
             "type": "dart",
-            "program": "apps/bb_example_app/lib/development/main_preview_production.dart",
+            "program": "apps/kota_app/lib/development/main_preview_production.dart",
             "args": [
                 "--flavor", 
                "product"

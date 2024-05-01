@@ -52,5 +52,7 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Uygulamamızın bu özelliği kullanabilmesi için kameranıza erişim izni vermeniz gerekmektedir.</string>
 </dict>
 </plist>
