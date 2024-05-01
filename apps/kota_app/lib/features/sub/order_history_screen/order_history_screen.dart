@@ -1,7 +1,7 @@
-import 'package:bb_example_app/features/sub/order_history_screen/controller/order_history_controller.dart';
-import 'package:bb_example_app/features/sub/order_history_screen/view/order_history.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:kota_app/features/sub/order_history_screen/controller/order_history_controller.dart';
+import 'package:kota_app/features/sub/order_history_screen/view/order_history.dart';
 
 class OrderHistoryScreen extends StatelessWidget {
   const OrderHistoryScreen({super.key});

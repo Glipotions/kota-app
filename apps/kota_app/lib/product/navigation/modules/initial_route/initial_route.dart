@@ -1,6 +1,6 @@
-import 'package:bb_example_app/features/landing/splash_screen/splash_screen.dart';
-import 'package:bb_example_app/product/navigation/modules/initial_route/initial_route_enums.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kota_app/features/landing/splash_screen/splash_screen.dart';
+import 'package:kota_app/product/navigation/modules/initial_route/initial_route_enums.dart';
 
 /// Route Class for Initial Route
 class InitialRoute {

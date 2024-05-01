@@ -1,4 +1,4 @@
-import 'package:bb_example_app/product/managers/session_handler.dart';
+import 'package:kota_app/product/managers/session_handler.dart';
 
 ///Handles headers of this module for requests.
 class ModuleHeader {

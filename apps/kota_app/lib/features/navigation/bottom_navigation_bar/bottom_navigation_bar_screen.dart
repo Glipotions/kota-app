@@ -1,7 +1,7 @@
-import 'package:bb_example_app/features/navigation/bottom_navigation_bar/controller/bottom_navigation_controller.dart';
-import 'package:bb_example_app/features/navigation/bottom_navigation_bar/view/bottom_navigation_bar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:kota_app/features/navigation/bottom_navigation_bar/controller/bottom_navigation_controller.dart';
+import 'package:kota_app/features/navigation/bottom_navigation_bar/view/bottom_navigation_bar_view.dart';
 
 ///Widget for initializing GetxController for [BottomNavigationBarScreen]
 class BottomNavigationBarScreen extends StatelessWidget {

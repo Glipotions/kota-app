@@ -1,10 +1,10 @@
 // ignore_for_file: lines_longer_than_80_chars
 
 import 'package:api/api.dart';
-import 'package:bb_example_app/product/base/controller/base_controller.dart';
-import 'package:bb_example_app/product/navigation/modules/auth_route/auth_route_enums.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kota_app/product/base/controller/base_controller.dart';
+import 'package:kota_app/product/navigation/modules/auth_route/auth_route_enums.dart';
 import 'package:widgets/widget.dart';
 
 ///Controller for Example Screen

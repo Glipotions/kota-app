@@ -1,7 +1,7 @@
-import 'package:bb_example_app/features/sub/product_detail_screen/controller/product_detail_controller.dart';
-import 'package:bb_example_app/features/sub/product_detail_screen/view/product_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:kota_app/features/sub/product_detail_screen/controller/product_detail_controller.dart';
+import 'package:kota_app/features/sub/product_detail_screen/view/product_detail.dart';
 
 class ProductDetailScreen extends StatelessWidget {
   const ProductDetailScreen({

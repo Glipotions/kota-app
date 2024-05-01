@@ -1,8 +1,8 @@
-import 'package:bb_example_app/product/base/controller/base_controller.dart';
-import 'package:bb_example_app/product/managers/session_handler.dart';
-import 'package:bb_example_app/product/widgets/message/custom_toast_message.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:kota_app/product/base/controller/base_controller.dart';
+import 'package:kota_app/product/managers/session_handler.dart';
+import 'package:kota_app/product/widgets/message/custom_toast_message.dart';
 import 'package:widgets/widget.dart';
 
 ///Controller for Example Screen

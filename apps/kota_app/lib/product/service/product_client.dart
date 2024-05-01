@@ -1,7 +1,7 @@
 import 'package:api/api.dart';
-import 'package:bb_example_app/product/service/module_header.dart';
-import 'package:bb_example_app/product/utility/enums/cache_enums.dart';
 import 'package:common/common.dart';
+import 'package:kota_app/product/service/module_header.dart';
+import 'package:kota_app/product/utility/enums/cache_enums.dart';
 import 'package:values/values.dart';
 
 /// Client for handling module specific repositories

@@ -1,8 +1,8 @@
-import 'package:bb_example_app/product/base/controller/base_controller.dart';
-import 'package:bb_example_app/product/navigation/modules/bottom_navigation_route/bottom_navigation_route_enums.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kota_app/product/base/controller/base_controller.dart';
+import 'package:kota_app/product/navigation/modules/bottom_navigation_route/bottom_navigation_route_enums.dart';
 
 ///Controller for BottomNavigationBar
 class BottomNavigationController extends BaseControllerInterface {

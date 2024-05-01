@@ -17,7 +17,7 @@
         </intent>
     </queries>
     <application
-        android:label="bb_example_app"
+        android:label="kota_app"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

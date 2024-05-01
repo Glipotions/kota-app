@@ -1,10 +1,10 @@
 import 'package:api/api.dart';
-import 'package:bb_example_app/product/managers/cart_controller.dart';
-import 'package:bb_example_app/product/service/product_client.dart';
-import 'package:bb_example_app/product/utility/enums/cache_enums.dart';
 import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:kota_app/product/managers/cart_controller.dart';
+import 'package:kota_app/product/service/product_client.dart';
+import 'package:kota_app/product/utility/enums/cache_enums.dart';
 
 class SessionHandler extends ChangeNotifier {
   SessionHandler._init();

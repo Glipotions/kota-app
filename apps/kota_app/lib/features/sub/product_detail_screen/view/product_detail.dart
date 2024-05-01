@@ -1,18 +1,18 @@
 // ignore_for_file: omit_local_variable_types
 
-import 'package:bb_example_app/features/main/all_products_screen/view/components/add_to_cart_text.dart';
-import 'package:bb_example_app/features/sub/product_detail_screen/controller/product_detail_controller.dart';
-import 'package:bb_example_app/product/base/base_view.dart';
-import 'package:bb_example_app/product/consts/general.dart';
-import 'package:bb_example_app/product/managers/cart_controller.dart';
-import 'package:bb_example_app/product/utility/enums/module_padding_enums.dart';
-import 'package:bb_example_app/product/widgets/button/clickable_text.dart';
-import 'package:bb_example_app/product/widgets/button/quantity_selection_button.dart';
-import 'package:bb_example_app/product/widgets/card/bordered_image.dart';
-import 'package:bb_example_app/product/widgets/chip/custom_choice_chip.dart';
-import 'package:bb_example_app/product/widgets/other/stock_information.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:kota_app/features/main/all_products_screen/view/components/add_to_cart_text.dart';
+import 'package:kota_app/features/sub/product_detail_screen/controller/product_detail_controller.dart';
+import 'package:kota_app/product/base/base_view.dart';
+import 'package:kota_app/product/consts/general.dart';
+import 'package:kota_app/product/managers/cart_controller.dart';
+import 'package:kota_app/product/utility/enums/module_padding_enums.dart';
+import 'package:kota_app/product/widgets/button/clickable_text.dart';
+import 'package:kota_app/product/widgets/button/quantity_selection_button.dart';
+import 'package:kota_app/product/widgets/card/bordered_image.dart';
+import 'package:kota_app/product/widgets/chip/custom_choice_chip.dart';
+import 'package:kota_app/product/widgets/other/stock_information.dart';
 import 'package:values/values.dart';
 
 class ProductDetail extends StatelessWidget {

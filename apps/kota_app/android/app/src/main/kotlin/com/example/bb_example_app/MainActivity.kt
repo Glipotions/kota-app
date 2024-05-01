@@ -1,4 +1,4 @@
-package com.example.bb_example_app
+package com.example.kota_app
 
 import io.flutter.embedding.android.FlutterActivity
 

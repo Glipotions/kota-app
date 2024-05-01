@@ -1,4 +1,4 @@
-import 'package:bb_example_app/product/utility/enums/module_padding_enums.dart';
+import 'package:kota_app/product/utility/enums/module_padding_enums.dart';
 import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:values/values.dart';

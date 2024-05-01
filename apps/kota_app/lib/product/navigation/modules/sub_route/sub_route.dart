@@ -1,8 +1,8 @@
-import 'package:bb_example_app/features/sub/order_history_screen/order_history_screen.dart';
-import 'package:bb_example_app/features/sub/product_detail_screen/product_detail_screen.dart';
-import 'package:bb_example_app/features/sub/transaction_history_screen/transaction_history_screen.dart';
-import 'package:bb_example_app/product/navigation/modules/sub_route/sub_route_enums.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kota_app/features/sub/order_history_screen/order_history_screen.dart';
+import 'package:kota_app/features/sub/product_detail_screen/product_detail_screen.dart';
+import 'package:kota_app/features/sub/transaction_history_screen/transaction_history_screen.dart';
+import 'package:kota_app/product/navigation/modules/sub_route/sub_route_enums.dart';
 
 /// Route Class for Initial Route
 class SubRoute {

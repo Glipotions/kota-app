@@ -1,8 +1,8 @@
-import 'package:bb_example_app/features/auth/login_screen/controller/login_controller.dart';
-import 'package:bb_example_app/features/auth/login_screen/view/login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:kota_app/features/auth/login_screen/controller/login_controller.dart';
+import 'package:kota_app/features/auth/login_screen/view/login.dart';
 
 ///Widget for initializing GetxController for Example Screen
 class LoginScreen extends StatelessWidget {

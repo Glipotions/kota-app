@@ -1,11 +1,11 @@
 import 'package:api/api.dart';
-import 'package:bb_example_app/features/sub/order_history_screen/controller/order_history_controller.dart';
-import 'package:bb_example_app/product/base/base_view.dart';
-import 'package:bb_example_app/product/utility/enums/module_padding_enums.dart';
-import 'package:bb_example_app/product/widgets/chip/custom_choice_chip.dart';
-import 'package:bb_example_app/product/widgets/other/empty_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:kota_app/features/sub/order_history_screen/controller/order_history_controller.dart';
+import 'package:kota_app/product/base/base_view.dart';
+import 'package:kota_app/product/utility/enums/module_padding_enums.dart';
+import 'package:kota_app/product/widgets/chip/custom_choice_chip.dart';
+import 'package:kota_app/product/widgets/other/empty_view.dart';
 import 'package:values/values.dart';
 
 part 'components/order_card.dart';

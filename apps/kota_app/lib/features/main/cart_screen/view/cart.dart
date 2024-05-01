@@ -1,15 +1,16 @@
 // ignore_for_file: lines_longer_than_80_chars
 
-import 'package:bb_example_app/product/managers/cart_controller.dart';
-import 'package:bb_example_app/product/utility/enums/module_padding_enums.dart';
-import 'package:bb_example_app/product/utility/enums/module_radius_enums.dart';
-import 'package:bb_example_app/product/widgets/button/clickable_text.dart';
-import 'package:bb_example_app/product/widgets/button/module_button.dart';
-import 'package:bb_example_app/product/widgets/card/bordered_image.dart';
-import 'package:bb_example_app/product/widgets/other/empty_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:kota_app/product/managers/cart_controller.dart';
+import 'package:kota_app/product/utility/enums/module_padding_enums.dart';
+import 'package:kota_app/product/utility/enums/module_radius_enums.dart';
+import 'package:kota_app/product/widgets/button/clickable_text.dart';
+import 'package:kota_app/product/widgets/button/module_button.dart';
+import 'package:kota_app/product/widgets/card/bordered_image.dart';
+import 'package:kota_app/product/widgets/other/empty_view.dart';
 import 'package:values/values.dart';
+
 part 'components/product_card.dart';
 
 class Cart extends StatelessWidget {

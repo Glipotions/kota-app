@@ -1,9 +1,9 @@
 import 'package:api/api.dart';
-import 'package:bb_example_app/product/base/controller/base_controller.dart';
-import 'package:bb_example_app/product/navigation/modules/sub_route/sub_route_enums.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_rx/get_rx.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kota_app/product/base/controller/base_controller.dart';
+import 'package:kota_app/product/navigation/modules/sub_route/sub_route_enums.dart';
 
 class AllProductsController extends BaseControllerInterface {
   ProductGroupListResponseModel productsResponse =

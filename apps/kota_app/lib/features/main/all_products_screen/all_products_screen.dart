@@ -1,7 +1,7 @@
-import 'package:bb_example_app/features/main/all_products_screen/controller/all_products_controller.dart';
-import 'package:bb_example_app/features/main/all_products_screen/view/all_products.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:kota_app/features/main/all_products_screen/controller/all_products_controller.dart';
+import 'package:kota_app/features/main/all_products_screen/view/all_products.dart';
 
 class AllProductsScreen extends StatelessWidget {
   const AllProductsScreen({super.key});

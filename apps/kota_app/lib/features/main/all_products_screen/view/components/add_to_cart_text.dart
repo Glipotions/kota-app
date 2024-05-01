@@ -1,7 +1,7 @@
-import 'package:bb_example_app/product/managers/cart_controller.dart';
-import 'package:bb_example_app/product/widgets/button/clickable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:kota_app/product/managers/cart_controller.dart';
+import 'package:kota_app/product/widgets/button/clickable_text.dart';
 import 'package:widgets/widget.dart';
 
 class AddToCartText extends StatelessWidget {

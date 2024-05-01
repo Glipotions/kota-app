@@ -1,9 +1,9 @@
-import 'package:bb_example_app/features/navigation/bottom_navigation_bar/controller/bottom_navigation_controller.dart';
-import 'package:bb_example_app/product/managers/cart_controller.dart';
-import 'package:bb_example_app/product/utility/enums/module_padding_enums.dart';
 import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:kota_app/features/navigation/bottom_navigation_bar/controller/bottom_navigation_controller.dart';
+import 'package:kota_app/product/managers/cart_controller.dart';
+import 'package:kota_app/product/utility/enums/module_padding_enums.dart';
 import 'package:values/values.dart';
 
 class GeneralAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -19,7 +19,8 @@ class GeneralAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<CartController>();
+    final controller = Get.put(CartController());
+    // final controller = Get.find<CartController>();
     return AppBar(
       forceMaterialTransparency: true,
       title: Text(title),

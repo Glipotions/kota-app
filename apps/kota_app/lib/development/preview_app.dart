@@ -1,11 +1,11 @@
-import 'package:bb_example_app/product/init/application_initialize.dart';
-import 'package:bb_example_app/product/init/theme/module_theme.dart';
-import 'package:bb_example_app/product/navigation/routing_manager.dart';
 import 'package:common/common.dart';
 // ignore: depend_on_referenced_packages
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:kota_app/product/init/application_initialize.dart';
+import 'package:kota_app/product/init/theme/module_theme.dart';
+import 'package:kota_app/product/navigation/routing_manager.dart';
 import 'package:values/values.dart';
 import 'package:widgets/widget.dart';
 

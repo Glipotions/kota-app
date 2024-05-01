@@ -1,9 +1,9 @@
-import 'package:bb_example_app/product/base/components/general_error_view.dart';
-import 'package:bb_example_app/product/base/components/general_loading_view.dart';
-import 'package:bb_example_app/product/base/controller/base_controller.dart';
 import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:kota_app/product/base/components/general_error_view.dart';
+import 'package:kota_app/product/base/components/general_loading_view.dart';
+import 'package:kota_app/product/base/controller/base_controller.dart';
 import 'package:values/values.dart';
 
 ///Base View that handles loading states etc. automatically.

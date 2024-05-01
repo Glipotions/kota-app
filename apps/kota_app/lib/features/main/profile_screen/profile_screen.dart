@@ -1,7 +1,7 @@
-import 'package:bb_example_app/features/main/profile_screen/controller/profile_controller.dart';
-import 'package:bb_example_app/features/main/profile_screen/view/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:kota_app/features/main/profile_screen/controller/profile_controller.dart';
+import 'package:kota_app/features/main/profile_screen/view/profile.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});

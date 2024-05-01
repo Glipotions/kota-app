@@ -1,5 +1,5 @@
 import 'package:api/api.dart';
-import 'package:bb_example_app/product/base/controller/base_controller.dart';
+import 'package:kota_app/product/base/controller/base_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

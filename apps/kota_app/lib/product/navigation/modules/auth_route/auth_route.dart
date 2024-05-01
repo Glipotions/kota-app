@@ -1,8 +1,8 @@
-import 'package:bb_example_app/features/auth/login_screen/login_screen.dart';
-import 'package:bb_example_app/features/auth/register_screen/register_screen.dart';
-import 'package:bb_example_app/product/navigation/modules/auth_route/auth_route_enums.dart';
-import 'package:bb_example_app/product/navigation/routing_manager.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kota_app/features/auth/login_screen/login_screen.dart';
+import 'package:kota_app/features/auth/register_screen/register_screen.dart';
+import 'package:kota_app/product/navigation/modules/auth_route/auth_route_enums.dart';
+import 'package:kota_app/product/navigation/routing_manager.dart';
 
 /// Route Class for Auth Routes
 class AuthRoute {

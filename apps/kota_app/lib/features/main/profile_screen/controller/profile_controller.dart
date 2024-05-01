@@ -1,11 +1,11 @@
 import 'package:api/api.dart';
-import 'package:bb_example_app/features/main/profile_screen/view/profile.dart';
-import 'package:bb_example_app/product/base/controller/base_controller.dart';
-import 'package:bb_example_app/product/managers/session_handler.dart';
-import 'package:bb_example_app/product/navigation/modules/sub_route/sub_route_enums.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kota_app/features/main/profile_screen/view/profile.dart';
+import 'package:kota_app/product/base/controller/base_controller.dart';
+import 'package:kota_app/product/managers/session_handler.dart';
+import 'package:kota_app/product/navigation/modules/sub_route/sub_route_enums.dart';
 import 'package:values/values.dart';
 
 class ProfileController extends BaseControllerInterface {
@@ -63,6 +63,12 @@ class ProfileController extends BaseControllerInterface {
           subTitle: 'Destek ile iletişime geçebilirsiniz.',
           icon: const Icon(Icons.call),
           onTap: onTapSupport,
+        ),
+                OptionTileModel(
+          title: 'Kullanıcı Bilgilerim',
+          subTitle: 'Hesap bilgilerinizi görüntüleyebilirsiniz.',
+          icon: const Icon(Icons.manage_accounts),
+          onTap: onTapLogout,
         ),
         OptionTileModel(
           title: 'Çıkış Yap',

@@ -1,10 +1,10 @@
-import 'package:bb_example_app/features/auth/register_screen/controller/register_controller.dart';
-import 'package:bb_example_app/product/base/base_view.dart';
-import 'package:bb_example_app/product/utility/enums/module_padding_enums.dart';
-import 'package:bb_example_app/product/widgets/button/clickable_text.dart';
-import 'package:bb_example_app/product/widgets/button/module_button.dart';
-import 'package:bb_example_app/product/widgets/input/module_text_field.dart';
 import 'package:flutter/material.dart';
+import 'package:kota_app/features/auth/register_screen/controller/register_controller.dart';
+import 'package:kota_app/product/base/base_view.dart';
+import 'package:kota_app/product/utility/enums/module_padding_enums.dart';
+import 'package:kota_app/product/widgets/button/clickable_text.dart';
+import 'package:kota_app/product/widgets/button/module_button.dart';
+import 'package:kota_app/product/widgets/input/module_text_field.dart';
 import 'package:values/values.dart';
 
 part 'components/register_form.dart';

@@ -1,10 +1,10 @@
-import 'package:bb_example_app/features/index.dart';
-import 'package:bb_example_app/features/main/all_products_screen/all_products_screen.dart';
-import 'package:bb_example_app/features/main/cart_screen/view/cart.dart';
-import 'package:bb_example_app/features/main/profile_screen/profile_screen.dart';
-import 'package:bb_example_app/product/navigation/modules/bottom_navigation_route/bottom_navigation_route_enums.dart';
-import 'package:bb_example_app/product/navigation/routing_manager.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kota_app/features/index.dart';
+import 'package:kota_app/features/main/all_products_screen/all_products_screen.dart';
+import 'package:kota_app/features/main/cart_screen/view/cart.dart';
+import 'package:kota_app/features/main/profile_screen/profile_screen.dart';
+import 'package:kota_app/product/navigation/modules/bottom_navigation_route/bottom_navigation_route_enums.dart';
+import 'package:kota_app/product/navigation/routing_manager.dart';
 
 /// Route Class for Drawer Routes
 class BottomNavigationRoute {

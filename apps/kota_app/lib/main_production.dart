@@ -1,4 +1,4 @@
-import 'package:bb_example_app/app.dart';
+import 'package:kota_app/app.dart';
 import 'package:values/values.dart';
 
 /// PROD ENVIRONMENT

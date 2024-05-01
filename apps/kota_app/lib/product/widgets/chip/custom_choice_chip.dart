@@ -1,6 +1,6 @@
-import 'package:bb_example_app/product/utility/enums/module_padding_enums.dart';
-import 'package:bb_example_app/product/utility/enums/module_radius_enums.dart';
 import 'package:flutter/material.dart';
+import 'package:kota_app/product/utility/enums/module_padding_enums.dart';
+import 'package:kota_app/product/utility/enums/module_radius_enums.dart';
 
 class CustomChoiceChip extends StatelessWidget {
   const CustomChoiceChip({

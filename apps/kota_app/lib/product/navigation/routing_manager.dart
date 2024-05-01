@@ -1,15 +1,15 @@
-import 'package:bb_example_app/features/index.dart';
-import 'package:bb_example_app/product/managers/session_handler.dart';
-import 'package:bb_example_app/product/navigation/modules/auth_route/auth_route.dart';
-import 'package:bb_example_app/product/navigation/modules/auth_route/auth_route_enums.dart';
-import 'package:bb_example_app/product/navigation/modules/bottom_navigation_route/bottom_navigation_route.dart';
-import 'package:bb_example_app/product/navigation/modules/bottom_navigation_route/bottom_navigation_route_enums.dart';
-import 'package:bb_example_app/product/navigation/modules/initial_route/initial_route.dart';
-import 'package:bb_example_app/product/navigation/modules/initial_route/initial_route_enums.dart';
-import 'package:bb_example_app/product/navigation/modules/sub_route/sub_route.dart';
 import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kota_app/features/index.dart';
+import 'package:kota_app/product/managers/session_handler.dart';
+import 'package:kota_app/product/navigation/modules/auth_route/auth_route.dart';
+import 'package:kota_app/product/navigation/modules/auth_route/auth_route_enums.dart';
+import 'package:kota_app/product/navigation/modules/bottom_navigation_route/bottom_navigation_route.dart';
+import 'package:kota_app/product/navigation/modules/bottom_navigation_route/bottom_navigation_route_enums.dart';
+import 'package:kota_app/product/navigation/modules/initial_route/initial_route.dart';
+import 'package:kota_app/product/navigation/modules/initial_route/initial_route_enums.dart';
+import 'package:kota_app/product/navigation/modules/sub_route/sub_route.dart';
 
 /// Routing Manager for module
 class RoutingManager extends AbstractRoutingManager {
@@ -52,6 +52,9 @@ class RoutingManager extends AbstractRoutingManager {
         return InitialRouteScreens.splashScreen.path;
       } else if (_instance
           .isUnauthorizedAndNotAuthScreen(state.matchedLocation)) {
+
+        // return BottomNavigationRouteEnum.allProductsScreen.path;
+
         return AuthRouteScreens.loginScreen.path;
       } else if (_instance.isAuthorizedAndAuthScreen(state.matchedLocation)) {
         return BottomNavigationRouteEnum.allProductsScreen.path;

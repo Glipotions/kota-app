@@ -1,10 +1,11 @@
 import 'dart:async';
-import 'package:bb_example_app/product/managers/local_notification_handler.dart';
-import 'package:bb_example_app/product/service/product_client.dart';
-import 'package:bb_example_app/product/utility/enums/cache_enums.dart';
+
 import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:kota_app/product/managers/local_notification_handler.dart';
+import 'package:kota_app/product/service/product_client.dart';
+import 'package:kota_app/product/utility/enums/cache_enums.dart';
 import 'package:logger/logger.dart';
 import 'package:values/values.dart';
 
@@ -37,8 +38,8 @@ class ApplicationInitialize {
         LightColors(),
         DarkColors(),
       ],
-      lanKey: CacheKey.colorCode.name,
-      themeKey: CacheKey.lanCode.name,
+      themeKey: CacheKey.colorCode.name,
+      lanKey: CacheKey.lanCode.name,
     );
 
     SystemChrome.setSystemUIOverlayStyle(
