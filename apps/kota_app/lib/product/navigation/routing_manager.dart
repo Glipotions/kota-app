@@ -10,6 +10,7 @@ import 'package:kota_app/product/navigation/modules/bottom_navigation_route/bott
 import 'package:kota_app/product/navigation/modules/initial_route/initial_route.dart';
 import 'package:kota_app/product/navigation/modules/initial_route/initial_route_enums.dart';
 import 'package:kota_app/product/navigation/modules/sub_route/sub_route.dart';
+import 'package:kota_app/product/navigation/modules/sub_route/sub_route_enums.dart';
 
 /// Routing Manager for module
 class RoutingManager extends AbstractRoutingManager {
@@ -53,20 +54,23 @@ class RoutingManager extends AbstractRoutingManager {
       } else if (_instance.isUnauthorizedAndNotAuthScreenAndNotInitRoute(
         state.matchedLocation,
       )) {
-        if (SessionHandler.instance.isInitRoute &&
-            SessionHandler.instance.isInitRoute2 == true) {
-          SessionHandler.instance.isInitRoute2 = false;
-        } else {
+        // if (SessionHandler.instance.isInitRoute &&
+        //     SessionHandler.instance.isInitRoute2 == true) {
+        //   SessionHandler.instance.isInitRoute2 = false;
+        // } else {
+        //   SessionHandler.instance.isInitRoute = false;
+        // }
+        if (SessionHandler.instance.isInitRoute) {
           SessionHandler.instance.isInitRoute = false;
+
+          return BottomNavigationRouteEnum.allProductsScreen.path;
         }
-        return BottomNavigationRouteEnum.allProductsScreen.path;
+        return state.matchedLocation;
         // return AuthRouteScreens.loginScreen.path;
-      }
-      else if (_instance
+      } else if (_instance
           .isUnauthorizedAndNotAuthScreen(state.matchedLocation)) {
         return AuthRouteScreens.loginScreen.path;
-      }
-      else if (_instance.isAuthorizedAndAuthScreen(state.matchedLocation)) {
+      } else if (_instance.isAuthorizedAndAuthScreen(state.matchedLocation)) {
         return BottomNavigationRouteEnum.allProductsScreen.path;
       }
       return null;
@@ -96,7 +100,10 @@ class RoutingManager extends AbstractRoutingManager {
         currentName == InitialRouteScreens.splashScreen.path;
     final isInitRoute = SessionHandler.instance.isInitRoute;
 
-    return isUnauthorized && isNotAuthScreen && isInitRoute;
+    final isProfileScreen =
+        currentName == BottomNavigationRouteEnum.profileScreen.path;
+
+    return isUnauthorized && isNotAuthScreen && !isProfileScreen;
   }
 
   bool isUnauthorizedAndNotAuthScreen(String currentName) {

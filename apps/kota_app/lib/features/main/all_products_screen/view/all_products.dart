@@ -27,10 +27,11 @@ class AllProducts extends StatelessWidget {
         additionalIcon: IconButton(
           icon: const Icon(Icons.search),
           onPressed: () {
+            controller.setSearchMode(true);
             showSearch(
               context: context,
               delegate: CustomSearchDelegate(controller),
-            );
+            ).then((_) => controller.setSearchMode(false));
           },
         ),
         leading: IconButton(
@@ -47,10 +48,14 @@ class AllProducts extends StatelessWidget {
             children: [
               Flexible(
                 child: Obx(
-                  () => ListView.separated(
+                  () => GridView.builder(
                     controller: controller.scrollController,
-                    shrinkWrap: true,
-                    physics: const AlwaysScrollableScrollPhysics(),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 0.645,
+                      crossAxisSpacing: ModulePadding.s.value,
+                      mainAxisSpacing: ModulePadding.xxs.value,
+                    ),
                     itemBuilder: (context, index) {
                       final item = controller.products[index];
                       return ProductCard(
@@ -61,8 +66,6 @@ class AllProducts extends StatelessWidget {
                         item: item,
                       );
                     },
-                    separatorBuilder: (content, index) =>
-                        SizedBox(height: ModulePadding.xxs.value),
                     itemCount: controller.products.length,
                   ),
                 ),
@@ -105,11 +108,10 @@ class CustomSearchDelegate extends SearchDelegate<ProductGroupItem?> {
   }
 
   Widget _buildSearchResults() {
-    // Eğer sorgu boş ise boş bir widget döndür
     if (query.isEmpty) {
       return const Center(child: Text('Arama terimi giriniz.'));
     }
-    // _updateSearchResults();
+
     return FutureBuilder<List<ProductGroupItem>>(
       future: controller.getSearchProducts(query),
       builder: (context, snapshot) {
@@ -117,7 +119,7 @@ class CustomSearchDelegate extends SearchDelegate<ProductGroupItem?> {
           return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
           return Center(child: Text('Bir hata oluştu: ${snapshot.error}'));
-        } else if (snapshot.hasData) {
+        } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
           return _buildProductList(snapshot.data!);
         } else {
           return const Center(child: Text('Ürün bulunamadı'));
@@ -148,12 +150,15 @@ class CustomSearchDelegate extends SearchDelegate<ProductGroupItem?> {
       child: Column(
         children: [
           Flexible(
-            child: ListView.separated(
-              controller: controller.scrollController,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
+            child: GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 21 / 32,
+                crossAxisSpacing: ModulePadding.s.value,
+                mainAxisSpacing: ModulePadding.xxs.value,
+              ),
               itemBuilder: (context, index) {
-                final item = filteredProducts[index];
+                final item = controller.filteredProducts[index];
                 return ProductCard(
                   onTap: () => controller.onTapProductDetail(
                     item.code!,
@@ -162,8 +167,6 @@ class CustomSearchDelegate extends SearchDelegate<ProductGroupItem?> {
                   item: item,
                 );
               },
-              separatorBuilder: (content, index) =>
-                  SizedBox(height: ModulePadding.xxs.value),
               itemCount: filteredProducts.length,
             ),
           ),
@@ -185,6 +188,6 @@ Future<void> _scanBarcode(AllProductsController controller) async {
       await controller.getByBarcode(barcode);
     }
   } catch (e) {
-    // Hata yönetimi
+    // Handle error
   }
 }

@@ -128,7 +128,7 @@ class ModuleTheme implements AppTheme {
           letterSpacing: 1.25,
         ),
         labelMedium: TextStyle(
-          fontSize: 14,
+          fontSize: 12,
           fontWeight: FontWeight.w500,
           letterSpacing: 1.25,
         ),

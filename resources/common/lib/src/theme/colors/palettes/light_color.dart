@@ -8,32 +8,37 @@ class LightColors implements AbstractColor {
 
   @override
   String get themeCode => 'light';
+//0xFFFFAB91
+  @override
+  Color get primary => const Color(0xFFE59177); // Şeftali
+  @override
+  Color get onPrimary => const Color(0xFF000000); // Karanlık Metin
 
   @override
-  Color get primary => const Color(0xFF1565C0); // Canlı Mavi
+  Color get primaryContainer => const Color(0xFFFFCCBC); // Açık Şeftali
   @override
-  Color get onPrimary => const Color(0xFFFFFFFF); // Beyaz Metin
+  Color get onPrimaryContainer => const Color(0xFF442B2D); // Koyu Kahverengi Metin
+
   @override
-  Color get primaryContainer => const Color(0xFF90CAF9);
-  @override
-  Color get onPrimaryContainer => const Color(0xFF0D47A1);
-  @override
-  Color get secondary => const Color(0xFF1E88E5); // Parlak Mavi
+  Color get secondary => const Color(0xFFFF7043); // Koyu Şeftali
   @override
   Color get onSecondary => const Color(0xFFFFFFFF); // Beyaz Metin
-  @override
-  Color get secondaryContainer => const Color(0xFFBBDEFB); // Soft Mavi
-  @override
-  Color get onSecondaryContainer => const Color(0xFF1565C0); // Canlı Mavi Metni
 
   @override
-  Color get tertiary => const Color(0xFF4CAF50); // Success
+  Color get secondaryContainer => const Color(0xFFFFAB91); // Şeftali
   @override
-  Color get onTertiary => const Color(0xFFFFFFFF); // Beyaz Metin
+  Color get onSecondaryContainer => const Color(0xFF000000); // Karanlık Metin
+
   @override
-  Color get tertiaryContainer => const Color(0xFFE3F2FD); // Çok Açık Mavi
+  Color get tertiary => const Color(0xFFFF8A65); // Orta Şeftali
   @override
-  Color get onTertiaryContainer => const Color(0xFF1976D2); // Parlak Mavi Metni
+  Color get onTertiary => const Color(0xFF000000); // Karanlık Metin
+
+  @override
+  Color get tertiaryContainer => const Color(0xFFFFCCBC); // Açık Şeftali
+  @override
+  Color get onTertiaryContainer => const Color(0xFF442B2D); // Koyu Kahverengi Metin
+
 
   // Error color palette (can keep as it is)
   @override

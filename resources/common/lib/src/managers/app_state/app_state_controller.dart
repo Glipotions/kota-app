@@ -47,23 +47,23 @@ class AppStateController {
   }
 
   AbstractColor _initTheme() {
-    if (getCurrentThemeCode==null) {
-      final isPlatformDark =
-          PlatformDispatcher.instance.platformBrightness == Brightness.dark;
+    // if (getCurrentThemeCode==null) {
+    //   final isPlatformDark =
+    //       PlatformDispatcher.instance.platformBrightness == Brightness.dark;
 
-      final theme = availableColorPalettes.firstWhere(
-        (element) =>
-            element.brightness ==
-            (isPlatformDark ? Brightness.dark : Brightness.light),
-        orElse: () => availableColorPalettes.first,
-      );
-      _localeManager.setStringValue(key: themeCacheKey, value: theme.themeCode);
-      return theme;
-    } else {
-      return getColorDataByCode(getCurrentThemeCode!);
-    }
+    //   final theme = availableColorPalettes.firstWhere(
+    //     (element) =>
+    //         element.brightness ==
+    //         (isPlatformDark ? Brightness.dark : Brightness.light),
+    //     orElse: () => availableColorPalettes.first,
+    //   );
+    //   _localeManager.setStringValue(key: themeCacheKey, value: theme.themeCode);
+    //   return theme;
+    // } else {
+    //   return getColorDataByCode(getCurrentThemeCode!);
+    // }
 
-    // return getColorDataByCode('light');
+    return getColorDataByCode('light');
   }
 
   ///REturns color data based on theme code
@@ -80,23 +80,26 @@ class AppStateController {
       );
 
   Locale _initLocale() {
-    if (getCurrentLanCode == null) {
-      var isLanguageExist = false;
-      final userLanCode = Platform.localeName.split('-')[0];
-      supportedLocalization.forEach((key, value) {
-        if (value.lanCode == userLanCode) {
-          isLanguageExist = true;
-        }
-      });
-      _localeManager.setStringValue(
-        key: lanCacheKey,
-        value: isLanguageExist ? userLanCode : 'en',
-      );
+    // if (getCurrentLanCode == null) {
+    //   var isLanguageExist = false;
+    //   final userLanCode = Platform.localeName.split('-')[0];
+    //   supportedLocalization.forEach((key, value) {
+    //     if (value.lanCode == userLanCode) {
+    //       isLanguageExist = true;
+    //     }
+    //   });
+    //   _localeManager.setStringValue(
+    //     key: lanCacheKey,
+    //     value: isLanguageExist ? userLanCode : 'tr',
+    //   );
 
-      return Locale(isLanguageExist ? userLanCode : 'en');
-    } else {
-      return Locale(_localeManager.getStringValue(key: lanCacheKey)!);
-    }
+    //   return Locale(isLanguageExist ? userLanCode : 'tr');
+    // } else {
+    //   return Locale(_localeManager.getStringValue(key: lanCacheKey)!);
+    // }
+
+      return Locale('tr');
+
   }
 
   ///Returns current theme code.

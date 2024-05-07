@@ -41,6 +41,20 @@ class _LoginForm extends StatelessWidget {
             textInputAction: TextInputAction.done,
             onFieldSubmitted: (_) => controller.onTapLogin(),
           ),
+          Obx(
+            () => Row(
+              children: [
+                const Spacer(),
+                const Text('Beni hatırla'),
+                Checkbox(
+                  value: controller.rememberMe.value,
+                  onChanged: (bool? value) {
+                    controller.rememberMe.value = value!;
+                  },
+                ),
+              ],
+            ),
+          ),
           SizedBox(height: ModulePadding.s.value),
           ModuleButton.primary(
             onTap: controller.onTapLogin,

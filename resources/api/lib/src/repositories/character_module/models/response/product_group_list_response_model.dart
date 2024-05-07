@@ -50,18 +50,22 @@ class ProductGroupItem extends IBaseModel<ProductGroupItem> {
     this.name,
     this.price,
     this.pictureUrl,
+    this.productName,
+
   });
   int? id;
   String? code;
   String? name;
   double? price;
   String? pictureUrl;
+  String? productName;
 
   @override
   ProductGroupItem fromJson(Map<String, dynamic> json) => ProductGroupItem(
         id: json['id'],
         code: json['code'],
         name: json['name'],
+        productName: json['productName'],
         pictureUrl: json['pictureUrl'],
         price: json['price']?.toDouble(),
       );

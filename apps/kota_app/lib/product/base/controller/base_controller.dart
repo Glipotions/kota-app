@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:api/api.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -32,11 +34,9 @@ abstract class BaseControllerInterface extends GetxController {
   ///Setter for [_errorMessage]
   set errorMessage(String? value) => _errorMessage.value = value;
 
-
   ProductClient get client => ProductClient.instance;
 
   SessionHandler get sessionHandler => SessionHandler.instance;
-  
 
   StringValidator get validator => StringValidator(context);
 
@@ -51,13 +51,16 @@ abstract class BaseControllerInterface extends GetxController {
     } on AppException catch (e) {
       errorMessage = e.toString();
       loadingStatus = LoadingStatus.error;
+      if (e.status == HttpStatus.unauthorized) {
+        await SessionHandler.instance.logOut();
+      }
     } catch (e) {
       errorMessage = context.i10n.defaultErrorMessage;
       loadingStatus = LoadingStatus.error;
     }
   }
 
-    void showErrorToastMessage(String message) {
+  void showErrorToastMessage(String message) {
     ToastMessage.showToastMessage(
       message: message,
       type: ToastMessageType.error,
@@ -77,8 +80,6 @@ abstract class BaseControllerInterface extends GetxController {
       type: ToastMessageType.success,
     );
   }
-
-  
 
   /// Method to unfocus field on tap of outside of the text fields handle
   void unFocus() => FocusScope.of(context).unfocus();

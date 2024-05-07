@@ -10,5 +10,8 @@ enum CacheKey {
   colorCode,
 
   /// Key that holds selected current lanCode
-  lanCode,
+  lanCode, isRemember,
 }
+
+
+enum SecuredCacheKey { username, password }

@@ -45,8 +45,12 @@ abstract class BaseClient {
           data: returnResponse == null ? null : returnResponse as R,
         );
       } else {
-        final errorModel = BaseErrorModel()
-            .jsonParser(jsonEncode(response.data)) as BaseErrorModel;
+        var errorModel = BaseErrorModel();
+        if (response.data != '') {
+          errorModel = BaseErrorModel().jsonParser(jsonEncode(response.data))
+              as BaseErrorModel;
+        }
+
         return BaseHttpModel(status: BaseModelStatus.error, error: errorModel);
       }
     } on DioException catch (e) {

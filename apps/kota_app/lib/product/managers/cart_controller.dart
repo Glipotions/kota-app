@@ -2,7 +2,10 @@
 
 import 'package:api/api.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:kota_app/product/base/controller/base_controller.dart';
+import 'package:kota_app/product/managers/session_handler.dart';
+import 'package:kota_app/product/navigation/modules/sub_route/sub_route_enums.dart';
 import 'package:widgets/widget.dart';
 
 class CartController extends BaseControllerInterface {
@@ -51,32 +54,37 @@ class CartController extends BaseControllerInterface {
   }
 
   Future<void> onTapCompleteOrder() async {
-    final request = CreateOrderRequestModel(
-      cariHesapId: sessionHandler.currentUser!.currentAccountId!.toString(),
-      orderDetails: itemList
-          .map(
-            (e) => OrderDetail(
-              amount: e.quantity.toString(),
-              productId: e.id.toString(),
-              unitPrice: e.price.toString(),
-            ),
-          )
-          .toList(),
-    );
+    if (sessionHandler.currentUser == null) {
+      // await SessionHandler.instance.logOut();
+    await  context.pushNamed(SubRouteEnums.loginSubScreen.name);
+    } else {
+      final request = CreateOrderRequestModel(
+        cariHesapId: sessionHandler.currentUser!.currentAccountId!.toString(),
+        orderDetails: itemList
+            .map(
+              (e) => OrderDetail(
+                amount: e.quantity.toString(),
+                productId: e.id.toString(),
+                unitPrice: e.price.toString(),
+              ),
+            )
+            .toList(),
+      );
 
-    LoadingProgress.start();
-    await client.appService.createOrder(request: request).handleRequest(
-          ignoreException: true,
-          onIgnoreException: (err) {
-            showErrorToastMessage(err?.title ?? 'Bir hata oluştu.');
-          },
-          onSuccess: (res) {
-            showSuccessToastMessage('Sipariş başarı ile oluşturuldu.');
-            itemList = [];
-          },
-          defaultResponse: CreateOrderResponseModel(),
-        );
-    LoadingProgress.stop();
+      LoadingProgress.start();
+      await client.appService.createOrder(request: request).handleRequest(
+            ignoreException: true,
+            onIgnoreException: (err) {
+              showErrorToastMessage(err?.title ?? 'Bir hata oluştu.');
+            },
+            onSuccess: (res) {
+              showSuccessToastMessage('Sipariş başarı ile oluşturuldu.');
+              itemList = [];
+            },
+            defaultResponse: CreateOrderResponseModel(),
+          );
+      LoadingProgress.stop();
+    }
   }
 }
 
@@ -111,7 +119,7 @@ class CartProductModel {
       name: name ?? this.name,
       price: price ?? this.price,
       quantity: quantity ?? this.quantity,
-      pictureUrl: pictureUrl??this.pictureUrl,
+      pictureUrl: pictureUrl ?? this.pictureUrl,
     );
   }
 }

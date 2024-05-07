@@ -37,11 +37,16 @@ class _ProductCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        '${item.code} - ${item.name} ',
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: context.bodyLarge,
+                      Column(
+                        children: [
+                          Text(
+                            '${item.code} - ${item.name}',
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: context.bodySmall,
+                          ),
+                          
+                        ],
                       ),
                       Row(
                         children: [

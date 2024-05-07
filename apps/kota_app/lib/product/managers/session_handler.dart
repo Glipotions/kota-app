@@ -18,8 +18,8 @@ class SessionHandler extends ChangeNotifier {
 
   UserAuthStatus _userAuthStatus = UserAuthStatus.notInitialized;
   UserAuthStatus get userAuthStatus => _userAuthStatus;
-  bool isInitRoute=true;
-  bool isInitRoute2=true;
+  bool isInitRoute = true;
+  bool isInitRoute2 = true;
 
   set userAuthStatus(UserAuthStatus value) {
     _userAuthStatus = value;
@@ -44,15 +44,15 @@ class SessionHandler extends ChangeNotifier {
 
   Future<void> getCurrentUser() async {
     await ProductClient.instance.appService.currentUser().handleRequest(
-      onSuccess: (res)async{
-        await logIn(res: res!);
-      },
-      onIgnoreException: (err)async{
-        await logOut();
-      },
-      ignoreException: true,
-      defaultResponse:  LoginResponseModel(),
-    );
+          onSuccess: (res) async {
+            await logIn(res: res!);
+          },
+          onIgnoreException: (err) async {
+            await logOut();
+          },
+          ignoreException: true,
+          defaultResponse: LoginResponseModel(),
+        );
   }
 
   void onAuthStatusChanged() {

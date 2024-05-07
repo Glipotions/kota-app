@@ -9,32 +9,35 @@ class DarkColors implements AbstractColor {
   @override
   String get themeCode => 'dark';
 
-    @override
-  Color get primary => const Color(0xFF42A5F5); // Canlı Mavi
   @override
-  Color get onPrimary => const Color(0xFF0D47A1); // Karanlık Mavi Metin
+  Color get primary => const Color(0xFF8D6E63); // Koyu Şeftali
   @override
-  Color get primaryContainer => const Color(0xFF90CAF9); // Açık Canlı Mavi
-  @override
-  Color get onPrimaryContainer => const Color(0xFF1E88E5); // Parlak Mavi Metni
+  Color get onPrimary => const Color(0xFFFFFFFF); // Beyaz Metin
 
   @override
-  Color get secondary => const Color(0xFF64B5F6); // Parlak Mavi
+  Color get primaryContainer => const Color(0xFF6D4C41); // Daha Koyu Şeftali
   @override
-  Color get onSecondary => const Color(0xFF0D47A1); // Karanlık Mavi Metin
-  @override
-  Color get secondaryContainer => const Color(0xFFBBDEFB); // Soft Mavi
-  @override
-  Color get onSecondaryContainer => const Color(0xFF1565C0); // Canlı Mavi Metni
+  Color get onPrimaryContainer => const Color(0xFFFFAB91); // Açık Şeftali Metin
 
   @override
-  Color get tertiary => const Color(0xFF4CAF509);
+  Color get secondary => const Color(0xFF5D4037); // Koyu Kahverengi
   @override
-  Color get onTertiary => const Color(0xFF1565C0); // Canlı Mavi Metin
+  Color get onSecondary => const Color(0xFFE0E0E0); // Açık Gri Metin
+
   @override
-  Color get tertiaryContainer => const Color(0xFF42A5F5); // Gökyüzü Mavisi
+  Color get secondaryContainer => const Color(0xFF4E342E); // Çok Koyu Kahverengi
   @override
-  Color get onTertiaryContainer => const Color(0xFF1976D2); // Parlak Mavi Metni
+  Color get onSecondaryContainer => const Color(0xFFFFAB91); // Açık Şeftali Metin
+
+  @override
+  Color get tertiary => const Color(0xFF795548); // Bronz
+  @override
+  Color get onTertiary => const Color(0xFFFFFFFF); // Beyaz Metin
+
+  @override
+  Color get tertiaryContainer => const Color(0xFF5D4037); // Koyu Kahverengi
+  @override
+  Color get onTertiaryContainer => const Color(0xFFFFAB91); // Açık Şeftali Metin
 
 
   // Error color palette (can keep as it is or adjust for dark theme)

@@ -21,6 +21,7 @@ class ProductDetailController extends BaseControllerInterface {
 
   final String code;
   final String productCode;
+  RxInt productCountInPackage = 1.obs;
   RxDouble? selectedUnitPrice = 0.0.obs;
   RxBool isColorEnabled = true.obs;
   RxInt selectedSize = (-1).obs;
@@ -32,12 +33,13 @@ class ProductDetailController extends BaseControllerInterface {
 
   final Rx<CartProductModel> _cartProduct = Rx(
     CartProductModel(
-        id: 0,
-        code: '',
-        name: '',
-        price: 0,
-        quantity: 0,
-        pictureUrl: baseLogoUrl,),
+      id: 0,
+      code: '',
+      name: '',
+      price: 0,
+      quantity: 0,
+      pictureUrl: baseLogoUrl,
+    ),
   );
   CartProductModel get cartProduct => _cartProduct.value;
   set cartProduct(CartProductModel value) => _cartProduct.value = value;
@@ -83,7 +85,7 @@ class ProductDetailController extends BaseControllerInterface {
         )
         .firstOrNull;
     selectedUnitPrice?.value = selectedProductVariant?.unitPrice ?? 0.0;
-    if(selectedProductVariant?.productCode==null) return;
+    if (selectedProductVariant?.productCode == null) return;
     fillCartModel();
   }
 
@@ -93,7 +95,7 @@ class ProductDetailController extends BaseControllerInterface {
       code: selectedProductVariant!.productCode!,
       name: selectedProductVariant?.productName,
       price: selectedUnitPrice?.value ?? 0,
-      quantity: int.parse(cQty.text),
+      quantity: int.parse(cQty.text == '' ? '0' : cQty.text),
       pictureUrl: product.pictureUrl ?? baseLogoUrl,
     );
   }

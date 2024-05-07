@@ -52,7 +52,7 @@ class BaseView<T extends BaseControllerInterface> extends StatelessWidget {
                     showBtn ? (onTapTryAgain ?? controller.onReady) : null,
               ))
           : (controller.loadingStatus.isLoaded ||
-                  controller.loadingStatus.isProcessing)
+                  controller.loadingStatus.isProcessing) || child==null
               ? child
               : loadingView ?? const GeneralLoadingView();
     });

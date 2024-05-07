@@ -1,26 +1,27 @@
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 
 ///You can manage everything related to caching using this class.
 class LocaleManager {
+  LocaleManager._init();
+  late final SharedPreferences _preferences;
+  late final FlutterSecureStorage _securedPreferences;
 
-    LocaleManager._init();
-    late final SharedPreferences _preferences;
+  static final LocaleManager _instance = LocaleManager._init();
 
-    static final LocaleManager _instance = LocaleManager._init();
+  ///Returns instace for LocaleManager
+  static LocaleManager get instance => _instance;
 
-    ///Returns instace for LocaleManager
-    static LocaleManager get instance => _instance;
-
-    ///Initialize the Shared Preferances. To use it in testing you can use
-    ///initValue parameter within this method.
-    static Future<void> cacheInit([SharedPreferences? initValue]) async {
-      instance._preferences = 
-      initValue ?? await SharedPreferences.getInstance();
-    }
+  ///Initialize the Shared Preferances. To use it in testing you can use
+  ///initValue parameter within this method.
+  static Future<void> cacheInit([SharedPreferences? initValue]) async {
+    instance._preferences = initValue ?? await SharedPreferences.getInstance();
+    instance._securedPreferences = const FlutterSecureStorage();
+  }
 
   ///This method is written for setting mock values while testing.
-  Future<SharedPreferences> setMockValues(Map<String,Object> mockValues)async{
+  Future<SharedPreferences> setMockValues(
+      Map<String, Object> mockValues) async {
     // ignore: invalid_use_of_visible_for_testing_member
     SharedPreferences.setMockInitialValues(mockValues);
     return SharedPreferences.getInstance();
@@ -53,12 +54,12 @@ class LocaleManager {
   }
 
   ///This method sets bool value for given key.
-  Future<void> setBoolValue({required String key,required  bool value}) async {
+  Future<void> setBoolValue({required String key, required bool value}) async {
     await _preferences.setBool(key, value);
   }
 
   ///This method sets int value for given key.
-  Future<void> setIntValue({required String key,required  int value}) async {
+  Future<void> setIntValue({required String key, required int value}) async {
     await _preferences.setInt(key, value);
   }
 
@@ -70,4 +71,15 @@ class LocaleManager {
 
   ///This method get int value at given key.
   int? getIntValue({required String key}) => _preferences.getInt(key);
+
+  Future<String?> getSecuredValue(String key) async =>
+      await _securedPreferences.read(key: key);
+
+  Future<void> setSecuredValue(String key, String value) async {
+    await _securedPreferences.write(key: key, value: value);
+  }
+
+  Future<void> deleteAllSecuredValues() async {
+    await _securedPreferences.deleteAll();
+  }
 }
