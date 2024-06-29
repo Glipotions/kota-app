@@ -47,26 +47,28 @@ class AllProducts extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Flexible(
-                child: Obx(
-                  () => GridView.builder(
-                    controller: controller.scrollController,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: 0.645,
-                      crossAxisSpacing: ModulePadding.s.value,
-                      mainAxisSpacing: ModulePadding.xxs.value,
+                child: OrientationBuilder(
+                  builder: (context, orientation) => Obx(
+                    () => GridView.builder(
+                      controller: controller.scrollController,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: orientation == Orientation.portrait ? 2 : 4,
+                        childAspectRatio: 0.645,
+                        crossAxisSpacing: ModulePadding.s.value,
+                        mainAxisSpacing: ModulePadding.xxs.value,
+                      ),
+                      itemBuilder: (context, index) {
+                        final item = controller.products[index];
+                        return ProductCard(
+                          onTap: () => controller.onTapProductDetail(
+                            item.code!,
+                            item.name,
+                          ),
+                          item: item,
+                        );
+                      },
+                      itemCount: controller.products.length,
                     ),
-                    itemBuilder: (context, index) {
-                      final item = controller.products[index];
-                      return ProductCard(
-                        onTap: () => controller.onTapProductDetail(
-                          item.code!,
-                          item.name,
-                        ),
-                        item: item,
-                      );
-                    },
-                    itemCount: controller.products.length,
                   ),
                 ),
               ),

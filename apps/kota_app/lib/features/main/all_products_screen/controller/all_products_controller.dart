@@ -54,7 +54,8 @@ class AllProductsController extends BaseControllerInterface {
 
   Future<void> _getProducts() async {
     final request = ProductGroupListRequestModel(
-      pageIndex: productsResponse.index == null ? 0 : productsResponse.index! + 1,
+      pageIndex:
+          productsResponse.index == null ? 0 : productsResponse.index! + 1,
       pageSize: 10,
     );
 
@@ -63,7 +64,7 @@ class AllProductsController extends BaseControllerInterface {
         productsResponse = res!;
         if (res.items != null) {
           products.addAll(res.items!);
-          products=products;
+          products = products;
         }
       },
     );
@@ -76,15 +77,14 @@ class AllProductsController extends BaseControllerInterface {
       searchText: searchText,
     );
 
-
     await client.appService.allProducts(request: request).handleRequest(
       onSuccess: (res) {
-    filteredProducts = <ProductGroupItem>[];
+        filteredProducts = <ProductGroupItem>[];
         productsResponse = res!;
         if (res.items != null) {
           filteredProducts.addAll(res.items!);
         }
-        filteredProducts=filteredProducts;
+        filteredProducts = filteredProducts;
       },
     );
     return filteredProducts;
@@ -101,13 +101,17 @@ class AllProductsController extends BaseControllerInterface {
     if (productGroupItem != null) {
       await context.pushNamed(
         SubRouteEnums.productDetail.name,
-        pathParameters: {'id': productGroupItem!.code!, 'productCode': productGroupItem!.name!},
+        pathParameters: {
+          'id': productGroupItem!.code!,
+          'productCode': productGroupItem!.name!
+        },
       );
     }
   }
 
   Future<void> onLazyLoad() async {
-    if (!isInSearchMode && !isPaginationLoading &&
+    if (!isInSearchMode &&
+        !isPaginationLoading &&
         scrollController.offset >= scrollController.position.maxScrollExtent &&
         !scrollController.position.outOfRange &&
         (productsResponse.hasNext ?? false)) {

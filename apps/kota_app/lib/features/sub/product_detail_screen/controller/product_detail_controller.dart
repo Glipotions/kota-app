@@ -29,7 +29,7 @@ class ProductDetailController extends BaseControllerInterface {
   String? selectedSizeName = '';
   String? selectedColorName = '';
 
-  final TextEditingController cQty = TextEditingController(text: '0');
+  TextEditingController cQty = TextEditingController(text: '0');
 
   final Rx<CartProductModel> _cartProduct = Rx(
     CartProductModel(
@@ -85,8 +85,12 @@ class ProductDetailController extends BaseControllerInterface {
         )
         .firstOrNull;
     selectedUnitPrice?.value = selectedProductVariant?.unitPrice ?? 0.0;
+    cQty.text = (selectedProductVariant?.productCountInPackage == null
+        ? '0'
+        : selectedProductVariant?.productCountInPackage.toString())!;
     if (selectedProductVariant?.productCode == null) return;
     fillCartModel();
+    update();
   }
 
   void fillCartModel() {

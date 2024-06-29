@@ -23,7 +23,8 @@ class ProductDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final CartController cartCont = Get.find();
+    // final CartController cartCont = Get.find();
+    final CartController cartCont = Get.put(CartController());
 
     return GestureDetector(
       onTap: controller.unFocus,
@@ -44,12 +45,14 @@ class ProductDetail extends StatelessWidget {
                   Row(
                     children: [
                       Expanded(
-                        child: QuantitySelectionButton(
-                          cController: controller.cQty,
-                          productCountInPackage: controller
-                                  .selectedProductVariant!
-                                  .productCountInPackage ??
-                              1,
+                        child: Obx(
+                          () => QuantitySelectionButton(
+                            cController: controller.cQty,
+                            productCountInPackage: controller
+                                    .selectedProductVariant!
+                                    .productCountInPackage ??
+                                1,
+                          ),
                         ),
                       ),
                       SizedBox(
@@ -92,7 +95,8 @@ class ProductDetail extends StatelessWidget {
                           ],
                         ).isVisible(
                           value: cartCont.inChartItemById(
-                                controller.selectedProductVariant?.productId ?? 0,
+                                controller.selectedProductVariant?.productId ??
+                                    0,
                               ) !=
                               null,
                         ),
@@ -104,13 +108,14 @@ class ProductDetail extends StatelessWidget {
                           onTap: () {
                             cartCont.onTapRemoveProduct(
                               CartProductModel(
-                                id: controller.selectedProductVariant!.productId!,
+                                id: controller
+                                    .selectedProductVariant!.productId!,
                                 code: controller.code,
                                 name: controller.code,
                                 price: controller.selectedUnitPrice!.value,
                                 quantity: int.parse(controller.cQty.text),
-                                pictureUrl:
-                                    controller.product.pictureUrl ?? baseLogoUrl,
+                                pictureUrl: controller.product.pictureUrl ??
+                                    baseLogoUrl,
                               ),
                             );
                           },
@@ -118,7 +123,8 @@ class ProductDetail extends StatelessWidget {
                               context.bodyMedium.copyWith(color: context.error),
                         ).isVisible(
                           value: cartCont.inChartItemById(
-                                controller.selectedProductVariant?.productId ?? 0,
+                                controller.selectedProductVariant?.productId ??
+                                    0,
                               ) !=
                               null,
                         ),
@@ -204,7 +210,7 @@ class ProductDetail extends StatelessWidget {
                                 return const SizedBox();
                               }
                               final item = list[index];
-      
+
                               return Obx(
                                 () => CustomChoiceChip(
                                   title: item,
@@ -245,7 +251,7 @@ class ProductDetail extends StatelessWidget {
                                 return const SizedBox();
                               }
                               final item = list[index];
-      
+
                               return Obx(
                                 () => CustomChoiceChip(
                                   title: item,

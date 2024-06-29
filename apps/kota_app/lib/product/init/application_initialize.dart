@@ -50,7 +50,11 @@ class ApplicationInitialize {
       ),
     );
 
-    await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+    await SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
 
     //  FirebaseMessagingService.messagingInit(
     //   showNotification: (title, body) => LocalNotificationHandler.instance

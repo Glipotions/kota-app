@@ -13,7 +13,7 @@ dependencies:
     path: ../../resources/api
   common:
     path: ../../resources/common
-  cupertino_icons: ^1.0.2
+  cupertino_icons: ^1.0.3
   flutter:
     sdk: flutter
   flutter_barcode_scanner: ^2.0.0
@@ -21,7 +21,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   get: ^4.6.6
-  go_router: ^13.0.1
+  go_router: ^14.2.0
   logger: ^2.0.2+1
   universal_io: ^2.2.2
   values:

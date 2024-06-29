@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 class QuantitySelectionButton extends StatefulWidget {
   const QuantitySelectionButton({
     required this.cController,
-    this.productCountInPackage = 2,
+    this.productCountInPackage = 1,
     super.key,
   });
 
