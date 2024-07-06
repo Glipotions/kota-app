@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kota_app/product/managers/cart_controller.dart';
+import 'package:kota_app/product/models/cart_product_model.dart';
 import 'package:kota_app/product/utility/enums/module_padding_enums.dart';
 import 'package:kota_app/product/utility/enums/module_radius_enums.dart';
 import 'package:kota_app/product/widgets/button/clickable_text.dart';

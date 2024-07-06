@@ -103,7 +103,7 @@ class AllProductsController extends BaseControllerInterface {
         SubRouteEnums.productDetail.name,
         pathParameters: {
           'id': productGroupItem!.code!,
-          'productCode': productGroupItem!.name!
+          'productCode': productGroupItem!.name!,
         },
       );
     }

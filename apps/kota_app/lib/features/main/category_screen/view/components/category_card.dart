@@ -1,17 +1,20 @@
 import 'package:api/api.dart';
 import 'package:flutter/material.dart';
+import 'package:kota_app/product/utility/enums/module_padding_enums.dart';
 import 'package:kota_app/product/utility/enums/module_radius_enums.dart';
 import 'package:widgets/widget.dart';
 
 class CategoryCard extends StatelessWidget {
+  const CategoryCard({required this.category, super.key});
   final ProductCategoryModel category;
-
-  const CategoryCard({Key? key, required this.category}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      padding: EdgeInsets.symmetric(
+        horizontal: ModulePadding.s.value,
+        vertical: ModulePadding.xxs.value,
+      ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(ModuleRadius.xl.value),
         child: Stack(
@@ -26,7 +29,7 @@ class CategoryCard extends StatelessWidget {
             ),
             Container(
               width: double.infinity,
-              height: 150.0,
+              height: ModulePadding.xs.value,
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.bottomCenter,
@@ -39,23 +42,23 @@ class CategoryCard extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: EdgeInsets.all(ModulePadding.s.value),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     category.name!,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
-                      fontSize: 20.0,
+                      fontSize: ModulePadding.m.value,
                     ),
                   ),
                   Text(
                     '${category.productCount} Products',
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: Colors.white,
-                      fontSize: 16.0,
+                      fontSize: ModulePadding.s.value,
                     ),
                   ),
                 ],

@@ -49,7 +49,7 @@ class ModuleTheme implements AppTheme {
         scrim: appColors.scrim,
         shadow: appColors.shadow,
         surfaceTint: appColors.surfaceTint,
-        surfaceVariant: appColors.surfaceVariant,
+        surfaceContainerHighest: appColors.surfaceVariant,
         tertiaryContainer: appColors.tertiaryContainer,
       );
 
@@ -220,11 +220,11 @@ class ModuleTheme implements AppTheme {
   @override
   TextButtonThemeData get textButtonThemeData => TextButtonThemeData(
         style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
-          foregroundColor: MaterialStateProperty.all<Color>(appColors.primary),
-          shadowColor: MaterialStateProperty.all<Color>(Colors.transparent),
-          overlayColor: MaterialStateProperty.all<Color>(Colors.transparent),
-          textStyle: MaterialStateProperty.all<TextStyle>(
+          backgroundColor: WidgetStateProperty.all<Color>(Colors.transparent),
+          foregroundColor: WidgetStateProperty.all<Color>(appColors.primary),
+          shadowColor: WidgetStateProperty.all<Color>(Colors.transparent),
+          overlayColor: WidgetStateProperty.all<Color>(Colors.transparent),
+          textStyle: WidgetStateProperty.all<TextStyle>(
             TextStyle(
               color: appColors.primary,
               fontWeight: FontWeight.w400,
@@ -238,24 +238,24 @@ class ModuleTheme implements AppTheme {
   OutlinedButtonThemeData get outlinedButtonThemeData =>
       OutlinedButtonThemeData(
         style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
+          backgroundColor: WidgetStateProperty.all<Color>(Colors.transparent),
           foregroundColor:
-              MaterialStateProperty.all<Color>(appColors.secondary),
-          side: MaterialStateProperty.resolveWith((Set<MaterialState> states) {
-            if (states.contains(MaterialState.disabled)) {
+              WidgetStateProperty.all<Color>(appColors.secondary),
+          side: WidgetStateProperty.resolveWith((Set<WidgetState> states) {
+            if (states.contains(WidgetState.disabled)) {
               return BorderSide(color: appColors.secondary);
             }
             return BorderSide(color: appColors.secondary);
           }),
-          padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.zero),
-          textStyle: MaterialStateProperty.all<TextStyle>(
+          padding: WidgetStateProperty.all<EdgeInsets>(EdgeInsets.zero),
+          textStyle: WidgetStateProperty.all<TextStyle>(
             TextStyle(
               color: appColors.secondary,
               fontWeight: FontWeight.w400,
               fontSize: 16,
             ),
           ),
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          shape: WidgetStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(ModuleRadius.l.value),
             ),
@@ -265,8 +265,8 @@ class ModuleTheme implements AppTheme {
 
   @override
   CheckboxThemeData get checkboxThemeData => CheckboxThemeData(
-        fillColor: MaterialStateProperty.all<Color?>(appColors.primary),
-        checkColor: MaterialStateProperty.all<Color?>(appColors.onPrimary),
+        fillColor: WidgetStateProperty.all<Color?>(appColors.primary),
+        checkColor: WidgetStateProperty.all<Color?>(appColors.onPrimary),
         side: BorderSide(width: 0.7, color: appColors.primary),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(ModuleRadius.s.value),
@@ -275,7 +275,7 @@ class ModuleTheme implements AppTheme {
 
   @override
   RadioThemeData get radioThemeData => RadioThemeData(
-        fillColor: MaterialStateProperty.all<Color>(appColors.primary),
+        fillColor: WidgetStateProperty.all<Color>(appColors.primary),
       );
 
   @override

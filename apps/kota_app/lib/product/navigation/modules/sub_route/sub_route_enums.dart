@@ -5,11 +5,15 @@ enum SubRouteEnums {
     '/order-history',
     'orderHistoryScreen',
   ),
+  orderHistoryDetail(
+    '/order-history-detail',
+    'orderHistoryDetailScreen',
+  ),
   transactionHistory(
     '/transaction-history',
     'transactionScreen',
   ),
-    manageAccount(
+  manageAccount(
     '/manage-account',
     'manageAccountScreen',
   ),

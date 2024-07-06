@@ -30,7 +30,7 @@ class ProductVariantResponseModel
         colors: json['colors'] == null
             ? []
             : List<String>.from(json['colors']!.map((x) => x)),
-            pictureUrl: json['pictureUrl'],
+        pictureUrl: json['pictureUrl'],
       );
 
   @override
@@ -44,7 +44,7 @@ class ProductVariantResponseModel
             : List<dynamic>.from(
                 colors!.map((x) => x),
               ),
-        'pictureUrl':pictureUrl,
+        'pictureUrl': pictureUrl,
       };
 }
 
@@ -78,7 +78,7 @@ class ProductVariant {
         sizeId: json['sizeId'],
         sizeName: json['sizeName'],
         durum: json['durum'],
-        productCountInPackage: json['productCountInPackage']
+        productCountInPackage: json['productCountInPackage'],
       );
 
   int? id;

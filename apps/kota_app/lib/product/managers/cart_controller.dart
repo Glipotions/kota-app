@@ -4,7 +4,7 @@ import 'package:api/api.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kota_app/product/base/controller/base_controller.dart';
-import 'package:kota_app/product/managers/session_handler.dart';
+import 'package:kota_app/product/models/cart_product_model.dart';
 import 'package:kota_app/product/navigation/modules/sub_route/sub_route_enums.dart';
 import 'package:widgets/widget.dart';
 
@@ -85,41 +85,5 @@ class CartController extends BaseControllerInterface {
           );
       LoadingProgress.stop();
     }
-  }
-}
-
-class CartProductModel {
-  CartProductModel({
-    required this.id,
-    required this.code,
-    required this.price,
-    required this.quantity,
-    this.name,
-    this.pictureUrl,
-  });
-
-  int id;
-  String code;
-  String? name;
-  double price;
-  int quantity;
-  String? pictureUrl;
-
-  CartProductModel copyWith({
-    int? id,
-    String? code,
-    String? name,
-    double? price,
-    int? quantity,
-    String? pictureUrl,
-  }) {
-    return CartProductModel(
-      id: id ?? this.id,
-      code: code ?? this.code,
-      name: name ?? this.name,
-      price: price ?? this.price,
-      quantity: quantity ?? this.quantity,
-      pictureUrl: pictureUrl ?? this.pictureUrl,
-    );
   }
 }

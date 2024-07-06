@@ -41,6 +41,7 @@ class OrderHistory extends StatelessWidget {
                         children: [
                           _OrderCard(
                             item: item,
+                            controller: controller,
                           ),
                           Obx(
                             () => Padding(

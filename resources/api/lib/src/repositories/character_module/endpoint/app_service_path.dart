@@ -11,6 +11,8 @@ enum AppServicePath {
 
   orderHistory('api/AlinanSiparises/byCurrencyId'),
 
+  orderHistoryDetail('api/AlinanSiparises'),
+
   balance('api/CariHesaps'),
 
   createOrder('api/AlinanSiparises'),

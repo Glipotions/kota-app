@@ -10,7 +10,6 @@ import 'package:kota_app/product/navigation/modules/bottom_navigation_route/bott
 import 'package:kota_app/product/navigation/modules/initial_route/initial_route.dart';
 import 'package:kota_app/product/navigation/modules/initial_route/initial_route_enums.dart';
 import 'package:kota_app/product/navigation/modules/sub_route/sub_route.dart';
-import 'package:kota_app/product/navigation/modules/sub_route/sub_route_enums.dart';
 
 /// Routing Manager for module
 class RoutingManager extends AbstractRoutingManager {
@@ -50,6 +49,7 @@ class RoutingManager extends AbstractRoutingManager {
     redirect: (context, state) {
       final authHandler = SessionHandler.instance;
       if (authHandler.userAuthStatus == UserAuthStatus.notInitialized) {
+        // return AuthRouteScreens.loginScreen.path;
         return InitialRouteScreens.splashScreen.path;
       } else if (_instance.isUnauthorizedAndNotAuthScreenAndNotInitRoute(
         state.matchedLocation,
@@ -98,7 +98,7 @@ class RoutingManager extends AbstractRoutingManager {
                 .indexWhere((element) => element.path == currentName) ==
             -1 ||
         currentName == InitialRouteScreens.splashScreen.path;
-    final isInitRoute = SessionHandler.instance.isInitRoute;
+    // final isInitRoute = SessionHandler.instance.isInitRoute;
 
     final isProfileScreen =
         currentName == BottomNavigationRouteEnum.profileScreen.path;

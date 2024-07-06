@@ -15,7 +15,7 @@ class LoginController extends BaseControllerInterface {
   final GlobalKey<FormState> fKey = GlobalKey<FormState>();
   final TextEditingController cEmail = TextEditingController();
   final TextEditingController cPassword = TextEditingController();
-  var rememberMe = false.obs;
+  RxBool rememberMe = false.obs;
 
   @override
   Future<void> onReady() async {
@@ -60,12 +60,12 @@ class LoginController extends BaseControllerInterface {
   }
 
   Future<void> getUserCredentials() async {
-    // ignore: use_if_null_to_convert_nulls_to_bools
+    // ignore:  use_if_null_to_convert_nulls_to_bools
     if (LocaleManager.instance.getBoolValue(key: CacheKey.isRemember.name) ==
         true) {
-      var username = await LocaleManager.instance
+      final username = await LocaleManager.instance
           .getSecuredValue(SecuredCacheKey.username.name);
-      var password = await LocaleManager.instance
+      final password = await LocaleManager.instance
           .getSecuredValue(SecuredCacheKey.password.name);
       rememberMe.value = true;
       if (username != null) {
@@ -78,7 +78,7 @@ class LoginController extends BaseControllerInterface {
   }
 
   Future<void> saveUserCredentials() async {
-    LocaleManager.instance
+   await LocaleManager.instance
         .setBoolValue(key: CacheKey.isRemember.name, value: rememberMe.value);
 
     if (rememberMe.value) {

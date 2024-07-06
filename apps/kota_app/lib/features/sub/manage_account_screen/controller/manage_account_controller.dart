@@ -1,3 +1,6 @@
+// ignore_for_file: use_setters_to_change_properties, 
+// ignore_for_file: avoid_positional_boolean_parameters
+
 import 'package:api/api.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:kota_app/product/base/controller/base_controller.dart';
@@ -6,6 +9,7 @@ import 'package:kota_app/product/managers/session_handler.dart';
 class ManageAccountController extends BaseControllerInterface {
   ManageAccountController();
 
+  @override
   SessionHandler get sessionHandler => SessionHandler.instance;
 
   final Rx<User> _user =

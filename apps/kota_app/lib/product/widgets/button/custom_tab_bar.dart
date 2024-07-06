@@ -38,7 +38,7 @@ class CustomTabBar extends StatelessWidget {
         indicatorColor: Colors.transparent,
         dividerColor: Colors.transparent,
         labelStyle: labelStyle,
-        overlayColor: MaterialStateProperty.all(Colors.transparent),
+        overlayColor: WidgetStateProperty.all(Colors.transparent),
         indicator: BoxDecoration(
           color:
               color ?? context.onBackground,

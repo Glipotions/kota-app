@@ -1,6 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:kota_app/features/auth/login_screen/login_screen.dart';
 import 'package:kota_app/features/sub/manage_account_screen/manage_account_screen.dart';
+import 'package:kota_app/features/sub/order_history_detail_screen/order_history_detail_screen.dart';
 import 'package:kota_app/features/sub/order_history_screen/order_history_screen.dart';
 import 'package:kota_app/features/sub/product_detail_screen/product_detail_screen.dart';
 import 'package:kota_app/features/sub/transaction_history_screen/transaction_history_screen.dart';
@@ -16,6 +17,13 @@ class SubRoute {
       name: SubRouteEnums.orderHistory.name,
       path: SubRouteEnums.orderHistory.path,
       builder: (context, state) => const OrderHistoryScreen(),
+    ),
+    GoRoute(
+      name: SubRouteEnums.orderHistoryDetail.name,
+      path: '${SubRouteEnums.orderHistoryDetail.path}/:id',
+      builder: (context, state) => OrderHistoryDetailScreen(
+        id: state.pathParameters['id']!,
+      ),
     ),
     GoRoute(
       name: SubRouteEnums.transactionHistory.name,

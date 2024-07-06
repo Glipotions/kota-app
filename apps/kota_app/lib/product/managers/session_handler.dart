@@ -71,7 +71,7 @@ class SessionHandler extends ChangeNotifier {
       setLoggedIn(value: false),
     ]);
     currentUser = null;
-    userAuthStatus = UserAuthStatus.notInitialized;
+    userAuthStatus = UserAuthStatus.unAuthorized;
   }
 
   ///Logs in the current user.

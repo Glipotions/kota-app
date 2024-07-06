@@ -103,10 +103,10 @@ extension ContextExtension on BuildContext {
   Color get outline => Theme.of(this).colorScheme.outline;
 
   /// Returns the background color
-  Color get background => Theme.of(this).colorScheme.background;
+  Color get background => Theme.of(this).colorScheme.surface;
 
   /// Returns the onBackground color
-  Color get onBackground => Theme.of(this).colorScheme.onBackground;
+  Color get onBackground => Theme.of(this).colorScheme.onSurface;
 
   /// Returns the surface color
   Color get surface => Theme.of(this).colorScheme.surface;
@@ -115,7 +115,8 @@ extension ContextExtension on BuildContext {
   Color get onSurface => Theme.of(this).colorScheme.onSurface;
 
   /// Returns the surfaceVariant color
-  Color get surfaceVariant => Theme.of(this).colorScheme.surfaceVariant;
+  Color get surfaceVariant =>
+      Theme.of(this).colorScheme.surfaceContainerHighest;
 
   /// Returns the onSurfaceVariant color
   Color get onSurfaceVariant => Theme.of(this).colorScheme.onSurfaceVariant;
@@ -143,7 +144,7 @@ extension ContextExtension on BuildContext {
 
   /// Returns the brightness from the current theme's color scheme.
   Brightness get brightness => Theme.of(this).colorScheme.brightness;
-  
-   /// Returns Localization Label
-  AppLocalizationLabel get i10n =>AppLocalization.getLabels(this);
+
+  /// Returns Localization Label
+  AppLocalizationLabel get i10n => AppLocalization.getLabels(this);
 }

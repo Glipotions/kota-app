@@ -30,7 +30,9 @@ enum ModulePadding {
   xxxl(36),
 
   ///64
-  xxxxl(64);
+  xxxxl(64),
+
+  mega(150);
 
   /// Gets the value of padding enum.
   final double value;

@@ -52,7 +52,8 @@ class AllProducts extends StatelessWidget {
                     () => GridView.builder(
                       controller: controller.scrollController,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: orientation == Orientation.portrait ? 2 : 4,
+                        crossAxisCount:
+                            orientation == Orientation.portrait ? 2 : 4,
                         childAspectRatio: 0.645,
                         crossAxisSpacing: ModulePadding.s.value,
                         mainAxisSpacing: ModulePadding.xxs.value,

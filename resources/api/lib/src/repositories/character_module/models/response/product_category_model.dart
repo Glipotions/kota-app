@@ -26,7 +26,6 @@ class ProductCategoryModel extends IBaseModel<ProductCategoryModel> {
 
   @override
   Map<String, dynamic> toJson() {
-    // TODO: implement toJson
     throw UnimplementedError();
   }
 }

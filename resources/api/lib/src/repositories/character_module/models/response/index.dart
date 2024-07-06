@@ -1,6 +1,7 @@
 export 'balance_response_model.dart';
 export 'create_order_response_model.dart';
 export 'login_response_model.dart';
+export 'orders_history_detail_response_model.dart';
 export 'orders_history_response_model.dart';
 export 'product_category_model.dart';
 export 'product_group_list_response_model.dart';

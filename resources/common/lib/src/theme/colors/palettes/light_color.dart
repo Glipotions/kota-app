@@ -16,8 +16,10 @@ class LightColors implements AbstractColor {
 
   @override
   Color get primaryContainer => const Color(0xFFFFCCBC); // Açık Şeftali
+  
+  // Koyu Kahverengi Metin
   @override
-  Color get onPrimaryContainer => const Color(0xFF442B2D); // Koyu Kahverengi Metin
+  Color get onPrimaryContainer => const Color(0xFF442B2D); 
 
   @override
   Color get secondary => const Color(0xFFFF7043); // Koyu Şeftali

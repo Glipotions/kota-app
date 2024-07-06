@@ -7,6 +7,7 @@ import 'package:kota_app/features/sub/product_detail_screen/controller/product_d
 import 'package:kota_app/product/base/base_view.dart';
 import 'package:kota_app/product/consts/general.dart';
 import 'package:kota_app/product/managers/cart_controller.dart';
+import 'package:kota_app/product/models/cart_product_model.dart';
 import 'package:kota_app/product/utility/enums/module_padding_enums.dart';
 import 'package:kota_app/product/widgets/app_bar/general_app_bar.dart';
 import 'package:kota_app/product/widgets/button/clickable_text.dart';

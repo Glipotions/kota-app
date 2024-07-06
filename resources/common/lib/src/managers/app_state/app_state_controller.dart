@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:common/common.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:universal_io/io.dart';
 
 ///This class is created for managing states that is valid for whole app.
 class AppStateController {
@@ -98,7 +97,7 @@ class AppStateController {
     //   return Locale(_localeManager.getStringValue(key: lanCacheKey)!);
     // }
 
-      return Locale('tr');
+      return const Locale('tr');
 
   }
 

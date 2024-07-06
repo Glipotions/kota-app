@@ -1,7 +1,11 @@
-part of '../cart.dart';
 
-class _ProductCard extends StatelessWidget {
-  const _ProductCard({required this.item, this.onTapRemove, this.onTap});
+import 'package:flutter/material.dart';
+import 'package:kota_app/product/models/cart_product_model.dart';
+import 'package:kota_app/product/utility/enums/module_padding_enums.dart';
+import 'package:values/values.dart';
+
+class ProductCard extends StatelessWidget {
+  const ProductCard({required this.item, this.onTapRemove, this.onTap});
   final VoidCallback? onTap;
   final VoidCallback? onTapRemove;
   final CartProductModel item;
@@ -15,20 +19,20 @@ class _ProductCard extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Expanded(
-                flex: 2,
-                child: BorderedImage(
-                  radius: BorderRadius.only(
-                    bottomLeft: Radius.circular(ModuleRadius.m.value),
-                    topLeft: Radius.circular(ModuleRadius.m.value),
-                  ),
-                  aspectRatio: 164 / 80,
-                  imageUrl: item.pictureUrl!,
-                ),
-              ),
-              SizedBox(
-                width: ModulePadding.xxs.value,
-              ),
+              // Expanded(
+              //   flex: 2,
+              //   child: BorderedImage(
+              //     radius: BorderRadius.only(
+              //       bottomLeft: Radius.circular(ModuleRadius.m.value),
+              //       topLeft: Radius.circular(ModuleRadius.m.value),
+              //     ),
+              //     aspectRatio: 164 / 80,
+              //     imageUrl: item.pictureUrl!,
+              //   ),
+              // ),
+              // SizedBox(
+              //   width: ModulePadding.xxs.value,
+              // ),
               Expanded(
                 flex: 3,
                 child: Padding(
@@ -72,21 +76,6 @@ class _ProductCard extends StatelessWidget {
                           ),
                         ],
                       ),
-                      // Row(
-                      //   children: [
-                      //     Text(
-                      //       'Toplam:',
-                      //       style: context.titleMedium,
-                      //       textAlign: TextAlign.start,
-                      //     ),
-                      //     const Spacer(),
-                      //     Text(
-                      //       (item.price * item.quantity).formatPrice(),
-                      //       style: context.titleMedium,
-                      //       textAlign: TextAlign.end,
-                      //     ),
-                      //   ],
-                      // ),
                       SizedBox(
                         height: ModulePadding.xxxs.value,
                       ),

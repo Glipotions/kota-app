@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_await_in_return
+
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -21,7 +23,8 @@ class LocaleManager {
 
   ///This method is written for setting mock values while testing.
   Future<SharedPreferences> setMockValues(
-      Map<String, Object> mockValues) async {
+    Map<String, Object> mockValues,
+  ) async {
     // ignore: invalid_use_of_visible_for_testing_member
     SharedPreferences.setMockInitialValues(mockValues);
     return SharedPreferences.getInstance();

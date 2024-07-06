@@ -98,9 +98,7 @@ class ManageAccount extends StatelessWidget {
         Obx(
           () => Switch(
             value: controller.isDarkMode.value,
-            onChanged: (bool value) {
-              controller.setDarkMode(value);
-            },
+            onChanged: controller.setDarkMode,
           ),
         ),
       ],
@@ -109,7 +107,6 @@ class ManageAccount extends StatelessWidget {
 
   Widget removeAccountButton(BuildContext context) {
     return Align(
-      alignment: Alignment.center,
       child: TextButton(
         onPressed: () {
           showDialog(

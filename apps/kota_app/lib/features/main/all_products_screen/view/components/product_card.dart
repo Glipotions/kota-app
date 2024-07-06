@@ -11,7 +11,7 @@ class ProductCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Card(
-color: Colors.white,
+        color: Colors.white,
         elevation: 2,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
@@ -28,8 +28,9 @@ color: Colors.white,
                   imageUrl: item.pictureUrl != ''
                       ? item.pictureUrl!
                       : 'https://kota-app.b-cdn.net/logo.jpg',
-                  radius: BorderRadius.vertical(
-                      top: Radius.circular(8)), // Üst köşeleri yuvarlak
+                  radius: const BorderRadius.vertical(
+                    top: Radius.circular(8),
+                  ), // Üst köşeleri yuvarlak
                 ),
               ),
               SizedBox(height: ModulePadding.xs.value),
@@ -40,7 +41,7 @@ color: Colors.white,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '${item.name ?? ''}',
+                      item.name ?? '',
                       style:
                           context.titleLarge.copyWith(color: context.secondary),
                       overflow: TextOverflow.ellipsis,
@@ -55,11 +56,6 @@ color: Colors.white,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    // Text(
-                    //   item.price?.formatPrice() ?? '',
-                    //   style:
-                    //       context.titleMedium.copyWith(color: context.primary,),
-                    // ),
                   ],
                 ),
               ),

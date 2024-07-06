@@ -95,7 +95,7 @@ class AppOutlineButton extends StatelessWidget {
               OutlinedButtonTheme.of(context).style!.copyWith(
                     backgroundColor: bgColor == null
                         ? null
-                        : MaterialStateProperty.all<Color>(bgColor!),
+                        : WidgetStateProperty.all<Color>(bgColor!),
                   ),
           child: widget ??
               Text(

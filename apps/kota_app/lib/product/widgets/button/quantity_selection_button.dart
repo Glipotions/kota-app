@@ -38,9 +38,9 @@ class _QuantitySelectionButtonState extends State<QuantitySelectionButton> {
     if (_debounce?.isActive ?? false) _debounce?.cancel();
     _debounce = Timer(const Duration(milliseconds: 500), () {
       final text = widget.cController.text;
-      int? currentQty = int.tryParse(text);
+      final currentQty = int.tryParse(text);
       if (currentQty != null) {
-        int roundedQty = (currentQty ~/ widget.productCountInPackage!) *
+        final roundedQty = (currentQty ~/ widget.productCountInPackage!) *
             widget.productCountInPackage!;
         if (roundedQty != currentQty) {
           widget.cController.value = TextEditingValue(

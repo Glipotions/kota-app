@@ -1,7 +1,9 @@
 import 'package:api/api.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:kota_app/product/base/controller/base_controller.dart';
+import 'package:kota_app/product/navigation/modules/sub_route/sub_route_enums.dart';
 
 class OrderHistoryController extends BaseControllerInterface {
 
@@ -74,4 +76,11 @@ class OrderHistoryController extends BaseControllerInterface {
       isPaginationLoading = false;
     }
   }
+
+    void onTapOrderHistoryDetail(int id) =>
+      context.pushNamed(
+        SubRouteEnums.orderHistoryDetail.name,
+        pathParameters: {'id': id.toString(),},
+      );
+
 }

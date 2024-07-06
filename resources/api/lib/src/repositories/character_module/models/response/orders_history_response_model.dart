@@ -63,9 +63,9 @@ class OrderItem extends IBaseModel<OrderItem> {
     this.aciklama,
     this.durum,
   });
-  double? id;
+  int? id;
   String? kod;
-  double? cariHesapId;
+  int? cariHesapId;
   int? ozelKod1Id;
   int? dovizTuru;
   double? dovizKuru;
@@ -84,9 +84,9 @@ class OrderItem extends IBaseModel<OrderItem> {
 
   @override
   OrderItem fromJson(Map<String, dynamic> json) => OrderItem(
-        id: json['id']?.toDouble(),
+        id: json['id'],
         kod: json['kod'],
-        cariHesapId: json['cariHesapId']?.toDouble(),
+        cariHesapId: json['cariHesapId'],
         ozelKod1Id: json['ozelKod1Id'],
         dovizTuru: json['dovizTuru'],
         dovizKuru: json['dovizKuru']?.toDouble(),

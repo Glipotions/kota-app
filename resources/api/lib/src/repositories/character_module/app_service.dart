@@ -63,6 +63,18 @@ class AppService extends BaseClient {
   }
 
   ///Request that returns all characters
+  Future<BaseHttpModel<OrdersHistoryDetailResponseModel>> orderHistoryDetail({
+required int id,
+  }) async {
+    return baseRequest<OrdersHistoryDetailResponseModel, OrdersHistoryDetailResponseModel>(
+      responseModel: OrdersHistoryDetailResponseModel(),
+      httpUrl: AppServicePath.orderHistoryDetail.withPath(id.toString()),
+      method: DioHttpMethod.get,
+    );
+  }
+
+
+  ///Request that returns all characters
   Future<BaseHttpModel<CreateOrderResponseModel>> createOrder({
     required CreateOrderRequestModel request,
   }) async {
