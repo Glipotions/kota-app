@@ -23,7 +23,7 @@ class OrderHistoryDetailController extends BaseControllerInterface {
   Future<void> onReady() async {
     super.onReady();
     await onReadyGeneric(() async {
-    await fetchOrderContent();
+      await fetchOrderContent();
     });
   }
 
@@ -41,7 +41,6 @@ class OrderHistoryDetailController extends BaseControllerInterface {
               price: item.tutar!,
               quantity: item.miktar!,
               name: item.name,
-              
             ),
           );
         }

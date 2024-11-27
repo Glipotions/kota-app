@@ -33,3 +33,21 @@ class CartProductModel {
     );
   }
 }
+
+class CartProductPdfModel {
+  CartProductPdfModel({
+    this.id,
+    this.code,
+    this.date,
+    this.totalPrice,
+    this.totalQuantity,
+    this.items,
+  });
+
+  int? id;
+  String? code;
+  DateTime? date;
+  double? totalPrice;
+  int? totalQuantity;
+  List<CartProductModel>? items;
+}

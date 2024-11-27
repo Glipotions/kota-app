@@ -2,13 +2,14 @@ import 'package:api/api.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kota_app/features/sub/order_history_detail_screen/order_pdf/order_pdf_controller.dart';
 import 'package:kota_app/product/base/controller/base_controller.dart';
+import 'package:kota_app/product/models/cart_product_model.dart';
 import 'package:kota_app/product/navigation/modules/sub_route/sub_route_enums.dart';
+import 'package:pdf/pdf.dart';
+import 'package:printing/printing.dart';
 
 class OrderHistoryController extends BaseControllerInterface {
-
-  
-
   OrdersHistoryResponseModel transactionsResponse =
       OrdersHistoryResponseModel();
 
@@ -16,6 +17,7 @@ class OrderHistoryController extends BaseControllerInterface {
 
   final Rx<List<OrderItem>> _orderItems = Rx([]);
   final Rx<bool> _isPaginationLoading = Rx(false);
+  final OrderPdfController invoicePdfController = Get.put(OrderPdfController());
 
   List<OrderItem> get orderItems => _orderItems.value;
   set orderItems(List<OrderItem> value) => _orderItems
@@ -23,8 +25,7 @@ class OrderHistoryController extends BaseControllerInterface {
     ..value = value;
 
   bool get isPaginationLoading => _isPaginationLoading.value;
-  set isPaginationLoading(bool value) => _isPaginationLoading
-    .value = value;
+  set isPaginationLoading(bool value) => _isPaginationLoading.value = value;
 
   @override
   void onInit() {
@@ -77,10 +78,43 @@ class OrderHistoryController extends BaseControllerInterface {
     }
   }
 
-    void onTapOrderHistoryDetail(int id) =>
-      context.pushNamed(
+  void onTapOrderHistoryDetail(int id) => context.pushNamed(
         SubRouteEnums.orderHistoryDetail.name,
-        pathParameters: {'id': id.toString(),},
+        pathParameters: {
+          'id': id.toString(),
+        },
       );
 
+  Future<void> onTapOrderPdfCard(int id) async {
+    await client.appService.orderHistoryDetail(id: id).handleRequest(
+      onSuccess: (res) async {
+        final cartProductItems = <CartProductModel>[];
+
+        for (final item in res!.items!) {
+          cartProductItems.add(
+            CartProductModel(
+              id: item.id!,
+              code: item.code!,
+              price: item.birimFiyat!,
+              quantity: item.miktar!,
+              name: item.name,
+            ),
+          );
+        }
+
+        final pdfModel = CartProductPdfModel(
+          id: res.id,
+          code: res.kod,
+          date: res.tarih,
+          items: cartProductItems,
+          totalPrice: res.toplamTutar,
+        );
+
+        final pdf = await invoicePdfController.generateOrderHistoryDetailPdf(pdfModel);
+        await Printing.layoutPdf(
+          onLayout: (PdfPageFormat format) async => pdf.save(),
+        );
+      },
+    );
+  }
 }

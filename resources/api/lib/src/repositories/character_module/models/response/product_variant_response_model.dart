@@ -26,10 +26,14 @@ class ProductVariantResponseModel
               ),
         sizes: json['sizes'] == null
             ? []
-            : List<String>.from(json['sizes']!.map((x) => x)),
+            : List<String>.from(
+                json['sizes']!.where((x) => x != null).map((x) => x),
+              ),
         colors: json['colors'] == null
             ? []
-            : List<String>.from(json['colors']!.map((x) => x)),
+            : List<String>.from(
+                json['colors']!.where((x) => x != null).map((x) => x),
+              ),
         pictureUrl: json['pictureUrl'],
       );
 

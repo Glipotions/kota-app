@@ -26,10 +26,12 @@ class _OrderCard extends StatelessWidget {
                       controller.onTapOrderHistoryDetail(item.id!);
                     } else if (value == 'Düzenle') {
                       // Düzenle seçeneği için işlemler
+                    }else if (value == 'Pdf') {
+                      controller.onTapOrderPdfCard(item.id!);
                     }
                   },
                   itemBuilder: (BuildContext context) {
-                    return {'Gör', 'Düzenle'}.map((String choice) {
+                    return {'Gör', 'Düzenle', 'Pdf'}.map((String choice) {
                       return PopupMenuItem<String>(
                         value: choice,
                         child: Text(choice),

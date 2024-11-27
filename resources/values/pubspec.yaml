@@ -43,3 +43,13 @@ flutter:
           weight: 600
         - asset: assets/fonts/GreycliffCF-Bold.ttf
           weight: 700
+    - family: WorkSans
+      fonts:
+        - asset: assets/fonts/work_sans/WorkSans-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/work_sans/WorkSans-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/work_sans/WorkSans-BoldItalic.ttf
+          weight: 500
+        - asset: assets/fonts/work_sans/WorkSans-Italic.ttf
+          weight: 300
