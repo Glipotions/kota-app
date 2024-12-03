@@ -15,6 +15,28 @@ class CartProductModel {
   int quantity;
   String? pictureUrl;
 
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'code': code,
+      'name': name,
+      'price': price,
+      'quantity': quantity,
+      'pictureUrl': pictureUrl,
+    };
+  }
+
+  factory CartProductModel.fromJson(Map<String, dynamic> json) {
+    return CartProductModel(
+      id: json['id'] as int,
+      code: json['code'] as String,
+      name: json['name'] as String?,
+      price: (json['price'] as num).toDouble(),
+      quantity: json['quantity'] as int,
+      pictureUrl: json['pictureUrl'] as String?,
+    );
+  }
+
   CartProductModel copyWith({
     int? id,
     String? code,

@@ -41,6 +41,7 @@ class OrderHistoryDetailController extends BaseControllerInterface {
               price: item.tutar!,
               quantity: item.miktar!,
               name: item.name,
+              pictureUrl: item.pictureUrl,
             ),
           );
         }

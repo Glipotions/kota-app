@@ -6,9 +6,11 @@ class CreateOrderRequestModel extends IBaseModel<CreateOrderRequestModel> {
   CreateOrderRequestModel({
     this.cariHesapId,
     this.orderDetails,
+    this.description,
   });
 
   String? cariHesapId;
+  String? description;
   List<OrderDetail>? orderDetails;
 
   @override
@@ -20,6 +22,7 @@ class CreateOrderRequestModel extends IBaseModel<CreateOrderRequestModel> {
             : List<OrderDetail>.from(
                 json['orderDetails']!.map(OrderDetail.fromJson),
               ),
+        description: json['aciklama'],
       );
 
   @override
@@ -28,6 +31,7 @@ class CreateOrderRequestModel extends IBaseModel<CreateOrderRequestModel> {
         'orderDetails': orderDetails == null
             ? <dynamic>[]
             : List<dynamic>.from(orderDetails!.map((x) => x.toJson())),
+        'aciklama': description,
       };
 }
 

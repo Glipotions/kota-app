@@ -3,6 +3,7 @@ import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:kota_app/features/auth/login_screen/controller/login_controller.dart';
 import 'package:kota_app/product/base/base_view.dart';
 import 'package:kota_app/product/utility/enums/module_padding_enums.dart';
+import 'package:kota_app/product/widgets/app_bar/general_app_bar.dart';
 import 'package:kota_app/product/widgets/button/clickable_text.dart';
 import 'package:kota_app/product/widgets/button/module_button.dart';
 import 'package:kota_app/product/widgets/input/module_text_field.dart';
@@ -19,29 +20,75 @@ class Login extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final screenSize = MediaQuery.of(context).size;
+
     return GestureDetector(
       onTap: controller.unFocus,
       child: Scaffold(
         key: controller.scaffoldKey,
-
-        ///Body
+        appBar: AppBar(title: Text('Giriş'),),
         body: BaseView<LoginController>(
           controller: controller,
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const ImageAssets().exampleImage.image(
-                      fit: BoxFit.cover,
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: isDarkMode
+                    ? [Colors.grey[900]!, Colors.grey[850]!]
+                    : [Colors.grey[100]!, Colors.white],
+              ),
+            ),
+            child: SafeArea(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Container(
+                      height: screenSize.height * 0.3,
+                      decoration: BoxDecoration(
+                        color: isDarkMode ? Colors.grey[850] : Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.05),
+                            blurRadius: 10,
+                            offset: const Offset(0, 5),
+                          ),
+                        ],
+                      ),
+                      child: Stack(
+                        fit: StackFit.expand,
+                        children: [
+                          const ImageAssets().exampleImage.image(
+                                fit: BoxFit.cover,
+                              ),
+                          // Add a subtle overlay gradient
+                          Container(
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [
+                                  Colors.black.withOpacity(0.1),
+                                  Colors.black.withOpacity(0.3),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                Flexible(
-                  child: Padding(
-                    padding: EdgeInsets.all(ModulePadding.s.value),
-                    child: _LoginForm(controller: controller),
-                  ),
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: _LoginForm(controller: controller),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
         ),

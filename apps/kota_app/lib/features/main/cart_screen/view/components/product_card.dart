@@ -8,91 +8,112 @@ class _ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Card(
-        child: IntrinsicHeight(
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(ModuleRadius.m.value),
+        child: Card(
+          elevation: 2,
+          margin: EdgeInsets.zero,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(ModuleRadius.m.value),
+          ),
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
-                flex: 2,
-                child: BorderedImage(
-                  radius: BorderRadius.only(
-                    bottomLeft: Radius.circular(ModuleRadius.m.value),
-                    topLeft: Radius.circular(ModuleRadius.m.value),
+              SizedBox(
+                width: 100,
+                height: 100,
+                child: Hero(
+                  tag: 'product_${item.id}',
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(ModuleRadius.m.value),
+                      bottomLeft: Radius.circular(ModuleRadius.m.value),
+                    ),
+                    child: BorderedImage(
+                      radius: BorderRadius.only(
+                        bottomLeft: Radius.circular(ModuleRadius.m.value),
+                        topLeft: Radius.circular(ModuleRadius.m.value),
+                      ),
+                      aspectRatio: 1,
+                      imageUrl: item.pictureUrl!,
+                    ),
                   ),
-                  aspectRatio: 164 / 80,
-                  imageUrl: item.pictureUrl!,
                 ),
               ),
-              SizedBox(
-                width: ModulePadding.xxs.value,
-              ),
               Expanded(
-                flex: 3,
                 child: Padding(
-                  padding: EdgeInsets.all(ModulePadding.s.value)
-                      .copyWith(left: ModulePadding.xs.value),
+                  padding: EdgeInsets.all(ModulePadding.s.value),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      Column(
-                        children: [
-                          Text(
-                            '${item.code} - ${item.name}',
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: context.bodySmall,
-                          ),
-                          
-                        ],
+                      Text(
+                        item.name!,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: context.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
+                      Text(
+                        item.code,
+                        style: context.bodySmall?.copyWith(
+                          color: Colors.grey,
+                        ),
+                      ),
+                      SizedBox(height: ModulePadding.xs.value),
                       Row(
                         children: [
-                          Text(
-                            '${item.quantity}x',
-                            style: context.titleSmall,
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: ModulePadding.xs.value,
+                              vertical: ModulePadding.xxxs.value,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).primaryColor.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(ModuleRadius.s.value),
+                            ),
+                            child: Text(
+                              '${item.quantity}x',
+                              style: context.titleSmall?.copyWith(
+                                color: Theme.of(context).primaryColor,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ),
-                          Text(
-                            item.price.formatPrice(),
-                            style: context.titleSmall,
-                            textAlign: TextAlign.end,
-                          ),
-                          const Spacer(),
-                          Text(
-                            '=',
-                            style: context.titleSmall,
-                            textAlign: TextAlign.start,
+                          SizedBox(width: ModulePadding.xs.value),
+                          Expanded(
+                            child: Text(
+                              item.price.formatPrice(),
+                              style: context.titleSmall,
+                            ),
                           ),
                           Text(
                             (item.price * item.quantity).formatPrice(),
-                            style: context.titleSmall,
-                            textAlign: TextAlign.end,
+                            style: context.titleMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).primaryColor,
+                            ),
                           ),
                         ],
                       ),
-                      // Row(
-                      //   children: [
-                      //     Text(
-                      //       'Toplam:',
-                      //       style: context.titleMedium,
-                      //       textAlign: TextAlign.start,
-                      //     ),
-                      //     const Spacer(),
-                      //     Text(
-                      //       (item.price * item.quantity).formatPrice(),
-                      //       style: context.titleMedium,
-                      //       textAlign: TextAlign.end,
-                      //     ),
-                      //   ],
-                      // ),
-                      SizedBox(
-                        height: ModulePadding.xxxs.value,
-                      ),
-                      ClickableText(
-                        text: 'Ürünü Kaldır',
-                        onTap: onTapRemove,
+                      SizedBox(height: ModulePadding.xs.value),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: TextButton.icon(
+                          onPressed: onTapRemove,
+                          icon: const Icon(Icons.delete_outline, size: 20),
+                          label: const Text('Ürünü Kaldır'),
+                          style: TextButton.styleFrom(
+                            foregroundColor: Colors.red,
+                            padding: EdgeInsets.symmetric(
+                              horizontal: ModulePadding.xs.value,
+                            ),
+                          ),
+                        ),
                       ),
                     ],
                   ),

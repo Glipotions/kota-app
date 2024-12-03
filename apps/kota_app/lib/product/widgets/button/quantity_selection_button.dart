@@ -12,7 +12,6 @@ class QuantitySelectionButton extends StatefulWidget {
 
   final TextEditingController cController;
   final int? productCountInPackage;
-
   @override
   State<QuantitySelectionButton> createState() =>
       _QuantitySelectionButtonState();
@@ -40,8 +39,8 @@ class _QuantitySelectionButtonState extends State<QuantitySelectionButton> {
       final text = widget.cController.text;
       final currentQty = int.tryParse(text);
       if (currentQty != null) {
-        final roundedQty = (currentQty ~/ widget.productCountInPackage!) *
-            widget.productCountInPackage!;
+        final roundedQty = (currentQty ~/ (widget.productCountInPackage ?? 1)) *
+            (widget.productCountInPackage ?? 1);
         if (roundedQty != currentQty) {
           widget.cController.value = TextEditingValue(
             text: roundedQty.toString(),
@@ -73,21 +72,42 @@ class _QuantitySelectionButtonState extends State<QuantitySelectionButton> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        IconButton(onPressed: onTapDecrease, icon: const Icon(Icons.remove)),
-        Expanded(
-          child: TextFormField(
-            controller: widget.cController,
-            textAlign: TextAlign.center,
-            keyboardType: TextInputType.number,
-            inputFormatters: <TextInputFormatter>[
-              FilteringTextInputFormatter.digitsOnly,
-            ],
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: Theme.of(context).dividerColor),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        children: [
+          IconButton(
+            onPressed: onTapDecrease, 
+            icon: const Icon(Icons.remove),
+            padding: const EdgeInsets.all(8),
           ),
-        ),
-        IconButton(onPressed: onTapIncrease, icon: const Icon(Icons.add)),
-      ],
+          Expanded(
+            child: TextFormField(
+              controller: widget.cController,
+              textAlign: TextAlign.center,
+              keyboardType: TextInputType.number,
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+              decoration: const InputDecoration(
+                border: InputBorder.none,
+                contentPadding: EdgeInsets.zero,
+              ),
+              inputFormatters: <TextInputFormatter>[
+                FilteringTextInputFormatter.digitsOnly,
+              ],
+            ),
+          ),
+          IconButton(
+            onPressed: onTapIncrease, 
+            icon: const Icon(Icons.add),
+            padding: const EdgeInsets.all(8),
+          ),
+        ],
+      ),
     );
   }
 }

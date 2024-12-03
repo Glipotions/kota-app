@@ -2,20 +2,15 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:kota_app/features/main/all_products_screen/view/components/add_to_cart_text.dart';
 import 'package:kota_app/features/sub/product_detail_screen/controller/product_detail_controller.dart';
-import 'package:kota_app/product/base/base_view.dart';
-import 'package:kota_app/product/consts/general.dart';
 import 'package:kota_app/product/managers/cart_controller.dart';
-import 'package:kota_app/product/models/cart_product_model.dart';
 import 'package:kota_app/product/utility/enums/module_padding_enums.dart';
 import 'package:kota_app/product/widgets/app_bar/general_app_bar.dart';
-import 'package:kota_app/product/widgets/button/clickable_text.dart';
 import 'package:kota_app/product/widgets/button/quantity_selection_button.dart';
 import 'package:kota_app/product/widgets/card/bordered_image.dart';
 import 'package:kota_app/product/widgets/chip/custom_choice_chip.dart';
 import 'package:kota_app/product/widgets/other/stock_information.dart';
-import 'package:values/values.dart';
+import 'package:kota_app/features/main/all_products_screen/view/components/add_to_cart_text.dart';
 
 class ProductDetail extends StatelessWidget {
   const ProductDetail({required this.controller, super.key});
@@ -24,259 +19,233 @@ class ProductDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final CartController cartCont = Get.find();
     final CartController cartCont = Get.put(CartController());
 
     return GestureDetector(
       onTap: controller.unFocus,
       child: Scaffold(
         key: controller.scaffoldKey,
-        bottomSheet: Padding(
-          padding: EdgeInsets.all(ModulePadding.s.value),
-          child: SizedBox(
-            height: 115,
-            width: double.infinity,
-            child: Card(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(
-                    height: ModulePadding.xxs.value,
-                  ),
-                  Row(
+        appBar: GeneralAppBar(
+          title: 'Ürün Detay: '+(controller.selectedProductVariant?.productCode ?? ''),
+          // additionalIcon: IconButton(
+          //   icon: const Icon(Icons.share),
+          //   onPressed: () {
+          //     // Share functionality
+          //   },
+          // ),
+        ),
+        body: Stack(
+          children: [
+            CustomScrollView(
+              slivers: [
+                SliverToBoxAdapter(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(
-                        child: Obx(
-                          () => QuantitySelectionButton(
-                            cController: controller.cQty,
-                            productCountInPackage: controller
-                                    .selectedProductVariant!
-                                    .productCountInPackage ??
-                                1,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: ModulePadding.xxs.value,
-                      ),
-                      Obx(
-                        () => AddToCartText(
-                          item: controller.cartProduct,
-                          cCont: controller.cQty,
-                        ),
-                      ),
-                      SizedBox(width: ModulePadding.xxs.value),
-                    ],
-                  ),
-                  SizedBox(height: ModulePadding.xxs.value),
-                  Row(
-                    children: [
-                      Obx(
-                        () => Row(
-                          children: [
-                            SizedBox(width: ModulePadding.xxs.value),
-                            const Text(
-                              'Sepetteki Adet:',
-                              // style: context.bodyMedium
-                              //     .copyWith(color: context.primary),
-                            ),
-                            Text(
-                              cartCont
-                                      .inChartItemById(
-                                        controller.selectedProductVariant
-                                                ?.productId ??
-                                            0,
-                                      )
-                                      ?.quantity
-                                      .toString() ??
-                                  '',
-                              // style: context.bodyMedium
-                              //     .copyWith(color: context.primary),
-                            ),
-                          ],
-                        ).isVisible(
-                          value: cartCont.inChartItemById(
-                                controller.selectedProductVariant?.productId ??
-                                    0,
-                              ) !=
-                              null,
-                        ),
-                      ),
-                      const Spacer(),
-                      Obx(
-                        () => ClickableText(
-                          text: 'Sepetten Kaldır',
-                          onTap: () {
-                            cartCont.onTapRemoveProduct(
-                              CartProductModel(
-                                id: controller
-                                    .selectedProductVariant!.productId!,
-                                code: controller.code,
-                                name: controller.code,
-                                price: controller.selectedUnitPrice!.value,
-                                quantity: int.parse(controller.cQty.text),
-                                pictureUrl: controller.product.pictureUrl ??
-                                    baseLogoUrl,
-                              ),
+                      // Image Carousel
+                      AspectRatio(
+                        aspectRatio: 1,
+                        child: PageView.builder(
+                          itemCount: 1,
+                          itemBuilder: (context, index) {
+                            return Hero(
+                              tag: 'product-${controller.code}',
+                              child: Obx(() {
+                                final imageUrl = controller.product.pictureUrl;
+                                if (imageUrl == null || imageUrl.isEmpty) {
+                                  return Container(
+                                    color: Colors.grey[200],
+                                    child: const Center(
+                                      child: Icon(
+                                        Icons.image_not_supported_outlined,
+                                        size: 48,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  );
+                                }
+                                return BorderedImage(
+                                  imageUrl: imageUrl,
+                                  radius: BorderRadius.zero,
+                                );
+                              }),
                             );
                           },
-                          textStyle:
-                              context.bodyMedium.copyWith(color: context.error),
-                        ).isVisible(
-                          value: cartCont.inChartItemById(
-                                controller.selectedProductVariant?.productId ??
-                                    0,
-                              ) !=
-                              null,
                         ),
                       ),
-                      SizedBox(width: ModulePadding.xxs.value),
-                    ],
-                  ),
-                  SizedBox(height: ModulePadding.xs.value),
-                ],
-              ),
-            ),
-          ),
-        ),
-        appBar: const GeneralAppBar(title: 'Ürün Detayı'),
-        body: BaseView<ProductDetailController>(
-          controller: controller,
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 160),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Obx(
-                    () => BorderedImage(
-                      radius: BorderRadius.zero,
-                      aspectRatio: 343 / 300,
-                      imageUrl: controller.product.pictureUrl ?? baseLogoUrl,
-                      // imageUrl: 'https://kota-app.b-cdn.net/1000-1.jpg',
-                      // imageUrl: 'https://thispersondoesnotexist.com/',
-                    ),
-                  ),
-                  SizedBox(height: ModulePadding.l.value),
-                  Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: ModulePadding.s.value),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          controller.productCode,
-                          style: context.titleLarge,
-                        ),
-                        Row(
+
+                      Padding(
+                        padding: EdgeInsets.all(ModulePadding.m.value),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const StockInformationWidget(isInStock: true),
-                            SizedBox(
-                              width: ModulePadding.xxs.value,
-                            ),
-                            const Spacer(),
+                            // Product Name and Price
+                            Obx(() => Text(
+                                  controller.selectedProductVariant
+                                          ?.productName ??
+                                      '',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headlineSmall
+                                      ?.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                )),
+                            const SizedBox(height: 8),
+                            Obx(() => Text(
+                                  '₺${controller.selectedUnitPrice?.value.toStringAsFixed(2) ?? "0.00"}',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleLarge
+                                      ?.copyWith(
+                                        color: Theme.of(context).primaryColor,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                )),
+
+                            const SizedBox(height: 16),
+
+                            // Stock Information
                             Obx(
-                              () => Text(
-                                controller.selectedUnitPrice == 0.0
-                                    ? ''
-                                    : 'Fiyat: ${controller.selectedUnitPrice} TL',
-                                style: context.titleLarge,
-                                textAlign: TextAlign.end,
+                              () => StockInformationWidget(
+                                isInStock:
+                                    (controller.selectedProductVariant?.stock ??
+                                            0) >
+                                        0,
                               ),
                             ),
+
+                            const SizedBox(height: 16),
+
+                            // Color Selection
+                            Obx(() {
+                              final colors = controller.product.colors;
+                              if (colors == null || colors.isEmpty)
+                                return const SizedBox();
+
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Renk Seçimi',
+                                    style:
+                                        Theme.of(context).textTheme.titleMedium,
+                                  ),
+                                  const SizedBox(height: 8),
+                                  SizedBox(
+                                    height: 40,
+                                    child: ListView.builder(
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: colors.length,
+                                      itemBuilder: (context, index) {
+                                        return Padding(
+                                          padding:
+                                              const EdgeInsets.only(right: 8),
+                                          child: Obx(() => CustomChoiceChip(
+                                                title: colors[index],
+                                                isSelected: controller
+                                                        .selectedColor.value ==
+                                                    index,
+                                                onTap: () => controller
+                                                    .onTapColor(index),
+                                              )),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              );
+                            }),
+
+                            const SizedBox(height: 16),
+
+                            // Size Selection
+                            Obx(() {
+                              final sizes = controller.product.sizes;
+                              if (sizes == null || sizes.isEmpty)
+                                return const SizedBox();
+
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Beden Seçimi',
+                                    style:
+                                        Theme.of(context).textTheme.titleMedium,
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Wrap(
+                                    spacing: 8,
+                                    children: List.generate(
+                                      sizes.length,
+                                      (index) => Obx(() => CustomChoiceChip(
+                                            title: sizes[index],
+                                            isSelected:
+                                                controller.selectedSize.value ==
+                                                    index,
+                                            onTap: () =>
+                                                controller.onTapSize(index),
+                                          )),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            }),
+
+                            // Add padding at the bottom to account for the bottom sheet
+                            SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.2),
                           ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  SizedBox(height: ModulePadding.l.value),
-                  Padding(
-                    padding: EdgeInsets.only(left: ModulePadding.s.value),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Renk Seçimi',
-                        ),
-                        SizedBox(
-                          height: ModulePadding.xxs.value,
-                        ),
-                        SizedBox(
-                          height: 35,
-                          child: ListView.separated(
-                            scrollDirection: Axis.horizontal,
-                            itemBuilder: (context, index) {
-                              final list = controller.product.colors ?? [];
-                              if (list.length <= index) {
-                                return const SizedBox();
-                              }
-                              final item = list[index];
-
-                              return Obx(
-                                () => CustomChoiceChip(
-                                  title: item,
-                                  isSelected:
-                                      index == controller.selectedColor.value,
-                                  onTap: () => controller.onTapColor(index),
-                                ),
-                              );
-                            },
-                            separatorBuilder: (context, index) => SizedBox(
-                              width: ModulePadding.xxs.value,
-                            ),
-                            itemCount: 35,
-                          ),
-                        ),
-                      ],
+                ),
+              ],
+            ),
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 10,
+                      offset: const Offset(0, -2),
                     ),
-                  ),
-                  SizedBox(height: ModulePadding.l.value),
-                  Padding(
-                    padding: EdgeInsets.only(left: ModulePadding.s.value),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Beden Seçimi',
-                        ),
-                        SizedBox(
-                          height: ModulePadding.xxs.value,
-                        ),
-                        SizedBox(
-                          height: 35,
-                          child: ListView.separated(
-                            scrollDirection: Axis.horizontal,
-                            itemBuilder: (context, index) {
-                              final list = controller.product.sizes ?? [];
-                              if (list.length <= index) {
-                                return const SizedBox();
-                              }
-                              final item = list[index];
-
-                              return Obx(
-                                () => CustomChoiceChip(
-                                  title: item,
-                                  isSelected:
-                                      index == controller.selectedSize.value,
-                                  onTap: () => controller.onTapSize(index),
-                                  enabled:
-                                      controller.sizeEnableCheck(index).value,
-                                ),
-                              );
-                            },
-                            separatorBuilder: (context, index) => SizedBox(
-                              width: ModulePadding.xxs.value,
-                            ),
-                            itemCount: 10,
-                          ),
-                        ),
-                      ],
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      flex: 3,
+                      child: QuantitySelectionButton(
+                        cController: controller.cQty,
+                        productCountInPackage: controller
+                            .selectedProductVariant?.productCountInPackage,
+                      ),
                     ),
-                  ),
-                ],
+                    const SizedBox(width: 8),
+                    Expanded(
+                      flex: 4,
+                      child: AddToCartText(
+                        item: controller.cartProduct,
+                        cCont: controller.cQty,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
+          ],
         ),
       ),
     );

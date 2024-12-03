@@ -132,7 +132,9 @@ class AllProductsController extends BaseControllerInterface {
     if (!isInSearch) {
       productsResponse = ProductGroupListResponseModel();
       _products.value.clear();
-      scrollController.jumpTo(0);
+      if (scrollController.hasClients) {
+        scrollController.jumpTo(0);
+      }
       _getProducts();
     }
   }

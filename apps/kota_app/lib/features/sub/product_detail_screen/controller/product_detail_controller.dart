@@ -47,6 +47,7 @@ class ProductDetailController extends BaseControllerInterface {
   @override
   Future<void> onReady() async {
     super.onReady();
+    cQty.text = '0';
     await onReadyGeneric(() async {
       await _getProductDetail();
     });
@@ -55,9 +56,19 @@ class ProductDetailController extends BaseControllerInterface {
   Future<void> _getProductDetail() async {
     await client.appService.productDetail(code).handleRequest(
       onSuccess: (res) {
-        product = res!;
-        selectedColorName = product.colors?.first;
-        selectedSizeName = product.sizes?.first;
+        if (res != null) {
+          product = res;
+          if (product.colors?.isNotEmpty ?? false) {
+            selectedColorName = product.colors?.first;
+            selectedColor.value = 0;
+          }
+          if (product.sizes?.isNotEmpty ?? false) {
+            selectedSizeName = product.sizes?.first;
+            selectedSize.value = 0;
+          }
+          selectProduct(selectedColorName, selectedSizeName);
+          update();
+        }
       },
     );
   }

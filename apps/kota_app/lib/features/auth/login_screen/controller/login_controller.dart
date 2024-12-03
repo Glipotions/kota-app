@@ -35,12 +35,12 @@ class LoginController extends BaseControllerInterface {
       LoadingProgress.start();
       await client.appService.login(request: request).handleRequest(
             defaultResponse: LoginResponseModel(),
-            onSuccess: (res) => {
+            onSuccess: (res) async => {
               if (res?.user?.hasCurrentAccount ?? false)
                 {
-                  // await Future.wait([
-                  //   saveUserCredentials(),
-                  // ]),
+                  await Future.wait([
+                    saveUserCredentials(),
+                  ]),
                   sessionHandler.logIn(res: res!),
                 }
               else

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kota_app/product/managers/cart_controller.dart';
 import 'package:kota_app/product/models/cart_product_model.dart';
-import 'package:kota_app/product/widgets/button/clickable_text.dart';
 import 'package:widgets/widget.dart';
+import 'modern_cart_button.dart';
 
 class AddToCartText extends StatelessWidget {
   const AddToCartText({
@@ -19,10 +19,11 @@ class AddToCartText extends StatelessWidget {
   Widget build(BuildContext context) {
     final cartCont = Get.find<CartController>();
     return Obx(
-      () => ClickableText(
+      () => ModernCartButton(
         text: cartCont.inChartItemById(item.id) != null
             ? 'Sepeti Güncelle'
             : 'Sepete Ekle',
+        icon: Icons.shopping_cart_outlined,
         onTap: () {
           final qty = int.tryParse(cCont.text);
           if (item.id == 0) {

@@ -1,15 +1,22 @@
 // ignore_for_file: omit_local_variable_types
 
+import 'dart:convert';
+
 import 'package:api/api.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kota_app/product/base/controller/base_controller.dart';
 import 'package:kota_app/product/models/cart_product_model.dart';
 import 'package:kota_app/product/navigation/modules/sub_route/sub_route_enums.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:widgets/widget.dart';
 
 class CartController extends BaseControllerInterface {
+  static const String _cartKey = 'cart_items';
   final Rx<List<CartProductModel>> _itemList = Rx([]);
+  final RxBool isDescriptionVisible = false.obs;
+  final TextEditingController descriptionController = TextEditingController();
 
   List<CartProductModel> get itemList => _itemList.value;
   set itemList(List<CartProductModel> value) => _itemList
@@ -19,7 +26,40 @@ class CartController extends BaseControllerInterface {
   @override
   Future<void> onReady() async {
     super.onReady();
-    await onReadyGeneric(() async {});
+    await onReadyGeneric(() async {
+      await loadCartItems();
+    });
+  }
+
+  Future<void> loadCartItems() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final String? cartJson = prefs.getString(_cartKey);
+      if (cartJson != null) {
+        final List<dynamic> decodedList = json.decode(cartJson) as List<dynamic>;
+        itemList = decodedList
+            .map((item) => CartProductModel.fromJson(item as Map<String, dynamic>))
+            .toList();
+      }
+    } catch (e) {
+      debugPrint('Error loading cart items: $e');
+    }
+  }
+
+  Future<void> _saveCartItems() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final String cartJson = json.encode(itemList.map((item) => item.toJson()).toList());
+      await prefs.setString(_cartKey, cartJson);
+    } catch (e) {
+      debugPrint('Error saving cart items: $e');
+    }
+  }
+
+  Future<void> clearCart() async {
+    itemList = [];
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_cartKey);
   }
 
   void onTapAddProduct(CartProductModel item) {
@@ -31,6 +71,7 @@ class CartController extends BaseControllerInterface {
     }
     itemList.add(item);
     itemList = itemList;
+    _saveCartItems();
   }
 
   void onTapRemoveProduct(CartProductModel item) {
@@ -38,6 +79,7 @@ class CartController extends BaseControllerInterface {
       itemList.removeWhere((element) => element.id == item.id);
     }
     itemList = itemList;
+    _saveCartItems();
   }
 
   CartProductModel? inChartItemById(int id) =>
@@ -60,6 +102,7 @@ class CartController extends BaseControllerInterface {
     } else {
       final request = CreateOrderRequestModel(
         cariHesapId: sessionHandler.currentUser!.currentAccountId!.toString(),
+        description: descriptionController.text.trim(),
         orderDetails: itemList
             .map(
               (e) => OrderDetail(
@@ -85,5 +128,11 @@ class CartController extends BaseControllerInterface {
           );
       LoadingProgress.stop();
     }
+  }
+
+  @override
+  void onClose() {
+    descriptionController.dispose();
+    super.onClose();
   }
 }
