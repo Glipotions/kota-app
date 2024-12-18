@@ -207,7 +207,7 @@ class ProductDetail extends StatelessWidget {
             Positioned(
               left: 0,
               right: 0,
-              bottom: 0,
+              bottom: ModulePadding.m.value,
               child: Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 12,

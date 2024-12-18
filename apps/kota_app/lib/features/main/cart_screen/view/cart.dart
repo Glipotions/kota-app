@@ -6,7 +6,6 @@ import 'package:kota_app/product/managers/cart_controller.dart';
 import 'package:kota_app/product/models/cart_product_model.dart';
 import 'package:kota_app/product/utility/enums/module_padding_enums.dart';
 import 'package:kota_app/product/utility/enums/module_radius_enums.dart';
-import 'package:kota_app/product/widgets/button/clickable_text.dart';
 import 'package:kota_app/product/widgets/button/module_button.dart';
 import 'package:kota_app/product/widgets/card/bordered_image.dart';
 import 'package:kota_app/product/widgets/other/empty_view.dart';
@@ -14,10 +13,49 @@ import 'package:values/values.dart';
 
 part 'components/product_card.dart';
 
-class Cart extends StatelessWidget {
+class Cart extends StatefulWidget {
   const Cart({super.key});
 
-  Future<void> _showClearCartDialog(BuildContext context, CartController controller) async {
+  @override
+  State<Cart> createState() => _CartState();
+}
+
+class _CartState extends State<Cart> {
+  final ScrollController _scrollController = ScrollController();
+  bool _showScrollButton = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(() {
+      final maxScroll = _scrollController.position.maxScrollExtent;
+      final currentScroll = _scrollController.offset;
+      final showButton = currentScroll > 200 && (maxScroll - currentScroll) > 20;
+      
+      if (showButton != _showScrollButton) {
+        setState(() {
+          _showScrollButton = showButton;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollToBottom() {
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOut,
+    );
+  }
+
+  Future<void> _showClearCartDialog(
+      BuildContext context, CartController controller) async {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -85,11 +123,12 @@ class Cart extends StatelessWidget {
               : const SizedBox()),
         ],
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterDocked,
       floatingActionButton: Obx(
         () => AnimatedSlide(
           duration: const Duration(milliseconds: 300),
-          offset: controller.itemList.isEmpty ? const Offset(0, 2) : Offset.zero,
+          offset:
+              controller.itemList.isEmpty ? const Offset(0, 2) : Offset.zero,
           child: AnimatedOpacity(
             duration: const Duration(milliseconds: 300),
             opacity: controller.itemList.isEmpty ? 0 : 1,
@@ -99,7 +138,11 @@ class Cart extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
-                    padding: EdgeInsets.all(ModulePadding.s.value),
+                    padding: EdgeInsets.only(
+                      left: ModulePadding.s.value,
+                      right: ModulePadding.s.value,
+                      top: ModulePadding.s.value,
+                    ),
                     decoration: BoxDecoration(
                       color: Theme.of(context).cardColor,
                       borderRadius: BorderRadius.circular(ModuleRadius.m.value),
@@ -131,47 +174,51 @@ class Cart extends StatelessWidget {
                             ),
                           ],
                         ),
-                        SizedBox(height: ModulePadding.s.value),
-                        Obx(() => Column(
-                          children: [
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.note_add_outlined,
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                                SizedBox(width: ModulePadding.xs.value),
-                                Text(
-                                  'Sipariş Notu',
-                                  style: context.titleSmall,
-                                ),
-                                const Spacer(),
-                                IconButton(
-                                  onPressed: () => controller.isDescriptionVisible.toggle(),
-                                  icon: Icon(
-                                    controller.isDescriptionVisible.value
-                                        ? Icons.keyboard_arrow_up
-                                        : Icons.keyboard_arrow_down,
+                        SizedBox(height: ModulePadding.xxs.value),
+                        Obx(
+                          () => Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.note_add_outlined,
+                                    color: Theme.of(context).primaryColor,
                                   ),
-                                ),
-                              ],
-                            ),
-                            if (controller.isDescriptionVisible.value) ...[
-                              SizedBox(height: ModulePadding.xs.value),
-                              TextField(
-                                controller: controller.descriptionController,
-                                decoration: InputDecoration(
-                                  hintText: 'Siparişiniz için not ekleyin...',
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(ModuleRadius.s.value),
+                                  SizedBox(width: ModulePadding.xs.value),
+                                  Text(
+                                    'Sipariş Notu',
+                                    style: context.titleSmall,
                                   ),
-                                ),
-                                maxLines: 3,
+                                  const Spacer(),
+                                  IconButton(
+                                    onPressed:
+                                        controller.isDescriptionVisible.toggle,
+                                    icon: Icon(
+                                      controller.isDescriptionVisible.value
+                                          ? Icons.keyboard_arrow_up
+                                          : Icons.keyboard_arrow_down,
+                                    ),
+                                  ),
+                                ],
                               ),
-                              SizedBox(height: ModulePadding.s.value),
+                              if (controller.isDescriptionVisible.value) ...[
+                                SizedBox(height: ModulePadding.xs.value),
+                                TextField(
+                                  controller: controller.descriptionController,
+                                  decoration: InputDecoration(
+                                    hintText: 'Siparişiniz için not ekleyin...',
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(
+                                          ModuleRadius.s.value),
+                                    ),
+                                  ),
+                                  maxLines: 3,
+                                ),
+                                SizedBox(height: ModulePadding.s.value),
+                              ],
                             ],
-                          ],
-                        )),
+                          ),
+                        ),
                         SizedBox(
                           width: double.infinity,
                           height: 54,
@@ -189,58 +236,75 @@ class Cart extends StatelessWidget {
           ),
         ),
       ),
-      body: Obx(
-        () => CustomScrollView(
-          slivers: [
-            SliverToBoxAdapter(
-              child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 300),
-                child: controller.itemList.isEmpty
-                    ? const EmptyView(
-                        message:
-                            'Sepete ürün eklenmemiştir.\nSepete eklediğiniz bütün ürünler burada listelenecektir!',
-                      )
-                    : Padding(
-                        padding: EdgeInsets.all(ModulePadding.s.value),
-                        child: ListView.separated(
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) {
-                            final item = controller.itemList[index];
-                            return Dismissible(
-                              key: Key(item.id.toString()),
-                              direction: DismissDirection.endToStart,
-                              background: Container(
-                                alignment: Alignment.centerRight,
-                                padding: EdgeInsets.only(right: ModulePadding.m.value),
-                                color: Colors.red,
-                                child: const Icon(
-                                  Icons.delete_outline,
-                                  color: Colors.white,
-                                ),
+      body: Stack(
+        children: [
+          Obx(
+            () => CustomScrollView(
+              controller: _scrollController,
+              slivers: [
+                SliverToBoxAdapter(
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 300),
+                    child: controller.itemList.isEmpty
+                        ? const EmptyView(
+                            message:
+                                'Sepete ürün eklenmemiştir.\nSepete eklediğiniz bütün ürünler burada listelenecektir!',
+                          )
+                        : Padding(
+                            padding: EdgeInsets.all(ModulePadding.s.value),
+                            child: ListView.separated(
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemBuilder: (context, index) {
+                                final item = controller.itemList[index];
+                                return Dismissible(
+                                  key: Key(item.id.toString()),
+                                  direction: DismissDirection.endToStart,
+                                  background: Container(
+                                    alignment: Alignment.centerRight,
+                                    padding: EdgeInsets.only(
+                                        right: ModulePadding.m.value),
+                                    color: Colors.red,
+                                    child: const Icon(
+                                      Icons.delete_outline,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  onDismissed: (direction) =>
+                                      controller.onTapRemoveProduct(item),
+                                  child: _ProductCard(
+                                    item: item,
+                                    onTapRemove: () =>
+                                        controller.onTapRemoveProduct(item),
+                                  ),
+                                );
+                              },
+                              separatorBuilder: (context, index) => SizedBox(
+                                height: ModulePadding.xs.value,
                               ),
-                              onDismissed: (direction) => 
-                                controller.onTapRemoveProduct(item),
-                              child: _ProductCard(
-                                item: item,
-                                onTapRemove: () => controller.onTapRemoveProduct(item),
-                              ),
-                            );
-                          },
-                          separatorBuilder: (context, index) => SizedBox(
-                            height: ModulePadding.xs.value,
+                              itemCount: controller.itemList.length,
+                            ),
                           ),
-                          itemCount: controller.itemList.length,
-                        ),
-                      ),
+                  ),
+                ),
+                // Add extra space at bottom for the floating action button
+                SliverToBoxAdapter(
+                  child: SizedBox(height: 160),
+                ),
+              ],
+            ),
+          ),
+          if (_showScrollButton)
+            Positioned(
+              right: ModulePadding.m.value,
+              bottom: 200,
+              child: FloatingActionButton(
+                mini: true,
+                onPressed: _scrollToBottom,
+                child: const Icon(Icons.keyboard_arrow_down),
               ),
             ),
-            // Add extra space at bottom for the floating action button
-            SliverToBoxAdapter(
-              child: SizedBox(height: 120),
-            ),
-          ],
-        ),
+        ],
       ),
     );
   }

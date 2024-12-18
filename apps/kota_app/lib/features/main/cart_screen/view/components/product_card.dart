@@ -100,21 +100,21 @@ class _ProductCard extends StatelessWidget {
                           ),
                         ],
                       ),
-                      SizedBox(height: ModulePadding.xs.value),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: TextButton.icon(
-                          onPressed: onTapRemove,
-                          icon: const Icon(Icons.delete_outline, size: 20),
-                          label: const Text('Ürünü Kaldır'),
-                          style: TextButton.styleFrom(
-                            foregroundColor: Colors.red,
-                            padding: EdgeInsets.symmetric(
-                              horizontal: ModulePadding.xs.value,
-                            ),
-                          ),
-                        ),
-                      ),
+                      // SizedBox(height: ModulePadding.xs.value),
+                      // Align(
+                      //   alignment: Alignment.centerRight,
+                      //   child: TextButton.icon(
+                      //     onPressed: onTapRemove,
+                      //     icon: const Icon(Icons.delete_outline, size: 20),
+                      //     label: const Text('Ürünü Kaldır'),
+                      //     style: TextButton.styleFrom(
+                      //       foregroundColor: Colors.red,
+                      //       padding: EdgeInsets.symmetric(
+                      //         horizontal: ModulePadding.xs.value,
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),

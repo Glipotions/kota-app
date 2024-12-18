@@ -123,6 +123,7 @@ class CartController extends BaseControllerInterface {
             onSuccess: (res) {
               showSuccessToastMessage('Sipariş başarı ile oluşturuldu.');
               itemList = [];
+              clearCart();
             },
             defaultResponse: CreateOrderResponseModel(),
           );

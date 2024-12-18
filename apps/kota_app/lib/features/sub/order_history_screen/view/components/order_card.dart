@@ -50,6 +50,48 @@ class _OrderCard extends StatelessWidget {
                             color: isDarkMode ? Colors.grey[300] : Colors.grey[600],
                           ),
                         ),
+                        if (item.aciklama != null && item.aciklama!.isNotEmpty) ...[
+                          const SizedBox(height: 8),
+                          Container(
+                            padding: EdgeInsets.all(ModulePadding.xs.value),
+                            decoration: BoxDecoration(
+                              color: isDarkMode 
+                                ? Colors.grey[800]
+                                : Colors.grey[100],
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(
+                                color: isDarkMode 
+                                  ? Colors.grey[700]! 
+                                  : Colors.grey[300]!,
+                              ),
+                            ),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Icon(
+                                  Icons.notes_outlined,
+                                  size: 16,
+                                  color: isDarkMode 
+                                    ? Colors.grey[400] 
+                                    : Colors.grey[600],
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    item.aciklama!,
+                                    style: context.bodySmall?.copyWith(
+                                      color: isDarkMode 
+                                        ? Colors.grey[300] 
+                                        : Colors.grey[700],
+                                    ),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ],
                     ),
                   ),
@@ -76,7 +118,7 @@ class _OrderCard extends StatelessWidget {
                     },
                     itemBuilder: (BuildContext context) {
                       return [
-                        PopupMenuItem(
+                        const PopupMenuItem(
                           value: 'Gör',
                           child: Row(
                             children: [
@@ -86,7 +128,7 @@ class _OrderCard extends StatelessWidget {
                             ],
                           ),
                         ),
-                        PopupMenuItem(
+                        const PopupMenuItem(
                           value: 'Düzenle',
                           child: Row(
                             children: [
@@ -96,7 +138,7 @@ class _OrderCard extends StatelessWidget {
                             ],
                           ),
                         ),
-                        PopupMenuItem(
+                        const PopupMenuItem(
                           value: 'Pdf',
                           child: Row(
                             children: [
@@ -111,7 +153,12 @@ class _OrderCard extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 12),
+              Divider(
+                color: isDarkMode ? Colors.grey[800] : Colors.grey[200],
+                height: 1,
+              ),
+              const SizedBox(height: 12),
               Row(
                 children: [
                   Container(
@@ -137,7 +184,7 @@ class _OrderCard extends StatelessWidget {
                               ? Colors.green
                               : Theme.of(context).primaryColor,
                         ),
-                        SizedBox(width: 4),
+                        const SizedBox(width: 4),
                         Text(
                           !item.durum! ? 'Tamamlandı' : 'Hazırlanıyor',
                           style: context.labelMedium?.copyWith(

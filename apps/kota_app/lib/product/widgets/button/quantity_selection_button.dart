@@ -89,6 +89,12 @@ class _QuantitySelectionButtonState extends State<QuantitySelectionButton> {
               controller: widget.cController,
               textAlign: TextAlign.center,
               keyboardType: TextInputType.number,
+              onTap: () {
+                widget.cController.selection = TextSelection(
+                  baseOffset: 0,
+                  extentOffset: widget.cController.text.length,
+                );
+              },
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.bold,
               ),

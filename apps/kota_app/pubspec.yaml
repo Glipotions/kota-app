@@ -14,6 +14,7 @@ environment:
 dependencies:
   api:
     path: ../../resources/api
+  badges: ^3.1.2
   common:
     path: ../../resources/common
   cupertino_icons: ^1.0.3
@@ -74,8 +75,6 @@ flutter:
   
   
 
-  
-  
   
   
   

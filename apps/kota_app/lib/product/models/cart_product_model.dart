@@ -6,6 +6,8 @@ class CartProductModel {
     required this.quantity,
     this.name,
     this.pictureUrl,
+    this.sizeName,
+    this.colorName,
   });
 
   int id;
@@ -14,6 +16,8 @@ class CartProductModel {
   double price;
   int quantity;
   String? pictureUrl;
+  String? sizeName;
+  String? colorName;
 
   Map<String, dynamic> toJson() {
     return {
@@ -23,6 +27,8 @@ class CartProductModel {
       'price': price,
       'quantity': quantity,
       'pictureUrl': pictureUrl,
+      'sizeName': sizeName,
+      'colorName': colorName
     };
   }
 
@@ -34,6 +40,8 @@ class CartProductModel {
       price: (json['price'] as num).toDouble(),
       quantity: json['quantity'] as int,
       pictureUrl: json['pictureUrl'] as String?,
+      sizeName: json['sizeName'] as String?,
+      colorName: json['colorName'] as String?,
     );
   }
 

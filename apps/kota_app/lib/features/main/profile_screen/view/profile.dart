@@ -19,7 +19,7 @@ class Profile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       key: controller.scaffoldKey,
-      appBar: const GeneralAppBar(title: 'Profil'),
+      appBar: const GeneralAppBar(title: 'Profil', leading: SizedBox(),),
       body: BaseView<ProfileController>(
         controller: controller,
         child: SingleChildScrollView(

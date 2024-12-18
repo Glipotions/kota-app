@@ -7,6 +7,7 @@ import 'package:kota_app/product/managers/cart_controller.dart';
 import 'package:kota_app/product/navigation/modules/bottom_navigation_route/bottom_navigation_route_enums.dart';
 import 'package:kota_app/product/utility/enums/module_padding_enums.dart';
 import 'package:values/values.dart';
+import 'package:badges/badges.dart' as badges;
 
 class GeneralAppBar extends StatelessWidget implements PreferredSizeWidget {
   const GeneralAppBar({
@@ -29,23 +30,35 @@ class GeneralAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: Text(title),
       leading: leading ?? IconButton(
         icon: const Icon(Icons.arrow_back),
-        onPressed: () => Navigator.of(context).pop(),
+        onPressed: () {
+          if (Navigator.of(context).canPop()) {
+            Navigator.of(context).pop();
+          }
+        },
       ),
       actions: [
         additionalIcon ?? const SizedBox(),
         Obx(
-          () => IconButton(
-            icon: Icon(
-              Icons.shopping_cart,
-              color: cartController.itemList.isNotEmpty ? context.primary : null,
+          () => badges.Badge(
+            showBadge: cartController.itemList.isNotEmpty,
+            position: badges.BadgePosition.topEnd(top: 0, end: 0),
+            badgeContent: Text(
+              '${cartController.itemList.length}',
+              style: const TextStyle(color: Colors.white, fontSize: 12),
             ),
-            onPressed: () {
-              // Pop until we reach the bottom navigation route
-              Navigator.of(context).popUntil((route) => route.isFirst);
-              // Then navigate to cart
-              context.goNamed(BottomNavigationRouteEnum.cartScreen.name);
-              bottomNavController.selectedIndex = 1;
-            },
+            child: IconButton(
+              icon: Icon(
+                Icons.shopping_cart,
+                color: cartController.itemList.isNotEmpty ? context.primary : null,
+              ),
+              onPressed: () {
+                // Pop until we reach the bottom navigation route
+                Navigator.of(context).popUntil((route) => route.isFirst);
+                // Then navigate to cart
+                context.goNamed(BottomNavigationRouteEnum.cartScreen.name);
+                bottomNavController.selectedIndex = 1;
+              },
+            ),
           ),
         ),
         SizedBox(

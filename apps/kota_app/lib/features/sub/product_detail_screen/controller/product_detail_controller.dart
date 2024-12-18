@@ -112,6 +112,8 @@ class ProductDetailController extends BaseControllerInterface {
       price: selectedUnitPrice?.value ?? 0,
       quantity: int.parse(cQty.text == '' ? '0' : cQty.text),
       pictureUrl: product.pictureUrl ?? baseLogoUrl,
+      sizeName: selectedSizeName,
+      colorName: selectedColorName,
     );
   }
 
