@@ -28,7 +28,8 @@ class OrdersHistoryResponseModel
         items: json['items'] == null
             ? []
             : List<OrderItem>.from(
-                json['items']!.map((x) => OrderItem().fromJson(x)),),
+                json['items']!.map((x) => OrderItem().fromJson(x)),
+              ),
         index: json['index'],
         size: json['size'],
         count: json['count'],
@@ -42,7 +43,6 @@ class OrdersHistoryResponseModel
 }
 
 class OrderItem extends IBaseModel<OrderItem> {
-
   OrderItem({
     this.id,
     this.kod,
@@ -62,6 +62,7 @@ class OrderItem extends IBaseModel<OrderItem> {
     this.siparisKdvOrani,
     this.aciklama,
     this.durum,
+    this.canBeDeleted = false,
   });
   int? id;
   String? kod;
@@ -81,6 +82,7 @@ class OrderItem extends IBaseModel<OrderItem> {
   double? siparisKdvOrani;
   String? aciklama;
   bool? durum;
+  bool? canBeDeleted;
 
   @override
   OrderItem fromJson(Map<String, dynamic> json) => OrderItem(
@@ -102,6 +104,7 @@ class OrderItem extends IBaseModel<OrderItem> {
         siparisKdvOrani: json['siparisKdvOrani']?.toDouble(),
         aciklama: json['aciklama'],
         durum: json['durum'],
+        canBeDeleted: json['canBeDeleted'],
       );
 
   @override

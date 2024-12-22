@@ -45,25 +45,57 @@ class _ProductCard extends StatelessWidget {
               ),
               Expanded(
                 child: Padding(
-                  padding: EdgeInsets.all(ModulePadding.s.value),
+                  padding: EdgeInsets.all(ModulePadding.xs.value),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
+                      // Text(
+                      //   item.code,
+                      //   style: context.bodySmall?.copyWith(
+                      //     color: Colors.grey,
+                      //   ),
+                      // ),
                       Text(
                         item.name!,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: context.titleMedium?.copyWith(
                           fontWeight: FontWeight.w600,
+                          color: Theme.of(context).hintColor,
                         ),
                       ),
-                      Text(
-                        item.code,
-                        style: context.bodySmall?.copyWith(
-                          color: Colors.grey,
+                      if (item.sizeName != null || item.colorName != null)
+                        Padding(
+                          padding:
+                              EdgeInsets.only(top: ModulePadding.xxs.value),
+                          child: Wrap(
+                            spacing: ModulePadding.xxs.value,
+                            children: [
+                              _buildChip(
+                                context,
+                                Icons.local_offer,
+                                item.code!,
+                                Colors.grey.shade100,
+                              ),
+                              if (item.sizeName != null)
+                                _buildChip(
+                                  context,
+                                  Icons.straighten,
+                                  item.sizeName!,
+                                  Colors.blue.shade50,
+                                ),
+                              if (item.colorName != null)
+                                _buildChip(
+                                  context,
+                                  Icons.palette_outlined,
+                                  item.colorName!,
+                                  Colors.orange.shade50,
+                                ),
+                            ],
+                          ),
                         ),
-                      ),
+
                       SizedBox(height: ModulePadding.xs.value),
                       Row(
                         children: [
@@ -73,8 +105,11 @@ class _ProductCard extends StatelessWidget {
                               vertical: ModulePadding.xxxs.value,
                             ),
                             decoration: BoxDecoration(
-                              color: Theme.of(context).primaryColor.withOpacity(0.1),
-                              borderRadius: BorderRadius.circular(ModuleRadius.s.value),
+                              color: Theme.of(context)
+                                  .primaryColor
+                                  .withOpacity(0.1),
+                              borderRadius:
+                                  BorderRadius.circular(ModuleRadius.s.value),
                             ),
                             child: Text(
                               '${item.quantity}x',
@@ -122,6 +157,53 @@ class _ProductCard extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildChip(
+    BuildContext context,
+    IconData icon,
+    String text,
+    Color bgColor,
+  ) {
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: ModulePadding.xxxs.value,
+        vertical: 2,
+      ),
+      decoration: BoxDecoration(
+        color: bgColor,
+        border: Border.all(
+          color: Theme.of(context).dividerColor,
+        ),
+        borderRadius: BorderRadius.circular(ModuleRadius.xs.value),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 0,
+            blurRadius: 1,
+            offset: const Offset(0, 1),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            icon,
+            size: 14,
+            color: Colors.black87,
+          ),
+          const SizedBox(width: 4),
+          Text(
+            text,
+            style: context.bodySmall?.copyWith(
+              color: Colors.black87,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
       ),
     );
   }

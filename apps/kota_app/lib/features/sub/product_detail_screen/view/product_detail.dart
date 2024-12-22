@@ -1,4 +1,4 @@
-// ignore_for_file: omit_local_variable_types
+// ignore_for_file: omit_local_variable_types, cascade_invocations
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,6 +11,84 @@ import 'package:kota_app/product/widgets/card/bordered_image.dart';
 import 'package:kota_app/product/widgets/chip/custom_choice_chip.dart';
 import 'package:kota_app/product/widgets/other/stock_information.dart';
 import 'package:kota_app/features/main/all_products_screen/view/components/add_to_cart_text.dart';
+import 'package:values/values.dart';
+
+extension SizeSortExtension on List<String>? {
+  List<String> sortSizes() {
+    if (this == null) return [];
+    final sortedList = [
+      ...?this
+    ]; // Null-safe spread operator kullanarak kopyalama
+
+    // Harfli bedenlerin sıralaması
+    final letterSizes = {
+      'XXS': 0,
+      'XS': 1,
+      'S': 2,
+      'M': 3,
+      'L': 4,
+      'XL': 5,
+      'XXL': 6,
+      'S-M': 7, // Birleşik bedenler en sona
+      'M-L': 8,
+      'L-XL': 9,
+      'XL-XXL': 10,
+    };
+
+    sortedList.sort((a, b) {
+      final aIsLetter = letterSizes.containsKey(a);
+      final bIsLetter = letterSizes.containsKey(b);
+
+      // İkisi de harfli beden ise
+      if (aIsLetter && bIsLetter) {
+        return letterSizes[a]!.compareTo(letterSizes[b]!);
+      }
+
+      // Sadece biri harfli beden ise, harfli olan önce gelsin
+      if (aIsLetter) return -1;
+      if (bIsLetter) return 1;
+
+      // İkisi de sayısal ise
+      final aNumbers =
+          a.split('-').map((e) => int.tryParse(e.trim()) ?? 0).toList();
+      final bNumbers =
+          b.split('-').map((e) => int.tryParse(e.trim()) ?? 0).toList();
+
+      // İlk sayıları karşılaştır
+      return aNumbers.first.compareTo(bNumbers.first);
+    });
+
+    return sortedList;
+  }
+}
+
+extension ColorNameExtension on String {
+  Color? toColor() {
+    final normalizedColor = trim().toLowerCase();
+    final colorMap = {
+      'siyah': Colors.black,
+      'beyaz': Colors.white,
+      'kırmızı': Colors.red,
+      'mavi': Colors.blue,
+      'yeşil': Colors.green,
+      'sarı': Colors.yellow,
+      'turuncu': Colors.orange,
+      'mor': Colors.purple,
+      'pembe': Colors.pink,
+      'kahverengi': Colors.brown,
+      'gri': Colors.grey,
+      'lacivert': const Color(0xFF000080),
+      'bej': const Color(0xFFE8D6B3),
+      'bordo': const Color(0xFF800000),
+      'altın': const Color(0xFFFFD700),
+      'gümüş': const Color(0xFFC0C0C0),
+      'indigo': Colors.indigo,
+      'füme': const Color(0xFF4A4A4A), // Koyu gri tonu
+      'koyu yeşil': const Color(0xFF006400), // Dark green
+    };
+    return colorMap[normalizedColor];
+  }
+}
 
 class ProductDetail extends StatelessWidget {
   const ProductDetail({required this.controller, super.key});
@@ -25,8 +103,8 @@ class ProductDetail extends StatelessWidget {
       onTap: controller.unFocus,
       child: Scaffold(
         key: controller.scaffoldKey,
-        appBar: GeneralAppBar(
-          title: 'Ürün Detay: '+(controller.selectedProductVariant?.productCode ?? ''),
+        appBar: const GeneralAppBar(
+          title: 'Ürün Detay',
           // additionalIcon: IconButton(
           //   icon: const Icon(Icons.share),
           //   onPressed: () {
@@ -80,28 +158,34 @@ class ProductDetail extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             // Product Name and Price
-                            Obx(() => Text(
-                                  controller.selectedProductVariant
-                                          ?.productName ??
-                                      '',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headlineSmall
-                                      ?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                )),
+                            Obx(
+                              () => Text(
+                                controller
+                                        .selectedProductVariant?.productName ??
+                                    '',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headlineSmall
+                                    ?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                              ),
+                            ),
                             const SizedBox(height: 8),
-                            Obx(() => Text(
-                                  '₺${controller.selectedUnitPrice?.value.toStringAsFixed(2) ?? "0.00"}',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleLarge
-                                      ?.copyWith(
-                                        color: Theme.of(context).primaryColor,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                )),
+                            Obx(
+                              () => Text(
+                                controller.selectedUnitPrice?.value
+                                        .formatPrice() ??
+                                    '₺0,00',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleLarge
+                                    ?.copyWith(
+                                      color: Theme.of(context).primaryColor,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                              ),
+                            ),
 
                             const SizedBox(height: 16),
 
@@ -120,8 +204,9 @@ class ProductDetail extends StatelessWidget {
                             // Color Selection
                             Obx(() {
                               final colors = controller.product.colors;
-                              if (colors == null || colors.isEmpty)
+                              if (colors == null || colors.isEmpty) {
                                 return const SizedBox();
+                              }
 
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -138,17 +223,26 @@ class ProductDetail extends StatelessWidget {
                                       scrollDirection: Axis.horizontal,
                                       itemCount: colors.length,
                                       itemBuilder: (context, index) {
+                                        final color = colors[index].toColor();
                                         return Padding(
                                           padding:
                                               const EdgeInsets.only(right: 8),
-                                          child: Obx(() => CustomChoiceChip(
-                                                title: colors[index],
-                                                isSelected: controller
-                                                        .selectedColor.value ==
-                                                    index,
-                                                onTap: () => controller
-                                                    .onTapColor(index),
-                                              )),
+                                          child: Obx(
+                                            () => CustomChoiceChip(
+                                              title: colors[index],
+                                              isSelected: controller
+                                                      .selectedColor.value ==
+                                                  index,
+                                              onTap: () =>
+                                                  controller.onTapColor(index),
+                                              backgroundColor: color,
+                                              labelColor: color != null
+                                                  ? (color == Colors.white
+                                                      ? Colors.black
+                                                      : Colors.white)
+                                                  : null,
+                                            ),
+                                          ),
                                         );
                                       },
                                     ),
@@ -162,8 +256,9 @@ class ProductDetail extends StatelessWidget {
                             // Size Selection
                             Obx(() {
                               final sizes = controller.product.sizes;
-                              if (sizes == null || sizes.isEmpty)
+                              if (sizes == null || sizes.isEmpty) {
                                 return const SizedBox();
+                              }
 
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -177,25 +272,32 @@ class ProductDetail extends StatelessWidget {
                                   Wrap(
                                     spacing: 8,
                                     children: List.generate(
-                                      sizes.length,
-                                      (index) => Obx(() => CustomChoiceChip(
-                                            title: sizes[index],
+                                      sizes.sortSizes().length,
+                                      (index) {
+                                        final sortedSizes = sizes.sortSizes();
+                                        final currentSize = sortedSizes[index];
+                                        final originalIndex =
+                                            sizes.indexOf(currentSize);
+                                        return Obx(
+                                          () => CustomChoiceChip(
+                                            title: currentSize,
                                             isSelected:
                                                 controller.selectedSize.value ==
-                                                    index,
-                                            onTap: () =>
-                                                controller.onTapSize(index),
-                                          )),
+                                                    originalIndex,
+                                            onTap: () => controller
+                                                .onTapSize(originalIndex),
+                                          ),
+                                        );
+                                      },
                                     ),
                                   ),
                                 ],
                               );
                             }),
 
-                            // Add padding at the bottom to account for the bottom sheet
                             SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.2),
+                              height: MediaQuery.of(context).size.height * 0.2,
+                            ),
                           ],
                         ),
                       ),

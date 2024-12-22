@@ -85,6 +85,10 @@ class OrderHistoryController extends BaseControllerInterface {
         },
       );
 
+  Future<void> onTapDeleteOrderHistory(int id) async {
+    await client.appService.deleteOrder(id: id);
+  }
+
   Future<void> onTapOrderPdfCard(int id) async {
     await client.appService.orderHistoryDetail(id: id).handleRequest(
       onSuccess: (res) async {
@@ -110,7 +114,8 @@ class OrderHistoryController extends BaseControllerInterface {
           totalPrice: res.toplamTutar,
         );
 
-        final pdf = await invoicePdfController.generateOrderHistoryDetailPdf(pdfModel);
+        final pdf =
+            await invoicePdfController.generateOrderHistoryDetailPdf(pdfModel);
         await Printing.layoutPdf(
           onLayout: (PdfPageFormat format) async => pdf.save(),
         );

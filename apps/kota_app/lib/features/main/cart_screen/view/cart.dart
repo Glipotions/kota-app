@@ -30,8 +30,9 @@ class _CartState extends State<Cart> {
     _scrollController.addListener(() {
       final maxScroll = _scrollController.position.maxScrollExtent;
       final currentScroll = _scrollController.offset;
-      final showButton = currentScroll > 200 && (maxScroll - currentScroll) > 20;
-      
+      final showButton =
+          currentScroll > 200 && (maxScroll - currentScroll) > 20;
+
       if (showButton != _showScrollButton) {
         setState(() {
           _showScrollButton = showButton;
@@ -123,7 +124,8 @@ class _CartState extends State<Cart> {
               : const SizedBox()),
         ],
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterDocked,
+      floatingActionButtonLocation:
+          FloatingActionButtonLocation.miniCenterDocked,
       floatingActionButton: Obx(
         () => AnimatedSlide(
           duration: const Duration(milliseconds: 300),
@@ -270,6 +272,76 @@ class _CartState extends State<Cart> {
                                       color: Colors.white,
                                     ),
                                   ),
+                                  confirmDismiss: (direction) async {
+                                    return await showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          backgroundColor:
+                                              Theme.of(context).cardColor,
+                                          title: Text(
+                                            'Ürünü Sil',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleLarge
+                                                ?.copyWith(
+                                                  color: Colors.red,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                          ),
+                                          content: Text(
+                                            'Ürünü sepetten silmek istediğinize emin misiniz?\n\n${item.name}',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium
+                                                ?.copyWith(
+                                                  color: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyLarge
+                                                      ?.color,
+                                                ),
+                                          ),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                          ),
+                                          actions: <Widget>[
+                                            TextButton(
+                                              onPressed: () =>
+                                                  Navigator.of(context)
+                                                      .pop(false),
+                                              style: TextButton.styleFrom(
+                                                foregroundColor:
+                                                    Colors.grey[600],
+                                              ),
+                                              child: const Text('İptal'),
+                                            ),
+                                            TextButton(
+                                              onPressed: () =>
+                                                  Navigator.of(context)
+                                                      .pop(true),
+                                              style: TextButton.styleFrom(
+                                                foregroundColor: Colors.red,
+                                                backgroundColor:
+                                                    Colors.red.withOpacity(0.1),
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                  horizontal: 16,
+                                                  vertical: 8,
+                                                ),
+                                              ),
+                                              child: const Text(
+                                                'Sil',
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  },
                                   onDismissed: (direction) =>
                                       controller.onTapRemoveProduct(item),
                                   child: _ProductCard(

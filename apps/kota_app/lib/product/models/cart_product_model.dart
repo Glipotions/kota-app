@@ -52,6 +52,8 @@ class CartProductModel {
     double? price,
     int? quantity,
     String? pictureUrl,
+    String? sizeName,
+    String? colorName,
   }) {
     return CartProductModel(
       id: id ?? this.id,
@@ -60,6 +62,8 @@ class CartProductModel {
       price: price ?? this.price,
       quantity: quantity ?? this.quantity,
       pictureUrl: pictureUrl ?? this.pictureUrl,
+      sizeName: sizeName ?? this.sizeName,
+      colorName: colorName ?? this.colorName,
     );
   }
 }

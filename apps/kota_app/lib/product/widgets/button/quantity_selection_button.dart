@@ -55,7 +55,7 @@ class _QuantitySelectionButtonState extends State<QuantitySelectionButton> {
   void onTapIncrease() {
     var currentQty = int.tryParse(widget.cController.text);
     if (currentQty != null) {
-      currentQty += widget.productCountInPackage!;
+      currentQty += widget.productCountInPackage ?? 1;
       widget.cController.text = currentQty.toString();
     }
   }
@@ -63,7 +63,7 @@ class _QuantitySelectionButtonState extends State<QuantitySelectionButton> {
   void onTapDecrease() {
     var currentQty = int.tryParse(widget.cController.text);
     if (currentQty != null) {
-      currentQty -= widget.productCountInPackage!;
+      currentQty -= widget.productCountInPackage ?? 1;
       if (currentQty >= 0) {
         widget.cController.text = currentQty.toString();
       }
@@ -80,7 +80,7 @@ class _QuantitySelectionButtonState extends State<QuantitySelectionButton> {
       child: Row(
         children: [
           IconButton(
-            onPressed: onTapDecrease, 
+            onPressed: onTapDecrease,
             icon: const Icon(Icons.remove),
             padding: const EdgeInsets.all(8),
           ),
@@ -96,8 +96,8 @@ class _QuantitySelectionButtonState extends State<QuantitySelectionButton> {
                 );
               },
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+                    fontWeight: FontWeight.bold,
+                  ),
               decoration: const InputDecoration(
                 border: InputBorder.none,
                 contentPadding: EdgeInsets.zero,
@@ -108,7 +108,7 @@ class _QuantitySelectionButtonState extends State<QuantitySelectionButton> {
             ),
           ),
           IconButton(
-            onPressed: onTapIncrease, 
+            onPressed: onTapIncrease,
             icon: const Icon(Icons.add),
             padding: const EdgeInsets.all(8),
           ),

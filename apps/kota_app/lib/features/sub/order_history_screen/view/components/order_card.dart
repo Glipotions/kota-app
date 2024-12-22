@@ -9,7 +9,7 @@ class _OrderCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    
+
     return Card(
       elevation: 2,
       margin: EdgeInsets.symmetric(
@@ -47,22 +47,25 @@ class _OrderCard extends StatelessWidget {
                         Text(
                           item.tarih?.displayToDateFormat() ?? '',
                           style: context.bodySmall?.copyWith(
-                            color: isDarkMode ? Colors.grey[300] : Colors.grey[600],
+                            color: isDarkMode
+                                ? Colors.grey[300]
+                                : Colors.grey[600],
                           ),
                         ),
-                        if (item.aciklama != null && item.aciklama!.isNotEmpty) ...[
+                        if (item.aciklama != null &&
+                            item.aciklama!.isNotEmpty) ...[
                           const SizedBox(height: 8),
                           Container(
                             padding: EdgeInsets.all(ModulePadding.xs.value),
                             decoration: BoxDecoration(
-                              color: isDarkMode 
-                                ? Colors.grey[800]
-                                : Colors.grey[100],
+                              color: isDarkMode
+                                  ? Colors.grey[800]
+                                  : Colors.grey[100],
                               borderRadius: BorderRadius.circular(8),
                               border: Border.all(
-                                color: isDarkMode 
-                                  ? Colors.grey[700]! 
-                                  : Colors.grey[300]!,
+                                color: isDarkMode
+                                    ? Colors.grey[700]!
+                                    : Colors.grey[300]!,
                               ),
                             ),
                             child: Row(
@@ -71,18 +74,18 @@ class _OrderCard extends StatelessWidget {
                                 Icon(
                                   Icons.notes_outlined,
                                   size: 16,
-                                  color: isDarkMode 
-                                    ? Colors.grey[400] 
-                                    : Colors.grey[600],
+                                  color: isDarkMode
+                                      ? Colors.grey[400]
+                                      : Colors.grey[600],
                                 ),
                                 const SizedBox(width: 8),
                                 Expanded(
                                   child: Text(
                                     item.aciklama!,
                                     style: context.bodySmall?.copyWith(
-                                      color: isDarkMode 
-                                        ? Colors.grey[300] 
-                                        : Colors.grey[700],
+                                      color: isDarkMode
+                                          ? Colors.grey[300]
+                                          : Colors.grey[700],
                                     ),
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
@@ -111,6 +114,9 @@ class _OrderCard extends StatelessWidget {
                         case 'Düzenle':
                           // Düzenle seçeneği için işlemler
                           break;
+                        case 'Sil':
+                          controller.onTapDeleteOrderHistory(item.id!);
+                          break;
                         case 'Pdf':
                           controller.onTapOrderPdfCard(item.id!);
                           break;
@@ -138,6 +144,17 @@ class _OrderCard extends StatelessWidget {
                             ],
                           ),
                         ),
+                        if (item.canBeDeleted ?? false || kDebugMode)
+                          const PopupMenuItem(
+                            value: 'Sil',
+                            child: Row(
+                              children: [
+                                Icon(Icons.delete_outline, size: 20),
+                                SizedBox(width: 8),
+                                Text('Sil'),
+                              ],
+                            ),
+                          ),
                         const PopupMenuItem(
                           value: 'Pdf',
                           child: Row(
@@ -204,7 +221,8 @@ class _OrderCard extends StatelessWidget {
                       Text(
                         'Toplam Tutar',
                         style: context.labelSmall?.copyWith(
-                          color: isDarkMode ? Colors.grey[300] : Colors.grey[600],
+                          color:
+                              isDarkMode ? Colors.grey[300] : Colors.grey[600],
                         ),
                       ),
                       const SizedBox(height: 2),

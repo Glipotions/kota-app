@@ -73,6 +73,14 @@ required int id,
     );
   }
 
+  Future<BaseHttpModel<OrdersHistoryDetailResponseModel>> deleteOrder({
+required int id,
+  }) async {
+    return baseRequest<OrdersHistoryDetailResponseModel, OrdersHistoryDetailResponseModel>(
+      httpUrl: AppServicePath.orderHistoryDetail.withPath(id.toString()),
+      method: DioHttpMethod.delete,
+    );
+  }
 
   ///Request that returns all characters
   Future<BaseHttpModel<CreateOrderResponseModel>> createOrder({

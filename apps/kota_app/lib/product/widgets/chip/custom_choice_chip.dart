@@ -12,6 +12,8 @@ class CustomChoiceChip extends StatelessWidget {
     this.insidePadding,
     this.borderWidth,
     this.action,
+    this.backgroundColor,
+    this.labelColor,
   });
 
   final String title;
@@ -21,6 +23,8 @@ class CustomChoiceChip extends StatelessWidget {
   final EdgeInsets? insidePadding;
   final Widget? action;
   final double? borderWidth;
+  final Color? backgroundColor;
+  final Color? labelColor;
 
   @override
   Widget build(BuildContext context) {
@@ -30,21 +34,31 @@ class CustomChoiceChip extends StatelessWidget {
         height: 35,
         child: DecoratedBox(
           decoration: BoxDecoration(
-            color: enabled
-                ? isSelected
-                    ? Theme.of(context).colorScheme.primary
-                    : Theme.of(context).colorScheme.primary.withOpacity(.3)
-                : Theme.of(context)
-                    .colorScheme
-                    .primary
-                    .withOpacity(.3), // etkin değilse opacity azaltılır
+            color: backgroundColor ??
+                (enabled
+                    ? isSelected
+                        ? Theme.of(context).colorScheme.primary
+                        : Theme.of(context).colorScheme.primary.withOpacity(.5)
+                    : Theme.of(context).colorScheme.primary.withOpacity(.5)),
             borderRadius: BorderRadius.circular(ModuleRadius.xxl.value),
             border: Border.all(
               color: isSelected
-                  ? Colors.transparent
+                  ? (backgroundColor != null 
+                      ? (backgroundColor == Colors.white ? Colors.black : Colors.white)
+                      : Theme.of(context).colorScheme.primary)
                   : Theme.of(context).colorScheme.surface,
-              width: borderWidth ?? 2,
+              width: isSelected ? 2.5 : (borderWidth ?? 1),
             ),
+            boxShadow: isSelected
+                ? [
+                    BoxShadow(
+                      color: (backgroundColor ?? Theme.of(context).colorScheme.primary).withOpacity(0.5),
+                      blurRadius: 8,
+                      spreadRadius: 2,
+                      offset: const Offset(0, 2),
+                    ),
+                  ]
+                : null,
           ),
           child: Padding(
             padding: insidePadding ??
@@ -56,23 +70,19 @@ class CustomChoiceChip extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                        color: enabled
-                            ? isSelected
-                                ? Theme.of(context).colorScheme.background
-                                : null
-                            : Theme.of(context)
-                                .colorScheme
-                                .background
-                                .withOpacity(
-                                    .5,),), // etkin değilse renk azaltılır
-                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                          color: labelColor ??
+                              (enabled
+                                  ? isSelected
+                                      ? Colors.white
+                                      : Theme.of(context).colorScheme.primary
+                                  : Theme.of(context).colorScheme.primary),
+                        ),
                   ),
-                  if (action != null)
-                    Padding(
-                      padding: EdgeInsets.only(left: ModulePadding.xxxs.value),
-                      child: action,
-                    ),
+                  if (action != null) ...[
+                    const SizedBox(width: 4),
+                    action!,
+                  ],
                 ],
               ),
             ),
