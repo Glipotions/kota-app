@@ -74,9 +74,10 @@ required int id,
   }
 
   Future<BaseHttpModel<OrdersHistoryDetailResponseModel>> deleteOrder({
-required int id,
+    required int id,
   }) async {
     return baseRequest<OrdersHistoryDetailResponseModel, OrdersHistoryDetailResponseModel>(
+      responseModel: OrdersHistoryDetailResponseModel(),
       httpUrl: AppServicePath.orderHistoryDetail.withPath(id.toString()),
       method: DioHttpMethod.delete,
     );
@@ -92,6 +93,18 @@ required int id,
       method: DioHttpMethod.post,
       requestModel: request,
       successStatus: HttpStatus.created,
+    );
+  }
+
+    Future<BaseHttpModel<CreateOrderResponseModel>> updateOrder({
+    required CreateOrderRequestModel request
+  }) async {
+    return baseRequest<CreateOrderResponseModel, CreateOrderResponseModel>(
+      responseModel: CreateOrderResponseModel(),
+      httpUrl: AppServicePath.createOrder.value,
+      method: DioHttpMethod.put,
+      requestModel: request,
+      successStatus: HttpStatus.ok,
     );
   }
 

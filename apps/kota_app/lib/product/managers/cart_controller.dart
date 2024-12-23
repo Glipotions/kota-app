@@ -17,6 +17,7 @@ class CartController extends BaseControllerInterface {
   final Rx<List<CartProductModel>> _itemList = Rx([]);
   final RxBool isDescriptionVisible = false.obs;
   final TextEditingController descriptionController = TextEditingController();
+  RxInt? editingOrderId = RxInt(0);
 
   List<CartProductModel> get itemList => _itemList.value;
   set itemList(List<CartProductModel> value) => _itemList
@@ -36,9 +37,11 @@ class CartController extends BaseControllerInterface {
       final prefs = await SharedPreferences.getInstance();
       final String? cartJson = prefs.getString(_cartKey);
       if (cartJson != null) {
-        final List<dynamic> decodedList = json.decode(cartJson) as List<dynamic>;
+        final List<dynamic> decodedList =
+            json.decode(cartJson) as List<dynamic>;
         itemList = decodedList
-            .map((item) => CartProductModel.fromJson(item as Map<String, dynamic>))
+            .map((item) =>
+                CartProductModel.fromJson(item as Map<String, dynamic>))
             .toList();
       }
     } catch (e) {
@@ -49,7 +52,8 @@ class CartController extends BaseControllerInterface {
   Future<void> _saveCartItems() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      final String cartJson = json.encode(itemList.map((item) => item.toJson()).toList());
+      final String cartJson =
+          json.encode(itemList.map((item) => item.toJson()).toList());
       await prefs.setString(_cartKey, cartJson);
     } catch (e) {
       debugPrint('Error saving cart items: $e');
@@ -57,6 +61,7 @@ class CartController extends BaseControllerInterface {
   }
 
   Future<void> clearCart() async {
+    editingOrderId?.value = 0;
     itemList = [];
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_cartKey);
@@ -97,15 +102,16 @@ class CartController extends BaseControllerInterface {
 
   Future<void> onTapCompleteOrder() async {
     if (sessionHandler.currentUser == null) {
-      // await SessionHandler.instance.logOut();
-    await  context.pushNamed(SubRouteEnums.loginSubScreen.name);
+      await context.pushNamed(SubRouteEnums.loginSubScreen.name);
     } else {
       final request = CreateOrderRequestModel(
+        id: editingOrderId?.value,
         cariHesapId: sessionHandler.currentUser!.currentAccountId!.toString(),
         description: descriptionController.text.trim(),
         orderDetails: itemList
             .map(
               (e) => OrderDetail(
+                id: e.orderDetailId ?? 0,
                 amount: e.quantity.toString(),
                 productId: e.id.toString(),
                 unitPrice: e.price.toString(),
@@ -115,18 +121,40 @@ class CartController extends BaseControllerInterface {
       );
 
       LoadingProgress.start();
-      await client.appService.createOrder(request: request).handleRequest(
-            ignoreException: true,
-            onIgnoreException: (err) {
-              showErrorToastMessage(err?.title ?? 'Bir hata oluştu.');
-            },
-            onSuccess: (res) {
-              showSuccessToastMessage('Sipariş başarı ile oluşturuldu.');
-              itemList = [];
-              clearCart();
-            },
-            defaultResponse: CreateOrderResponseModel(),
-          );
+      if (editingOrderId?.value != 0) {
+        // Sipariş güncelleme
+        request.id = editingOrderId!.value;
+        request.description = descriptionController.text.trim();
+        await client.appService
+            .updateOrder(
+              request: request,
+            )
+            .handleRequest(
+              ignoreException: true,
+              onIgnoreException: (err) {
+                showErrorToastMessage(err?.title ?? 'Bir hata oluştu.');
+              },
+              onSuccess: (res) {
+                showSuccessToastMessage('Sipariş başarı ile güncellendi.');
+                clearCart();
+              },
+              defaultResponse: CreateOrderResponseModel(),
+            );
+      } else {
+        // Yeni sipariş oluşturma
+        await client.appService.createOrder(request: request).handleRequest(
+              ignoreException: true,
+              onIgnoreException: (err) {
+                showErrorToastMessage(err?.title ?? 'Bir hata oluştu.');
+              },
+              onSuccess: (res) {
+                showSuccessToastMessage('Sipariş başarı ile oluşturuldu.');
+                itemList = [];
+                clearCart();
+              },
+              defaultResponse: CreateOrderResponseModel(),
+            );
+      }
       LoadingProgress.stop();
     }
   }

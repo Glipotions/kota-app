@@ -4,10 +4,13 @@ import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kota_app/features/sub/order_history_detail_screen/order_pdf/order_pdf_controller.dart';
 import 'package:kota_app/product/base/controller/base_controller.dart';
+import 'package:kota_app/product/managers/cart_controller.dart';
 import 'package:kota_app/product/models/cart_product_model.dart';
+import 'package:kota_app/product/navigation/modules/bottom_navigation_route/bottom_navigation_route_enums.dart';
 import 'package:kota_app/product/navigation/modules/sub_route/sub_route_enums.dart';
 import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
+import 'package:widgets/widget.dart';
 
 class OrderHistoryController extends BaseControllerInterface {
   OrdersHistoryResponseModel transactionsResponse =
@@ -86,7 +89,21 @@ class OrderHistoryController extends BaseControllerInterface {
       );
 
   Future<void> onTapDeleteOrderHistory(int id) async {
-    await client.appService.deleteOrder(id: id);
+    LoadingProgress.start();
+    await client.appService.deleteOrder(id: id).handleRequest(
+      ignoreException: true,
+      onIgnoreException: (err) {
+        showErrorToastMessage(err?.title ?? 'Bir hata oluştu.');
+      },
+      onSuccess: (res) {
+        showSuccessToastMessage('Sipariş başarıyla silindi.');
+        orderItems = [];
+        transactionsResponse = OrdersHistoryResponseModel();
+        onReady();
+      },
+      defaultResponse: OrdersHistoryDetailResponseModel(),
+    );
+    LoadingProgress.stop();
   }
 
   Future<void> onTapOrderPdfCard(int id) async {
@@ -121,5 +138,32 @@ class OrderHistoryController extends BaseControllerInterface {
         );
       },
     );
+  }
+
+  Future<void> onTapEditOrder(int id) async {
+    final cartController = Get.find<CartController>();
+    await cartController.clearCart();
+    cartController.editingOrderId?.value = id;
+
+    await client.appService.orderHistoryDetail(id: id).handleRequest(
+      onSuccess: (res) {
+        for (final item in res!.items!) {
+          final cartItem = CartProductModel(
+            id: item.urunId!,
+            code: item.code!,
+            price: item.birimFiyat!,
+            quantity: item.miktar!,
+            name: item.name,
+            pictureUrl: item.pictureUrl,
+            orderDetailId: item.id,
+            sizeName: item.sizeName,
+            colorName: item.colorName,
+          );
+          cartController.onTapAddProduct(cartItem);
+        }
+      },
+    );
+
+    context.goNamed(BottomNavigationRouteEnum.cartScreen.name);
   }
 }

@@ -114,6 +114,7 @@ class ProductDetailController extends BaseControllerInterface {
       pictureUrl: product.pictureUrl ?? baseLogoUrl,
       sizeName: selectedProductVariant!.sizeName,
       colorName: selectedProductVariant!.colorName,
+      productCodeGroupId: selectedProductVariant!.productCodeGroupId,
     );
   }
 

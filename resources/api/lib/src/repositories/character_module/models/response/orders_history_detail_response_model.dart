@@ -6,26 +6,27 @@ import 'package:api/src/index.dart';
 
 class OrdersHistoryDetailResponseModel
     extends IBaseModel<OrdersHistoryDetailResponseModel> {
-  OrdersHistoryDetailResponseModel(
-      {this.id,
-      this.kod,
-      this.cariHesapId,
-      this.ozelKod1Id,
-      this.dovizTuru,
-      this.dovizKuru,
-      this.tarih,
-      this.kdvSekli,
-      this.kdvHaricTutar,
-      this.iskontoTutari,
-      this.kdvTutari,
-      this.toplamTutar,
-      this.tutarYazi,
-      this.dovizTutar,
-      this.iskontoOrani,
-      this.siparisKdvOrani,
-      this.aciklama,
-      this.durum,
-      this.items,});
+  OrdersHistoryDetailResponseModel({
+    this.id,
+    this.kod,
+    this.cariHesapId,
+    this.ozelKod1Id,
+    this.dovizTuru,
+    this.dovizKuru,
+    this.tarih,
+    this.kdvSekli,
+    this.kdvHaricTutar,
+    this.iskontoTutari,
+    this.kdvTutari,
+    this.toplamTutar,
+    this.tutarYazi,
+    this.dovizTutar,
+    this.iskontoOrani,
+    this.siparisKdvOrani,
+    this.aciklama,
+    this.durum,
+    this.items,
+  });
   int? id;
   String? kod;
   int? cariHesapId;
@@ -82,23 +83,24 @@ class OrdersHistoryDetailResponseModel
 }
 
 class OrdersHistoryDetailItem extends IBaseModel<OrdersHistoryDetailItem> {
-
-  OrdersHistoryDetailItem({
-    this.id,
-    this.alinanSiparisId,
-    this.urunId,
-    this.miktar,
-    this.birimFiyat,
-    this.dovizliBirimFiyat,
-    this.kdvHaricTutar,
-    this.kdvOrani,
-    this.kdvTutari,
-    this.tutar,
-    this.durum,
-    this.code,
-    this.pictureUrl,
-    this.name
-  });
+  OrdersHistoryDetailItem(
+      {this.id,
+      this.alinanSiparisId,
+      this.urunId,
+      this.miktar,
+      this.birimFiyat,
+      this.dovizliBirimFiyat,
+      this.kdvHaricTutar,
+      this.kdvOrani,
+      this.kdvTutari,
+      this.tutar,
+      this.durum,
+      this.code,
+      this.pictureUrl,
+      this.name,
+      this.sizeName,
+      this.colorName,
+      });
   final int? id;
   final int? alinanSiparisId;
   final int? urunId;
@@ -113,6 +115,8 @@ class OrdersHistoryDetailItem extends IBaseModel<OrdersHistoryDetailItem> {
   final String? code;
   final String? pictureUrl;
   final String? name;
+  final String? sizeName;
+  final String? colorName;
 
   @override
   OrdersHistoryDetailItem fromJson(Map<String, dynamic> json) {
@@ -131,6 +135,8 @@ class OrdersHistoryDetailItem extends IBaseModel<OrdersHistoryDetailItem> {
       code: json['code'],
       pictureUrl: json['pictureUrl'],
       name: json['name'],
+      sizeName: json['sizeName'],
+      colorName: json['colorName'],
     );
   }
 
@@ -151,6 +157,8 @@ class OrdersHistoryDetailItem extends IBaseModel<OrdersHistoryDetailItem> {
       'code': code,
       'pictureUrl': pictureUrl,
       'name': name,
+      'sizeName': sizeName,
+      'colorName': colorName,
     };
   }
 }

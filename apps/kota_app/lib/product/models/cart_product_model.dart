@@ -8,9 +8,12 @@ class CartProductModel {
     this.pictureUrl,
     this.sizeName,
     this.colorName,
+    this.productCodeGroupId,
+    this.orderDetailId,
   });
 
   int id;
+  int? productCodeGroupId;
   String code;
   String? name;
   double price;
@@ -18,6 +21,7 @@ class CartProductModel {
   String? pictureUrl;
   String? sizeName;
   String? colorName;
+  int? orderDetailId;
 
   Map<String, dynamic> toJson() {
     return {
@@ -28,7 +32,8 @@ class CartProductModel {
       'quantity': quantity,
       'pictureUrl': pictureUrl,
       'sizeName': sizeName,
-      'colorName': colorName
+      'colorName': colorName,
+      'productCodeGroupId': productCodeGroupId,
     };
   }
 
@@ -42,6 +47,7 @@ class CartProductModel {
       pictureUrl: json['pictureUrl'] as String?,
       sizeName: json['sizeName'] as String?,
       colorName: json['colorName'] as String?,
+      productCodeGroupId: json['productCodeGroupId'] as int?,
     );
   }
 
@@ -54,6 +60,8 @@ class CartProductModel {
     String? pictureUrl,
     String? sizeName,
     String? colorName,
+    int? productCodeGroupId,
+    int? orderDetailId,
   }) {
     return CartProductModel(
       id: id ?? this.id,
@@ -64,6 +72,8 @@ class CartProductModel {
       pictureUrl: pictureUrl ?? this.pictureUrl,
       sizeName: sizeName ?? this.sizeName,
       colorName: colorName ?? this.colorName,
+      productCodeGroupId: productCodeGroupId ?? this.productCodeGroupId,
+      orderDetailId: orderDetailId ?? this.orderDetailId,
     );
   }
 }

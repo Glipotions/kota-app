@@ -112,7 +112,7 @@ class _OrderCard extends StatelessWidget {
                           controller.onTapOrderHistoryDetail(item.id!);
                           break;
                         case 'Düzenle':
-                          // Düzenle seçeneği için işlemler
+                          controller.onTapEditOrder(item.id!);
                           break;
                         case 'Sil':
                           controller.onTapDeleteOrderHistory(item.id!);
