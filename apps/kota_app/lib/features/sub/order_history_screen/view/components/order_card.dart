@@ -134,16 +134,17 @@ class _OrderCard extends StatelessWidget {
                             ],
                           ),
                         ),
-                        const PopupMenuItem(
-                          value: 'Düzenle',
-                          child: Row(
-                            children: [
-                              Icon(Icons.edit_outlined, size: 20),
-                              SizedBox(width: 8),
-                              Text('Düzenle'),
-                            ],
+                        if (item.canBeDeleted ?? false || kDebugMode)
+                          const PopupMenuItem(
+                            value: 'Düzenle',
+                            child: Row(
+                              children: [
+                                Icon(Icons.edit_outlined, size: 20),
+                                SizedBox(width: 8),
+                                Text('Düzenle'),
+                              ],
+                            ),
                           ),
-                        ),
                         if (item.canBeDeleted ?? false || kDebugMode)
                           const PopupMenuItem(
                             value: 'Sil',

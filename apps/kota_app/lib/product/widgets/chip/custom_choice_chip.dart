@@ -41,16 +41,19 @@ class CustomChoiceChip extends StatelessWidget {
                         : Theme.of(context).colorScheme.primary.withOpacity(.5)
                     : Theme.of(context).colorScheme.primary.withOpacity(.5)),
             borderRadius: BorderRadius.circular(ModuleRadius.xxl.value),
-            border: Border.all(
-              color: isSelected
-                  ? (backgroundColor != null 
-                      ? (backgroundColor == Colors.white ? Colors.black : Colors.white)
-                      : Theme.of(context).colorScheme.primary)
-                  : Theme.of(context).colorScheme.surface,
-              width: isSelected ? 2.5 : (borderWidth ?? 1),
-            ),
+            border: isSelected
+                ? Border.all(
+                    width: 1.5,
+                  )
+                : Border.all(
+                    color: Theme.of(context).colorScheme.surface,
+                    width: borderWidth ?? 1,
+                  ),
             boxShadow: isSelected
                 ? [
+                   const BoxShadow(
+                      color: Colors.white,
+                    ),
                     BoxShadow(
                       color: (backgroundColor ?? Theme.of(context).colorScheme.primary).withOpacity(0.5),
                       blurRadius: 8,

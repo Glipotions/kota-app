@@ -60,8 +60,8 @@ class _ProductCard extends StatelessWidget {
                         item.name!,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                        style: context.titleMedium?.copyWith(
-                          fontWeight: FontWeight.w600,
+                        style: context.titleSmall?.copyWith(
+                          fontWeight: FontWeight.w500,
                           color: Theme.of(context).hintColor,
                         ),
                       ),
