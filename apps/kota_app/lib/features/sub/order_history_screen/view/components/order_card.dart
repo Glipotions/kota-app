@@ -115,7 +115,60 @@ class _OrderCard extends StatelessWidget {
                           controller.onTapEditOrder(item.id!);
                           break;
                         case 'Sil':
-                          controller.onTapDeleteOrderHistory(item.id!);
+                          showDialog<bool>(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (BuildContext context) => AlertDialog(
+                              backgroundColor: Theme.of(context).cardColor,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              icon: Icon(
+                                Icons.delete_outline,
+                                color: Theme.of(context).colorScheme.error,
+                                size: 32,
+                              ),
+                              title: Text(
+                                'Siparişi Sil',
+                                style: TextStyle(
+                                  color: Theme.of(context).textTheme.titleLarge?.color,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              content: Text(
+                                'Bu siparişi silmek istediğinizden emin misiniz?',
+                                style: TextStyle(
+                                  color: Theme.of(context).textTheme.bodyMedium?.color,
+                                ),
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.of(context).pop(false),
+                                  child: Text(
+                                    'İptal',
+                                    style: TextStyle(
+                                      color: Theme.of(context).textTheme.bodyMedium?.color,
+                                    ),
+                                  ),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop(true);
+                                    controller.onTapDeleteOrderHistory(item.id!);
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Theme.of(context).colorScheme.error,
+                                    foregroundColor: Colors.white,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                  child: const Text('Sil'),
+                                ),
+                              ],
+                              actionsPadding: const EdgeInsets.all(16),
+                            ),
+                          );
                           break;
                         case 'Pdf':
                           controller.onTapOrderPdfCard(item.id!);

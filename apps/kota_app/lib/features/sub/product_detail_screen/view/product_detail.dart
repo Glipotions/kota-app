@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:kota_app/features/sub/product_detail_screen/controller/product_detail_controller.dart';
 import 'package:kota_app/product/managers/cart_controller.dart';
 import 'package:kota_app/product/utility/enums/module_padding_enums.dart';
+import 'package:kota_app/product/utility/enums/module_radius_enums.dart';
 import 'package:kota_app/product/widgets/app_bar/general_app_bar.dart';
 import 'package:kota_app/product/widgets/button/quantity_selection_button.dart';
 import 'package:kota_app/product/widgets/card/bordered_image.dart';
@@ -95,6 +96,168 @@ class ProductDetail extends StatelessWidget {
 
   final ProductDetailController controller;
 
+  Widget _buildChip(
+    BuildContext context,
+    IconData icon,
+    String text,
+    Color bgColor,
+  ) {
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: ModulePadding.xs.value,
+        vertical: ModulePadding.xxxs.value,
+      ),
+      decoration: BoxDecoration(
+        color: bgColor,
+        borderRadius: BorderRadius.circular(ModuleRadius.s.value),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 0,
+            blurRadius: 1,
+            offset: const Offset(0, 1),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            icon,
+            size: 14,
+            color: Colors.black87,
+          ),
+          const SizedBox(width: 4),
+          Text(
+            text,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: Colors.black87,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showCartPopup(BuildContext context, CartController cartController) {
+    final currentProductGroupId = controller.selectedProductVariant?.productCodeGroupId;
+    if (currentProductGroupId == null) return;
+
+    final cartItems = cartController.itemList
+        .where((item) => item.productCodeGroupId == currentProductGroupId)
+        .toList();
+
+    if (cartItems.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Bu üründen sepetinizde bulunmamaktadır.'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+
+    showModalBottomSheet(
+      context: context,
+      constraints: BoxConstraints(
+        maxHeight: MediaQuery.of(context).size.height * 0.7,
+      ),
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (context) => Container(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Sepetteki Ürünler',
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                IconButton(
+                  icon: const Icon(Icons.close),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ],
+            ),
+            const Divider(),
+            Flexible(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    ...cartItems.map((item) => Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: Card(
+                        elevation: 2,
+                        child: Padding(
+                          padding: EdgeInsets.all(ModulePadding.xs.value),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Wrap(
+                                  spacing: ModulePadding.xxs.value,
+                                  children: [
+                                    _buildChip(
+                                      context,
+                                      Icons.local_offer,
+                                      item.code!,
+                                      Colors.grey.shade100,
+                                    ),
+                                    if (item.sizeName != null)
+                                      _buildChip(
+                                        context,
+                                        Icons.straighten,
+                                        item.sizeName!,
+                                        Colors.blue.shade50,
+                                      ),
+                                    if (item.colorName != null)
+                                      _buildChip(
+                                        context,
+                                        Icons.palette_outlined,
+                                        item.colorName!,
+                                        Colors.orange.shade50,
+                                      ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: ModulePadding.xs.value,
+                                  vertical: ModulePadding.xxxs.value,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).primaryColor.withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(ModuleRadius.s.value),
+                                ),
+                                child: Text(
+                                  '${item.quantity}x',
+                                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                                    color: Theme.of(context).primaryColor,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    )).toList(),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final CartController cartCont = Get.put(CartController());
@@ -103,14 +266,12 @@ class ProductDetail extends StatelessWidget {
       onTap: controller.unFocus,
       child: Scaffold(
         key: controller.scaffoldKey,
-        appBar: const GeneralAppBar(
+        appBar: GeneralAppBar(
           title: 'Ürün Detay',
-          // additionalIcon: IconButton(
-          //   icon: const Icon(Icons.share),
-          //   onPressed: () {
-          //     // Share functionality
-          //   },
-          // ),
+          additionalIcon: IconButton(
+            icon: const Icon(Icons.shopping_basket_outlined),
+            onPressed: () => _showCartPopup(context, cartCont),
+          ),
         ),
         body: Stack(
           children: [
