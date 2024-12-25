@@ -60,7 +60,7 @@ class _ProductCard extends StatelessWidget {
                         item.name!,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                        style: context.titleSmall?.copyWith(
+                        style: context.labelMedium?.copyWith(
                           fontWeight: FontWeight.w500,
                           color: Theme.of(context).hintColor,
                         ),
@@ -69,33 +69,44 @@ class _ProductCard extends StatelessWidget {
                         Padding(
                           padding:
                               EdgeInsets.only(top: ModulePadding.xxs.value),
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Wrap(
-                              spacing: ModulePadding.xxs.value,
-                              children: [
-                                _buildChip(
-                                  context,
-                                  Icons.local_offer,
-                                  item.code!,
-                                  Colors.grey.shade100,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Row(
+                                  children: [
+                                    _buildChip(
+                                      context,
+                                      Icons.local_offer,
+                                      item.code!,
+                                      Colors.grey.shade100,
+                                    ),
+                                    SizedBox(width: ModulePadding.xxs.value),
+                                    if (item.sizeName != null)
+                                      _buildChip(
+                                        context,
+                                        Icons.straighten,
+                                        item.sizeName!,
+                                        Colors.blue.shade50,
+                                      ),
+                                  ],
                                 ),
-                                if (item.sizeName != null)
-                                  _buildChip(
-                                    context,
-                                    Icons.straighten,
-                                    item.sizeName!,
-                                    Colors.blue.shade50,
+                              ),
+                              if (item.colorName != null)
+                                SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Padding(
+                                    padding: EdgeInsets.only(top: ModulePadding.xxs.value),
+                                    child: _buildChip(
+                                      context,
+                                      Icons.palette_outlined,
+                                      item.colorName!,
+                                      Colors.orange.shade50,
+                                    ),
                                   ),
-                                if (item.colorName != null)
-                                  _buildChip(
-                                    context,
-                                    Icons.palette_outlined,
-                                    item.colorName!,
-                                    Colors.orange.shade50,
-                                  ),
-                              ],
-                            ),
+                                ),
+                            ],
                           ),
                         ),
 
