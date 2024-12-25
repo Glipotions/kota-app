@@ -15,10 +15,15 @@ class GeneralAppBar extends StatelessWidget implements PreferredSizeWidget {
     super.key,
     this.additionalIcon,
     this.leading,
+    this.elevation,
+    this.backgroundColor,
   });
   final String title;
   final Widget? additionalIcon;
   final Widget? leading;
+  final double? elevation;
+  final Color? backgroundColor;
+
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +31,8 @@ class GeneralAppBar extends StatelessWidget implements PreferredSizeWidget {
     final bottomNavController = Get.find<BottomNavigationController>();
     
     return AppBar(
+      backgroundColor: backgroundColor,
+      elevation: elevation,
       forceMaterialTransparency: true,
       title: Text(title),
       leading: leading ?? IconButton(

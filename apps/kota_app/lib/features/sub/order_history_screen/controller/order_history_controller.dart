@@ -158,6 +158,7 @@ class OrderHistoryController extends BaseControllerInterface {
             orderDetailId: item.id,
             sizeName: item.sizeName,
             colorName: item.colorName,
+            productCodeGroupId: item.productCodeGroupId,
           );
           cartController.onTapAddProduct(cartItem);
         }

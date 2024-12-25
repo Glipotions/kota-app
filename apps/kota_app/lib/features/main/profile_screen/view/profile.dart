@@ -19,37 +19,52 @@ class Profile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       key: controller.scaffoldKey,
-      appBar: const GeneralAppBar(title: 'Profil', leading: SizedBox(),),
+      appBar: GeneralAppBar(
+        title: 'Profil',
+        leading: const SizedBox(),
+        elevation: 0,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      ),
       body: BaseView<ProfileController>(
         controller: controller,
         child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.all(ModulePadding.s.value),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Obx(()=>_BalanceCard(
-                  balance: controller.balance.balance ?? 0,
-                  title: controller.balance.firma ?? '',
-                  onTap: controller.onTapPastTransactions,
-                ),),
-                SizedBox(
-                  height: ModulePadding.xxs.value,
-                ),
-                Flexible(
-                  child: ListView.separated(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      final item = controller.profileOptions[index];
-                      return _OptionTile(item: item,);
-                    },
-                    separatorBuilder: (context, index) =>
-                        SizedBox(height: ModulePadding.xxs.value),
-                    itemCount: controller.profileOptions.length,
+          physics: const BouncingScrollPhysics(),
+          child: SafeArea(
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: ModulePadding.s.value,
+                vertical: ModulePadding.xs.value,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // User info section if needed
+                  Obx(
+                    () => _BalanceCard(
+                      balance: controller.balance.balance ?? 0,
+                      title: controller.balance.firma ?? '',
+                      onTap: controller.onTapPastTransactions,
+                    ),
                   ),
-                ),
-              ],
+                  SizedBox(height: ModulePadding.m.value),
+                  Flexible(
+                    child: ListView.separated(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        final item = controller.profileOptions[index];
+                        return _OptionTile(item: item);
+                      },
+                      separatorBuilder: (context, index) =>
+                          SizedBox(height: ModulePadding.xs.value),
+                      itemCount: controller.profileOptions.length,
+                    ),
+                  ),
+                  // Bottom padding for better scroll experience
+                  SizedBox(height: ModulePadding.s.value),
+                ],
+              ),
             ),
           ),
         ),

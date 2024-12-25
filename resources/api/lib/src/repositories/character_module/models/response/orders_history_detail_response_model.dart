@@ -100,6 +100,7 @@ class OrdersHistoryDetailItem extends IBaseModel<OrdersHistoryDetailItem> {
       this.name,
       this.sizeName,
       this.colorName,
+      this.productCodeGroupId,
       });
   final int? id;
   final int? alinanSiparisId;
@@ -117,6 +118,7 @@ class OrdersHistoryDetailItem extends IBaseModel<OrdersHistoryDetailItem> {
   final String? name;
   final String? sizeName;
   final String? colorName;
+  final int? productCodeGroupId;
 
   @override
   OrdersHistoryDetailItem fromJson(Map<String, dynamic> json) {
@@ -137,6 +139,7 @@ class OrdersHistoryDetailItem extends IBaseModel<OrdersHistoryDetailItem> {
       name: json['name'],
       sizeName: json['sizeName'],
       colorName: json['colorName'],
+      productCodeGroupId: json['productCodeGroupId'],
     );
   }
 
