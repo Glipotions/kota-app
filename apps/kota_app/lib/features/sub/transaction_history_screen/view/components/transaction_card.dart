@@ -10,117 +10,139 @@ class _TransactionCard extends StatelessWidget {
     final bool isDebit = item.borc != 0;
     final double amount = isDebit ? item.borc ?? 0 : item.alacak ?? 0;
 
-    return Card(
-      elevation: 2,
-      margin: EdgeInsets.symmetric(
-        horizontal: ModulePadding.s.value,
-        vertical: ModulePadding.xxs.value,
-      ),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-        side: BorderSide(
-          color: context.primary.withOpacity(0.1),
-          width: 1,
+    return Hero(
+      tag: 'transaction_${item.fisNo}',
+      child: Card(
+        elevation: 2,
+        margin: EdgeInsets.zero,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          side: BorderSide(
+            color: context.primary.withOpacity(0.1),
+            width: 1,
+          ),
         ),
-      ),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(12),
-        onTap: () {
-          // TODO: Implement transaction detail view
-        },
-        child: Padding(
-          padding: EdgeInsets.all(ModulePadding.m.value),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    padding: EdgeInsets.all(ModulePadding.xs.value),
-                    decoration: BoxDecoration(
-                      color: isDebit 
-                          ? Colors.red.withOpacity(0.1)
-                          : Colors.green.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(8),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(12),
+          onTap: () {
+            // TODO: Implement transaction detail view
+          },
+          child: Padding(
+            padding: EdgeInsets.all(ModulePadding.m.value),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    // Transaction Icon
+                    Container(
+                      padding: EdgeInsets.all(ModulePadding.xs.value),
+                      decoration: BoxDecoration(
+                        color: isDebit 
+                            ? Colors.red.withOpacity(0.1)
+                            : Colors.green.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Icon(
+                        _getTransactionIcon(item.fisTuru ?? ''),
+                        color: isDebit ? Colors.red : Colors.green,
+                        size: 24,
+                      ),
                     ),
-                    child: Icon(
-                      isDebit ? Icons.remove_circle : Icons.add_circle,
-                      color: isDebit ? Colors.red : Colors.green,
-                      size: 24,
+                    SizedBox(width: ModulePadding.s.value),
+                    
+                    // Transaction Details
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            item.fisTuru ?? '',
+                            style: context.titleMedium.copyWith(
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          SizedBox(height: ModulePadding.xxs.value),
+                          Text(
+                            item.fisNo ?? '',
+                            style: context.bodyMedium.copyWith(
+                              color: context.secondary.withOpacity(0.7),
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  SizedBox(width: ModulePadding.s.value),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    
+                    // Amount and Date
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          item.fisTuru ?? '',
+                          amount.formatPrice(),
                           style: context.titleMedium.copyWith(
+                            color: isDebit ? Colors.red : Colors.green,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         SizedBox(height: ModulePadding.xxs.value),
                         Text(
-                          item.fisNo ?? '',
-                          style: context.bodyMedium.copyWith(
-                            color: context.secondary.withOpacity(0.7),
+                          item.tarih!.displayToDateFormat(),
+                          style: context.bodySmall.copyWith(
+                            color: context.secondary.withOpacity(0.5),
                           ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
                         ),
                       ],
                     ),
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
+                  ],
+                ),
+                
+                // Balance Section
+                if (item.bakiye != null) ...[
+                  SizedBox(height: ModulePadding.s.value),
+                  Divider(height: 1, color: context.primary.withOpacity(0.1)),
+                  SizedBox(height: ModulePadding.s.value),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        amount.formatPrice(),
-                        style: context.titleMedium.copyWith(
-                          color: isDebit ? Colors.red : Colors.green,
-                          fontWeight: FontWeight.bold,
+                        'Bakiye',
+                        style: context.bodyMedium.copyWith(
+                          color: context.secondary.withOpacity(0.7),
                         ),
                       ),
-                      SizedBox(height: ModulePadding.xxs.value),
                       Text(
-                        item.tarih!.displayToDateFormat(),
-                        style: context.bodySmall.copyWith(
-                          color: context.secondary.withOpacity(0.5),
+                        item.bakiye!.formatPrice(),
+                        style: context.titleSmall.copyWith(
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ],
                   ),
                 ],
-              ),
-              if (item.bakiye != null) ...[
-                SizedBox(height: ModulePadding.s.value),
-                Divider(height: 1, color: context.primary.withOpacity(0.1)),
-                SizedBox(height: ModulePadding.s.value),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Bakiye',
-                      style: context.bodyMedium.copyWith(
-                        color: context.secondary.withOpacity(0.7),
-                      ),
-                    ),
-                    Text(
-                      item.bakiye!.formatPrice(),
-                      style: context.titleMedium.copyWith(
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ],
-                ),
               ],
-            ],
+            ),
           ),
         ),
       ),
     );
+  }
+
+  IconData _getTransactionIcon(String type) {
+    switch (type.toLowerCase()) {
+      case 'payment':
+        return Icons.payment;
+      case 'transfer':
+        return Icons.swap_horiz;
+      case 'withdrawal':
+        return Icons.money_off;
+      case 'deposit':
+        return Icons.account_balance_wallet;
+      default:
+        return Icons.receipt_long;
+    }
   }
 }
 

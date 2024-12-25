@@ -38,7 +38,7 @@ class _ProductCard extends StatelessWidget {
                         topLeft: Radius.circular(ModuleRadius.m.value),
                       ),
                       aspectRatio: 1,
-                      imageUrl: item.pictureUrl!,
+                      imageUrl: item.pictureUrl ?? 'https://kota-app.b-cdn.net/logo.jpg',
                     ),
                   ),
                 ),
@@ -69,30 +69,33 @@ class _ProductCard extends StatelessWidget {
                         Padding(
                           padding:
                               EdgeInsets.only(top: ModulePadding.xxs.value),
-                          child: Wrap(
-                            spacing: ModulePadding.xxs.value,
-                            children: [
-                              _buildChip(
-                                context,
-                                Icons.local_offer,
-                                item.code!,
-                                Colors.grey.shade100,
-                              ),
-                              if (item.sizeName != null)
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Wrap(
+                              spacing: ModulePadding.xxs.value,
+                              children: [
                                 _buildChip(
                                   context,
-                                  Icons.straighten,
-                                  item.sizeName!,
-                                  Colors.blue.shade50,
+                                  Icons.local_offer,
+                                  item.code!,
+                                  Colors.grey.shade100,
                                 ),
-                              if (item.colorName != null)
-                                _buildChip(
-                                  context,
-                                  Icons.palette_outlined,
-                                  item.colorName!,
-                                  Colors.orange.shade50,
-                                ),
-                            ],
+                                if (item.sizeName != null)
+                                  _buildChip(
+                                    context,
+                                    Icons.straighten,
+                                    item.sizeName!,
+                                    Colors.blue.shade50,
+                                  ),
+                                if (item.colorName != null)
+                                  _buildChip(
+                                    context,
+                                    Icons.palette_outlined,
+                                    item.colorName!,
+                                    Colors.orange.shade50,
+                                  ),
+                              ],
+                            ),
                           ),
                         ),
 
@@ -124,6 +127,7 @@ class _ProductCard extends StatelessWidget {
                             child: Text(
                               item.price.formatPrice(),
                               style: context.titleSmall,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
                           Text(
@@ -132,6 +136,7 @@ class _ProductCard extends StatelessWidget {
                               fontWeight: FontWeight.bold,
                               color: Theme.of(context).primaryColor,
                             ),
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ],
                       ),
@@ -198,7 +203,7 @@ class _ProductCard extends StatelessWidget {
           const SizedBox(width: 4),
           Text(
             text,
-            style: context.bodySmall?.copyWith(
+            style: context.labelSmall?.copyWith(
               color: Colors.black87,
               fontWeight: FontWeight.w500,
             ),

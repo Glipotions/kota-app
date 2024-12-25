@@ -20,56 +20,202 @@ class TransactionHistory extends StatelessWidget {
       key: controller.scaffoldKey,
       appBar: AppBar(
         forceMaterialTransparency: true,
-        title: const Text('Cari Hareketler'),
+        title: const Text('Hesap Hareketleri'),
+        actions: [
+          // IconButton(
+          //   icon: const Icon(Icons.person_outline),
+          //   onPressed: () {
+          //     // TODO: Implement profile settings
+          //   },
+          // ),
+          IconButton(
+            icon: const Icon(Icons.dark_mode),
+            onPressed: () => controller.toggleTheme(),
+          ),
+        ],
       ),
       body: BaseView<TransactionHistoryController>(
         controller: controller,
-        child: Padding(
-          padding: EdgeInsets.all(ModulePadding.s.value),
-          child: Column(
-            children: [
-              Obx(
-                () => Flexible(
-                  child: ListView.separated(
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    controller: controller.scrollController,
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      final item = controller.transactionItems[index];
-                      return Column(
-                        children: [
-                          _TransactionCard(
-                            item: item,
+        child: Column(
+          children: [
+            // Account Summary Card
+            Card(
+              margin: EdgeInsets.all(ModulePadding.s.value),
+              child: Padding(
+                padding: EdgeInsets.all(ModulePadding.m.value),
+                child: Column(
+                  children: [
+                    Obx(() => Text(
+                          controller.currentBalance.formatPrice(),
+                          style: context.headlineMedium.copyWith(
+                            fontWeight: FontWeight.bold,
                           ),
-                          Obx(
-                            () => Padding(
-                              padding:
-                                  EdgeInsets.only(top: ModulePadding.m.value),
-                              child: const CircularProgressIndicator.adaptive(),
-                            ).isVisible(
-                              value: controller.isPaginationLoading &&
-                                  index ==
-                                      controller.transactionItems.length - 1,
-                            ),
+                        ),),
+                    SizedBox(height: ModulePadding.xs.value),
+                    Text(
+                      'Güncel Bakiye',
+                      style: context.titleSmall.copyWith(
+                        color: context.secondary.withOpacity(0.7),
+                      ),
+                    ),
+                    SizedBox(height: ModulePadding.m.value),
+                    Obx(
+                      () => Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          _SummaryTile(
+                            icon: Icons.arrow_upward,
+                            color: Colors.green,
+                            title: 'Gelir',
+                            amount: controller.totalIncome.formatPrice(),
+                          ),
+                          _SummaryTile(
+                            icon: Icons.arrow_downward,
+                            color: Colors.red,
+                            title: 'Gider',
+                            amount: controller.totalExpense.formatPrice(),
                           ),
                         ],
-                      );
-                    },
-                    separatorBuilder: (content, index) =>
-                        SizedBox(height: ModulePadding.xxs.value),
-                    itemCount: controller.transactionItems.length,
-                  ),
-                ).isVisible(
-                  value: controller.transactionItems.isNotEmpty,
-                  child: const EmptyView(
-                    message: 'Geçmiş hareket bulunmamaktadır.',
-                  ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
+            ),
+            
+            // Search and Filter Bar
+            Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: ModulePadding.s.value,
+                vertical: ModulePadding.xxxs.value,
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: controller.searchController,
+                      decoration: InputDecoration(
+                        hintText: 'Hesap hareketleri ara...',
+                        prefixIcon: const Icon(Icons.search),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      onChanged: controller.onSearchChanged,
+                    ),
+                  ),
+                  // SizedBox(width: ModulePadding.xs.value),
+                  // IconButton(
+                  //   icon: const Icon(Icons.filter_list),
+                  //   onPressed: controller.showFilterDialog,
+                  // ),
+                ],
+              ),
+            ),
+
+            // Transaction List
+            Obx(
+              () => Expanded(
+                child: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 300),
+                  child: controller.transactionItems.isEmpty
+                      ? const EmptyView(
+                          message: 'Hesap hareketleri bulunamadı.',
+                        )
+                      : ListView.separated(
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          controller: controller.scrollController,
+                          padding: EdgeInsets.all(ModulePadding.s.value),
+                          itemBuilder: (context, index) {
+                            if (index == 0 || controller.shouldShowDateHeader(index)) {
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: ModulePadding.xs.value,
+                                    ),
+                                    child: Text(
+                                      controller.getDateHeader(index),
+                                      style: context.titleSmall.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                        color: context.secondary,
+                                      ),
+                                    ),
+                                  ),
+                                  _TransactionCard(
+                                    item: controller.transactionItems[index],
+                                  ),
+                                ],
+                              );
+                            }
+                            return _TransactionCard(
+                              item: controller.transactionItems[index],
+                            );
+                          },
+                          separatorBuilder: (context, index) =>
+                              SizedBox(height: ModulePadding.xxs.value),
+                          itemCount: controller.transactionItems.length,
+                        ),
+                ),
+              ),
+            ),
+            
+            // Loading Indicator
+            Obx(
+              () => Padding(
+                padding: EdgeInsets.only(top: ModulePadding.m.value),
+                child: const CircularProgressIndicator.adaptive(),
+              ).isVisible(value: controller.isPaginationLoading),
+            ),
+          ],
         ),
       ),
+    );
+  }
+}
+
+class _SummaryTile extends StatelessWidget {
+  const _SummaryTile({
+    required this.icon,
+    required this.color,
+    required this.title,
+    required this.amount,
+  });
+
+  final IconData icon;
+  final Color color;
+  final String title;
+  final String amount;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          padding: EdgeInsets.all(ModulePadding.xs.value),
+          decoration: BoxDecoration(
+            color: color.withOpacity(0.1),
+            shape: BoxShape.circle,
+          ),
+          child: Icon(icon, color: color),
+        ),
+        SizedBox(height: ModulePadding.xxs.value),
+        Text(
+          title,
+          style: context.bodySmall.copyWith(
+            color: context.secondary.withOpacity(0.7),
+          ),
+        ),
+        SizedBox(height: ModulePadding.xxs.value),
+        Text(
+          amount,
+          style: context.titleSmall.copyWith(
+            fontWeight: FontWeight.bold,
+            color: color,
+          ),
+        ),
+      ],
     );
   }
 }
