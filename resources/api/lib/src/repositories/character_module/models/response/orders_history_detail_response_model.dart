@@ -162,6 +162,7 @@ class OrdersHistoryDetailItem extends IBaseModel<OrdersHistoryDetailItem> {
       'name': name,
       'sizeName': sizeName,
       'colorName': colorName,
+      'productCodeGroupId': productCodeGroupId,
     };
   }
 }

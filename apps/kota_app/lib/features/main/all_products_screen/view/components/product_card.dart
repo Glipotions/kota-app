@@ -25,7 +25,7 @@ class ProductCard extends StatelessWidget {
                 aspectRatio: 1, // Oranı artırdım (daha büyük resim)
                 child: BorderedImage(
                   aspectRatio: 4,
-                  imageUrl: item.pictureUrl != ''
+                  imageUrl: (item.pictureUrl != '' && item.pictureUrl != null)
                       ? item.pictureUrl!
                       : 'https://kota-app.b-cdn.net/logo.jpg',
                   radius: const BorderRadius.vertical(

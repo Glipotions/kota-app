@@ -12,9 +12,9 @@ void main() {
     EnvironmentConfigModel(
       appName: 'Dev App',
       environment: AppEnvironment.development,
-      apiBaseUrl: '192.168.31.122:5278',
+      // apiBaseUrl: '192.168.31.122:5278',
       // apiBaseUrl: '192.168.1.102:5278',
-      // apiBaseUrl: '78.186.131.20:8200',
+      apiBaseUrl: '78.186.131.20:8200',
       socketUrl: 'Socket Url',
     ),
   );

@@ -67,6 +67,7 @@ class ProductVariant {
     this.sizeName,
     this.durum,
     this.productCountInPackage,
+    this.pictureUrl,
   });
 
   factory ProductVariant.fromJson(Map<String, dynamic> json) => ProductVariant(
@@ -83,6 +84,7 @@ class ProductVariant {
         sizeName: json['sizeName'],
         durum: json['durum'],
         productCountInPackage: json['productCountInPackage'],
+        pictureUrl: json['pictureUrl'],
       );
 
   int? id;
@@ -98,6 +100,7 @@ class ProductVariant {
   String? sizeName;
   bool? durum;
   int? productCountInPackage;
+  String? pictureUrl;
 
   Map<String, dynamic> toJson() => throw UnimplementedError();
 }

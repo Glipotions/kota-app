@@ -67,6 +67,7 @@ extension ColorNameExtension on String {
   Color? toColor() {
     final normalizedColor = trim().toLowerCase();
     final colorMap = {
+      // Temel Renkler
       'siyah': Colors.black,
       'beyaz': Colors.white,
       'kırmızı': Colors.red,
@@ -78,14 +79,79 @@ extension ColorNameExtension on String {
       'pembe': Colors.pink,
       'kahverengi': Colors.brown,
       'gri': Colors.grey,
+      
+      // Özel Renkler
       'lacivert': const Color(0xFF000080),
+      'koyu mavi': const Color(0xFF000080),
       'bej': const Color(0xFFE8D6B3),
       'bordo': const Color(0xFF800000),
       'altın': const Color(0xFFFFD700),
       'gümüş': const Color(0xFFC0C0C0),
-      'indigo': Colors.indigo,
-      'füme': const Color(0xFF4A4A4A), // Koyu gri tonu
-      'koyu yeşil': const Color(0xFF006400), // Dark green
+      'indigo': const Color(0xFF3F51B5),
+      'füme': const Color(0xFF4A4A4A),
+      'açık füme': const Color(0xFF6B6B6B),
+      'koyu yeşil': const Color(0xFF006400),
+      'petrol yeşili': const Color(0xFF004D40),
+      'çağla yeşili': const Color(0xFF7CB342),
+      'mint yeşili': const Color(0xFF98FF98),
+      'haki': const Color(0xFF4B5320),
+      
+      // Gri Tonları
+      'gri melanj': const Color(0xFF9E9E9E),
+      'kar melanj': const Color(0xFFE0E0E0),
+      'antrasit': const Color(0xFF383838),
+      'taş gri': const Color(0xFF9E9E9E),
+      'duman gri': const Color(0xFF696969),
+      
+      // Kırmızı/Pembe Tonları
+      'fuşya': const Color(0xFFFF1493),
+      'nar': const Color(0xFFDC143C),
+      'nar çiçeği': const Color(0xFFFF69B4),
+      'gül kurusu': const Color(0xFFDC6B6B),
+      'vişne': const Color(0xFF800020),
+      'pudra': const Color(0xFFFFC0CB),
+      'somon': const Color(0xFFFA8072),
+      
+      // Bej/Kahve Tonları
+      'krem': const Color(0xFFFFFDD0),
+      'ekru': const Color(0xFFF5F5DC),
+      'sütlü kahve': const Color(0xFF987654),
+      'hardal': const Color(0xFFFFDB58),
+      'kiremir': const Color(0xFFDEB887),
+      'vizon': const Color(0xFF967969),
+      'ten': const Color(0xFFFFE4C4),
+      
+      // Mavi Tonları
+      'sax mavisi': const Color(0xFF4F97D1),
+      'bebe mavi': const Color(0xFF89CFF0),
+      'mavi&gri': const Color(0xFF607D8B),
+      'infinity': const Color(0xFF1560BD),
+      
+      // Mor Tonları
+      'lila': const Color(0xFFC8A2C8),
+      'mürdüm': const Color(0xFF4B0082),
+      'açık mürdüm': const Color(0xFF800080),
+      
+      // Desenli/Karışık
+      'leopar': const Color(0xFFD2691E),
+      'leopar baskılı': const Color(0xFFD2691E),
+      'baskılı': Colors.grey,
+      'asortili': Colors.grey,
+      'baski asortili': Colors.grey,
+      'renk asortili': Colors.grey,
+      
+      // Özel Karışımlar için varsayılan renk
+      'asortili(açik mürdüm-ten-gri)': Colors.grey,
+      'asortili(çağla yeşili-gül kurusu-mavi&gri)': Colors.grey,
+      'asortili(gül kurusu / açik füme / açik mürdüm)': Colors.grey,
+      'asortili(lacivert-bordo-mor)': Colors.grey,
+      'asortili(lacivert-pembe-şeftali-lila-kirmizi-bordo)': Colors.grey,
+      'asortili(mavi&gri / çağla yeşili / pembe)': Colors.grey,
+      'asortili(pembe-ekru-şeftali)': Colors.grey,
+      'asortili(siyah-beyaz-gri-ten)': Colors.grey,
+      
+      // Şeftali ve diğer renkler
+      'şeftali': const Color(0xFFFFDAB9),
     };
     return colorMap[normalizedColor];
   }

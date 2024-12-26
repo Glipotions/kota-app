@@ -425,186 +425,204 @@ class _CartState extends State<Cart> {
 
     final ttf = pw.Font.ttf(ttfRegular);
 
-    pdf.addPage(
-      pw.Page(
-        pageFormat: PdfPageFormat.a4,
-        theme: pw.ThemeData.withFont(
-          base: ttf,
-        ),
-        build: (context) {
-          return pw.Column(
-            crossAxisAlignment: pw.CrossAxisAlignment.start,
-            children: [
-              pw.Text(
-                'Sepet Ürünleri',
+    // Create table header
+    pw.TableRow buildTableHeader(pw.Font ttf) => pw.TableRow(
+          decoration: pw.BoxDecoration(
+            color: PdfColors.grey200,
+          ),
+          children: [
+            pw.Padding(
+              padding: const pw.EdgeInsets.all(5),
+              child: pw.Text(
+                'Ürün Adı',
                 style: pw.TextStyle(
                   font: ttf,
-                  fontSize: 20,
                   fontWeight: pw.FontWeight.bold,
                 ),
               ),
-              pw.SizedBox(height: 20),
-              pw.Table(
-                border: pw.TableBorder.all(),
-                columnWidths: {
-                  0: const pw.FlexColumnWidth(2),
-                  1: const pw.FlexColumnWidth(1),
-                  2: const pw.FlexColumnWidth(1),
-                  3: const pw.FlexColumnWidth(1),
-                  4: const pw.FlexColumnWidth(1),
-                  5: const pw.FlexColumnWidth(1),
-                  6: const pw.FlexColumnWidth(1),
-                },
-                children: [
-                  pw.TableRow(
-                    decoration: pw.BoxDecoration(
-                      color: PdfColors.grey200,
-                    ),
-                    children: [
-                      pw.Padding(
-                        padding: const pw.EdgeInsets.all(5),
-                        child: pw.Text(
-                          'Ürün Adı',
-                          style: pw.TextStyle(
-                            font: ttf,
-                            fontWeight: pw.FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      pw.Padding(
-                        padding: const pw.EdgeInsets.all(5),
-                        child: pw.Text(
-                          'Kod',
-                          style: pw.TextStyle(
-                            font: ttf,
-                            fontWeight: pw.FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      pw.Padding(
-                        padding: const pw.EdgeInsets.all(5),
-                        child: pw.Text(
-                          'Beden',
-                          style: pw.TextStyle(
-                            font: ttf,
-                            fontWeight: pw.FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      pw.Padding(
-                        padding: const pw.EdgeInsets.all(5),
-                        child: pw.Text(
-                          'Renk',
-                          style: pw.TextStyle(
-                            font: ttf,
-                            fontWeight: pw.FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      pw.Padding(
-                        padding: const pw.EdgeInsets.all(5),
-                        child: pw.Text(
-                          'Adet',
-                          style: pw.TextStyle(
-                            font: ttf,
-                            fontWeight: pw.FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      pw.Padding(
-                        padding: const pw.EdgeInsets.all(5),
-                        child: pw.Text(
-                          'Fiyat',
-                          style: pw.TextStyle(
-                            font: ttf,
-                            fontWeight: pw.FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      pw.Padding(
-                        padding: const pw.EdgeInsets.all(5),
-                        child: pw.Text(
-                          'Toplam',
-                          style: pw.TextStyle(
-                            font: ttf,
-                            fontWeight: pw.FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  ...groupedProducts.entries.expand((entry) {
-                    bool isEvenGroup =
-                        groupedProducts.keys.toList().indexOf(entry.key) % 2 ==
-                            0;
-                    final rows = entry.value.map((product) => pw.TableRow(
-                          decoration: pw.BoxDecoration(
-                            color: isEvenGroup
-                                ? PdfColors.white
-                                : PdfColors.grey400,
-                          ),
-                          children: [
-                            pw.Padding(
-                              padding: const pw.EdgeInsets.all(5),
-                              child: pw.Text(
-                                product.name ?? '',
-                                style: pw.TextStyle(font: ttf),
-                              ),
-                            ),
-                            pw.Padding(
-                              padding: const pw.EdgeInsets.all(5),
-                              child: pw.Text(
-                                product.code,
-                                style: pw.TextStyle(font: ttf),
-                              ),
-                            ),
-                            pw.Padding(
-                              padding: const pw.EdgeInsets.all(5),
-                              child: pw.Text(
-                                product.sizeName ?? '-',
-                                style: pw.TextStyle(font: ttf),
-                              ),
-                            ),
-                            pw.Padding(
-                              padding: const pw.EdgeInsets.all(5),
-                              child: pw.Text(
-                                product.colorName ?? '-',
-                                style: pw.TextStyle(font: ttf),
-                              ),
-                            ),
-                            pw.Padding(
-                              padding: const pw.EdgeInsets.all(5),
-                              child: pw.Text(
-                                product.quantity.toString(),
-                                style: pw.TextStyle(font: ttf),
-                              ),
-                            ),
-                            pw.Padding(
-                              padding: const pw.EdgeInsets.all(5),
-                              child: pw.Text(
-                                product.price.toStringAsFixed(2),
-                                style: pw.TextStyle(font: ttf),
-                              ),
-                            ),
-                            pw.Padding(
-                              padding: const pw.EdgeInsets.all(5),
-                              child: pw.Text(
-                                (product.price * product.quantity)
-                                    .toStringAsFixed(2),
-                                style: pw.TextStyle(font: ttf),
-                              ),
-                            ),
-                          ],
-                        ));
-                    return rows;
-                  }).toList(),
-                ],
+            ),
+            pw.Padding(
+              padding: const pw.EdgeInsets.all(5),
+              child: pw.Text(
+                'Kod',
+                style: pw.TextStyle(
+                  font: ttf,
+                  fontWeight: pw.FontWeight.bold,
+                ),
+              ),
+            ),
+            pw.Padding(
+              padding: const pw.EdgeInsets.all(5),
+              child: pw.Text(
+                'Beden',
+                style: pw.TextStyle(
+                  font: ttf,
+                  fontWeight: pw.FontWeight.bold,
+                ),
+              ),
+            ),
+            pw.Padding(
+              padding: const pw.EdgeInsets.all(5),
+              child: pw.Text(
+                'Renk',
+                style: pw.TextStyle(
+                  font: ttf,
+                  fontWeight: pw.FontWeight.bold,
+                ),
+              ),
+            ),
+            pw.Padding(
+              padding: const pw.EdgeInsets.all(5),
+              child: pw.Text(
+                'Adet',
+                style: pw.TextStyle(
+                  font: ttf,
+                  fontWeight: pw.FontWeight.bold,
+                ),
+              ),
+            ),
+            pw.Padding(
+              padding: const pw.EdgeInsets.all(5),
+              child: pw.Text(
+                'Fiyat',
+                style: pw.TextStyle(
+                  font: ttf,
+                  fontWeight: pw.FontWeight.bold,
+                ),
+              ),
+            ),
+            pw.Padding(
+              padding: const pw.EdgeInsets.all(5),
+              child: pw.Text(
+                'Toplam',
+                style: pw.TextStyle(
+                  font: ttf,
+                  fontWeight: pw.FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        );
+
+    // Calculate rows per page (approximate)
+    const rowsPerPage = 10;
+    final allRows = groupedProducts.entries.expand((entry) {
+      bool isEvenGroup =
+          groupedProducts.keys.toList().indexOf(entry.key) % 2 == 0;
+      return entry.value.map((product) => pw.TableRow(
+            decoration: pw.BoxDecoration(
+              color: isEvenGroup ? PdfColors.white : PdfColors.grey400,
+            ),
+            children: [
+              pw.Padding(
+                padding: const pw.EdgeInsets.all(2),
+                child: pw.Text(
+                  product.name ?? '',
+                  style: pw.TextStyle(font: ttf),
+                ),
+              ),
+              pw.Padding(
+                padding: const pw.EdgeInsets.all(2),
+                child: pw.Text(
+                  product.code,
+                  style: pw.TextStyle(font: ttf),
+                ),
+              ),
+              pw.Padding(
+                padding: const pw.EdgeInsets.all(2),
+                child: pw.Text(
+                  product.sizeName ?? '-',
+                  style: pw.TextStyle(font: ttf),
+                ),
+              ),
+              pw.Padding(
+                padding: const pw.EdgeInsets.all(2),
+                child: pw.Text(
+                  product.colorName ?? '-',
+                  style: pw.TextStyle(font: ttf),
+                ),
+              ),
+              pw.Padding(
+                padding: const pw.EdgeInsets.all(2),
+                child: pw.Text(
+                  product.quantity.toString(),
+                  style: pw.TextStyle(font: ttf),
+                ),
+              ),
+              pw.Padding(
+                padding: const pw.EdgeInsets.all(2),
+                child: pw.Text(
+                  product.price.toStringAsFixed(2),
+                  style: pw.TextStyle(font: ttf),
+                ),
+              ),
+              pw.Padding(
+                padding: const pw.EdgeInsets.all(2),
+                child: pw.Text(
+                  (product.price * product.quantity).toStringAsFixed(2),
+                  style: pw.TextStyle(font: ttf),
+                ),
               ),
             ],
-          );
-        },
-      ),
-    );
+          ));
+    }).toList();
+
+    // Split rows into pages
+    for (var i = 0; i < allRows.length; i += rowsPerPage) {
+      final endIndex = (i + rowsPerPage < allRows.length)
+          ? i + rowsPerPage
+          : allRows.length;
+      final pageRows = allRows.sublist(i, endIndex);
+
+      pdf.addPage(
+        pw.Page(
+          pageFormat: PdfPageFormat.a4.copyWith(
+            marginLeft: 30,
+            marginRight: 30,
+            marginTop: 40,
+            marginBottom: 40,
+          ),
+          theme: pw.ThemeData.withFont(
+            base: ttf,
+          ),
+          build: (context) {
+            return pw.Column(
+              crossAxisAlignment: pw.CrossAxisAlignment.start,
+              children: [
+                pw.Text(
+                  'Sepet Ürünleri - Sayfa ${(i ~/ rowsPerPage) + 1}',
+                  style: pw.TextStyle(
+                    font: ttf,
+                    fontSize: 20,
+                    fontWeight: pw.FontWeight.bold,
+                  ),
+                ),
+                pw.SizedBox(height: 10),
+                pw.Container(
+                  width: PdfPageFormat.a4.availableWidth,
+                  child: pw.Table(
+                    border: pw.TableBorder.all(),
+                    columnWidths: {
+                      0: const pw.FlexColumnWidth(4), // Ürün Adı - daha geniş
+                      1: const pw.FlexColumnWidth(1.6), // Kod
+                      2: const pw.FlexColumnWidth(1.2), // Beden
+                      3: const pw.FlexColumnWidth(1.5), // Renk
+                      4: const pw.FlexColumnWidth(1), // Adet
+                      5: const pw.FlexColumnWidth(1.2), // Fiyat
+                      6: const pw.FlexColumnWidth(1.5), // Toplam
+                    },
+                    children: [
+                      buildTableHeader(ttf),
+                      ...pageRows,
+                    ],
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
+      );
+    }
 
     final output = await getTemporaryDirectory();
     final file = File('${output.path}/sepet_urunleri.pdf');
