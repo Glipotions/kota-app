@@ -118,6 +118,20 @@ class ProductDetailController extends BaseControllerInterface {
     );
   }
 
+  String getSelectedColorImageUrl() {
+    if (selectedColorName == null) return product.pictureUrl ?? '';
+    
+    // Get first product variant with selected color
+    final colorVariant = product.productVariants?.firstWhereOrNull(
+      (variant) => variant.colorName == selectedColorName,
+    );
+
+    // Return variant picture if exists, otherwise fall back to general picture
+    return colorVariant?.pictureUrl?.isNotEmpty == true 
+        ? colorVariant!.pictureUrl!
+        : product.pictureUrl ?? '';
+  }
+
   RxBool sizeEnableCheck(int index) {
     if (product.productVariants!.any(
       (element) =>

@@ -356,8 +356,8 @@ class ProductDetail extends StatelessWidget {
                             return Hero(
                               tag: 'product-${controller.code}',
                               child: Obx(() {
-                                final imageUrl = controller.product.pictureUrl;
-                                if (imageUrl == null || imageUrl.isEmpty) {
+                                final imageUrl = controller.getSelectedColorImageUrl();
+                                if (imageUrl.isEmpty) {
                                   return Container(
                                     color: Colors.grey[200],
                                     child: const Center(
