@@ -233,36 +233,53 @@ class _OrderCard extends StatelessWidget {
               Row(
                 children: [
                   Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: ModulePadding.s.value,
-                      vertical: ModulePadding.xxs.value,
-                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
-                      color: !item.durum!
-                          ? Colors.green.withOpacity(0.1)
-                          : Theme.of(context).primaryColor.withOpacity(0.1),
+                      color: item.canBeDeleted!
+                          ? Colors.amber.shade50
+                          : !item.durum!
+                              ? Colors.green.shade50
+                              : Colors.blue.shade50,
                       borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: item.canBeDeleted!
+                            ? Colors.amber.shade300
+                            : !item.durum!
+                                ? Colors.green.shade300
+                                : Colors.blue.shade300,
+                        width: 1,
+                      ),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(
-                          !item.durum!
-                              ? Icons.check_circle_outline
-                              : Icons.pending_outlined,
+                          item.canBeDeleted!
+                              ? Icons.schedule
+                              : !item.durum!
+                                  ? Icons.check_circle
+                                  : Icons.sync,
                           size: 16,
-                          color: !item.durum!
-                              ? Colors.green
-                              : Theme.of(context).primaryColor,
+                          color: item.canBeDeleted!
+                              ? Colors.amber.shade700
+                              : !item.durum!
+                                  ? Colors.green.shade700
+                                  : Colors.blue.shade700,
                         ),
                         const SizedBox(width: 4),
                         Text(
-                          !item.durum! ? 'Tamamlandı' : 'Hazırlanıyor',
+                          item.canBeDeleted!
+                              ? 'Bekliyor'
+                              : !item.durum!
+                                  ? 'Tamamlandı'
+                                  : 'Hazırlanıyor',
                           style: context.labelMedium?.copyWith(
-                            color: !item.durum!
-                                ? Colors.green
-                                : Theme.of(context).primaryColor,
-                            fontWeight: FontWeight.w500,
+                            color: item.canBeDeleted!
+                                ? Colors.amber.shade700
+                                : !item.durum!
+                                    ? Colors.green.shade700
+                                    : Colors.blue.shade700,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ],

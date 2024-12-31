@@ -165,6 +165,7 @@ class OrderHistoryController extends BaseControllerInterface {
           );
           cartController.onTapAddProduct(cartItem);
         }
+        cartController.descriptionController.text = res.aciklama ?? '';
       },
     );
 

@@ -8,19 +8,21 @@ class BorderedImage extends StatelessWidget {
     super.key,
     this.aspectRatio,
     this.radius,
+    this.fit,
   });
 
   final String imageUrl;
   final double? aspectRatio;
   final BorderRadius? radius;
+  final BoxFit? fit;
 
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius:radius ?? BorderRadius.circular(ModuleRadius.xl.value),
+      borderRadius: radius ?? BorderRadius.circular(ModuleRadius.xl.value),
       child: AspectRatio(
         aspectRatio: aspectRatio ?? 343 / 250,
-        child: GeneralCachedImage(imageUrl: imageUrl,fit: BoxFit.cover,),
+        child: GeneralCachedImage(imageUrl: imageUrl, fit: fit),
       ),
     );
   }

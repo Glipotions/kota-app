@@ -33,7 +33,7 @@ class AddToCartText extends StatelessWidget {
             );
           } else {
             if (qty != null) {
-              cCont.text = '0';
+              // cCont.text = '0';
               if (qty == 0) {
                 cartCont.onTapRemoveProduct(item.copyWith(quantity: 0));
               } else {

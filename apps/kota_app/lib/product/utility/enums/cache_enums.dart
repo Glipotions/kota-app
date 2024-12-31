@@ -10,7 +10,10 @@ enum CacheKey {
   colorCode,
 
   /// Key that holds selected current lanCode
-  lanCode, isRemember,
+  lanCode,
+  isRemember,
+  /// Key that holds user roles
+  userRoles,
 }
 
 

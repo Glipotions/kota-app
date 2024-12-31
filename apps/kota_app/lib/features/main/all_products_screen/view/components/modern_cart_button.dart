@@ -21,6 +21,7 @@ class ModernCartButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final isUpdate = text == 'Sepeti Güncelle';
     
     return Material(
       color: Colors.transparent,
@@ -33,7 +34,10 @@ class ModernCartButton extends StatelessWidget {
           decoration: BoxDecoration(
             gradient: isEnabled
               ? LinearGradient(
-                  colors: [
+                  colors: isUpdate ? [
+                    Colors.orange.shade600,
+                    Colors.orange.shade400,
+                  ] : [
                     theme.colorScheme.primary,
                     theme.colorScheme.primaryContainer,
                   ],
@@ -47,7 +51,7 @@ class ModernCartButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color: theme.colorScheme.primary.withOpacity(0.3),
+                color: (isUpdate ? Colors.orange : theme.colorScheme.primary).withOpacity(0.3),
                 blurRadius: 8,
                 offset: const Offset(0, 4),
               ),

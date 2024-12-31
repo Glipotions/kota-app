@@ -79,7 +79,7 @@ extension ColorNameExtension on String {
       'pembe': Colors.pink,
       'kahverengi': Colors.brown,
       'gri': Colors.grey,
-      
+
       // Özel Renkler
       'lacivert': const Color(0xFF000080),
       'koyu mavi': const Color(0xFF000080),
@@ -95,14 +95,14 @@ extension ColorNameExtension on String {
       'çağla yeşili': const Color(0xFF7CB342),
       'mint yeşili': const Color(0xFF98FF98),
       'haki': const Color(0xFF4B5320),
-      
+
       // Gri Tonları
       'gri melanj': const Color(0xFF9E9E9E),
       'kar melanj': const Color(0xFFE0E0E0),
       'antrasit': const Color(0xFF383838),
       'taş gri': const Color(0xFF9E9E9E),
       'duman gri': const Color(0xFF696969),
-      
+
       // Kırmızı/Pembe Tonları
       'fuşya': const Color(0xFFFF1493),
       'nar': const Color(0xFFDC143C),
@@ -111,7 +111,7 @@ extension ColorNameExtension on String {
       'vişne': const Color(0xFF800020),
       'pudra': const Color(0xFFFFC0CB),
       'somon': const Color(0xFFFA8072),
-      
+
       // Bej/Kahve Tonları
       'krem': const Color(0xFFFFFDD0),
       'ekru': const Color(0xFFF5F5DC),
@@ -120,18 +120,18 @@ extension ColorNameExtension on String {
       'kiremir': const Color(0xFFDEB887),
       'vizon': const Color(0xFF967969),
       'ten': const Color(0xFFFFE4C4),
-      
+
       // Mavi Tonları
       'sax mavisi': const Color(0xFF4F97D1),
       'bebe mavi': const Color(0xFF89CFF0),
       'mavi&gri': const Color(0xFF607D8B),
       'infinity': const Color(0xFF1560BD),
-      
+
       // Mor Tonları
       'lila': const Color(0xFFC8A2C8),
       'mürdüm': const Color(0xFF4B0082),
       'açık mürdüm': const Color(0xFF800080),
-      
+
       // Desenli/Karışık
       'leopar': const Color(0xFFD2691E),
       'leopar baskılı': const Color(0xFFD2691E),
@@ -139,7 +139,7 @@ extension ColorNameExtension on String {
       'asortili': Colors.grey,
       'baski asortili': Colors.grey,
       'renk asortili': Colors.grey,
-      
+
       // Özel Karışımlar için varsayılan renk
       'asortili(açik mürdüm-ten-gri)': Colors.grey,
       'asortili(çağla yeşili-gül kurusu-mavi&gri)': Colors.grey,
@@ -149,7 +149,7 @@ extension ColorNameExtension on String {
       'asortili(mavi&gri / çağla yeşili / pembe)': Colors.grey,
       'asortili(pembe-ekru-şeftali)': Colors.grey,
       'asortili(siyah-beyaz-gri-ten)': Colors.grey,
-      
+
       // Şeftali ve diğer renkler
       'şeftali': const Color(0xFFFFDAB9),
     };
@@ -197,9 +197,9 @@ class ProductDetail extends StatelessWidget {
           Text(
             text,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: Colors.black87,
-              fontWeight: FontWeight.w500,
-            ),
+                  color: Colors.black87,
+                  fontWeight: FontWeight.w500,
+                ),
           ),
         ],
       ),
@@ -207,7 +207,8 @@ class ProductDetail extends StatelessWidget {
   }
 
   void _showCartPopup(BuildContext context, CartController cartController) {
-    final currentProductGroupId = controller.selectedProductVariant?.productCodeGroupId;
+    final currentProductGroupId =
+        controller.selectedProductVariant?.productCodeGroupId;
     if (currentProductGroupId == null) return;
 
     final cartItems = cartController.itemList
@@ -255,67 +256,168 @@ class ProductDetail extends StatelessWidget {
             const Divider(),
             Flexible(
               child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    ...cartItems.map((item) => Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      child: Card(
-                        elevation: 2,
-                        child: Padding(
-                          padding: EdgeInsets.all(ModulePadding.xs.value),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Wrap(
-                                  spacing: ModulePadding.xxs.value,
-                                  children: [
-                                    _buildChip(
-                                      context,
-                                      Icons.local_offer,
-                                      item.code!,
-                                      Colors.grey.shade100,
+                child: Obx(() {
+                  final updatedCartItems = cartController.itemList
+                      .where((item) =>
+                          item.productCodeGroupId == currentProductGroupId)
+                      .toList();
+
+                  if (updatedCartItems.isEmpty) {
+                    Navigator.pop(context);
+                    return const SizedBox();
+                  }
+
+                  return Column(
+                    children: [
+                      ...updatedCartItems.map(
+                        (item) => Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          child: Card(
+                            elevation: 2,
+                            child: Padding(
+                              padding: EdgeInsets.all(ModulePadding.xs.value),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Wrap(
+                                      spacing: ModulePadding.xxs.value,
+                                      children: [
+                                        _buildChip(
+                                          context,
+                                          Icons.local_offer,
+                                          item.code!,
+                                          Colors.grey.shade100,
+                                        ),
+                                        if (item.sizeName != null)
+                                          _buildChip(
+                                            context,
+                                            Icons.straighten,
+                                            item.sizeName!,
+                                            Colors.blue.shade50,
+                                          ),
+                                        if (item.colorName != null)
+                                          _buildChip(
+                                            context,
+                                            Icons.palette_outlined,
+                                            item.colorName!,
+                                            Colors.orange.shade50,
+                                          ),
+                                      ],
                                     ),
-                                    if (item.sizeName != null)
-                                      _buildChip(
-                                        context,
-                                        Icons.straighten,
-                                        item.sizeName!,
-                                        Colors.blue.shade50,
-                                      ),
-                                    if (item.colorName != null)
-                                      _buildChip(
-                                        context,
-                                        Icons.palette_outlined,
-                                        item.colorName!,
-                                        Colors.orange.shade50,
-                                      ),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: ModulePadding.xs.value,
-                                  vertical: ModulePadding.xxxs.value,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context).primaryColor.withOpacity(0.1),
-                                  borderRadius: BorderRadius.circular(ModuleRadius.s.value),
-                                ),
-                                child: Text(
-                                  '${item.quantity}x',
-                                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                                    color: Theme.of(context).primaryColor,
-                                    fontWeight: FontWeight.bold,
                                   ),
-                                ),
+                                  Row(
+                                    children: [
+                                      Container(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: ModulePadding.xs.value,
+                                          vertical: ModulePadding.xxxs.value,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: Theme.of(context)
+                                              .primaryColor
+                                              .withOpacity(0.1),
+                                          borderRadius: BorderRadius.circular(
+                                              ModuleRadius.s.value),
+                                        ),
+                                        child: Text(
+                                          '${item.quantity}x',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleSmall
+                                              ?.copyWith(
+                                                color: Theme.of(context)
+                                                    .primaryColor,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                        ),
+                                      ),
+                                      IconButton(
+                                        icon: const Icon(Icons.delete_outline,
+                                            color: Colors.red),
+                                        onPressed: () {
+                                          showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return AlertDialog(
+                                                backgroundColor: Colors.white,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(15),
+                                                ),
+                                                title: Text(
+                                                  'Ürünü Sil',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .titleLarge
+                                                      ?.copyWith(
+                                                        color: Colors.black87,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                ),
+                                                content: Text(
+                                                  'Bu ürünü sepetten silmek istediğinize emin misiniz?',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyMedium
+                                                      ?.copyWith(
+                                                        color: Colors.black87,
+                                                      ),
+                                                ),
+                                                actions: [
+                                                  TextButton(
+                                                    style: TextButton.styleFrom(
+                                                      foregroundColor:
+                                                          Colors.grey[700],
+                                                    ),
+                                                    child: const Text(
+                                                      'İptal',
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.w500),
+                                                    ),
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    },
+                                                  ),
+                                                  TextButton(
+                                                    style: TextButton.styleFrom(
+                                                      foregroundColor:
+                                                          Colors.red,
+                                                    ),
+                                                    child: const Text(
+                                                      'Sil',
+                                                      style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                      cartController
+                                                          .onTapRemoveProduct(
+                                                              item);
+                                                    },
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          );
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ],
                               ),
-                            ],
+                            ),
                           ),
                         ),
                       ),
-                    )).toList(),
-                  ],
-                ),
+                    ],
+                  );
+                }),
               ),
             ),
           ],
@@ -348,15 +450,16 @@ class ProductDetail extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // Image Carousel
-                      AspectRatio(
-                        aspectRatio: 1,
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.35,
                         child: PageView.builder(
                           itemCount: 1,
                           itemBuilder: (context, index) {
                             return Hero(
                               tag: 'product-${controller.code}',
                               child: Obx(() {
-                                final imageUrl = controller.getSelectedColorImageUrl();
+                                final imageUrl =
+                                    controller.getSelectedColorImageUrl();
                                 if (imageUrl.isEmpty) {
                                   return Container(
                                     color: Colors.grey[200],
@@ -372,6 +475,7 @@ class ProductDetail extends StatelessWidget {
                                 return BorderedImage(
                                   imageUrl: imageUrl,
                                   radius: BorderRadius.zero,
+                                  fit: BoxFit.contain,
                                 );
                               }),
                             );
@@ -444,34 +548,20 @@ class ProductDetail extends StatelessWidget {
                                         Theme.of(context).textTheme.titleMedium,
                                   ),
                                   const SizedBox(height: 8),
-                                  SizedBox(
-                                    height: 40,
-                                    child: ListView.builder(
-                                      scrollDirection: Axis.horizontal,
-                                      itemCount: colors.length,
-                                      itemBuilder: (context, index) {
-                                        final color = colors[index].toColor();
-                                        return Padding(
-                                          padding:
-                                              const EdgeInsets.only(right: 8),
-                                          child: Obx(
-                                            () => CustomChoiceChip(
-                                              title: colors[index],
-                                              isSelected: controller
-                                                      .selectedColor.value ==
+                                  Wrap(
+                                    spacing: 8,
+                                    children: List.generate(
+                                      colors.length,
+                                      (index) => Obx(
+                                        () => CustomChoiceChip(
+                                          title: colors[index],
+                                          isSelected:
+                                              controller.selectedColor.value ==
                                                   index,
-                                              onTap: () =>
-                                                  controller.onTapColor(index),
-                                              backgroundColor: color,
-                                              labelColor: color != null
-                                                  ? (color == Colors.white
-                                                      ? Colors.black
-                                                      : Colors.white)
-                                                  : null,
-                                            ),
-                                          ),
-                                        );
-                                      },
+                                          onTap: () =>
+                                              controller.onTapColor(index),
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ],

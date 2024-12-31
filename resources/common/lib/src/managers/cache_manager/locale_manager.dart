@@ -69,6 +69,9 @@ class LocaleManager {
   ///This method get String value at given key.
   String? getStringValue({required String key}) => _preferences.getString(key);
 
+  ///This method get List<String> value at given key.
+  List<String>? getStringListValue({required String key}) => _preferences.getStringList(key);
+
   ///This method get bool value at given key.
   bool? getBoolValue({required String key}) => _preferences.getBool(key);
 

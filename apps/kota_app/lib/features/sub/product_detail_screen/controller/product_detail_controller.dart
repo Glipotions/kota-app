@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:kota_app/product/base/controller/base_controller.dart';
 import 'package:kota_app/product/consts/general.dart';
 import 'package:kota_app/product/models/cart_product_model.dart';
+import 'package:kota_app/product/managers/cart_controller.dart';
 
 class ProductDetailController extends BaseControllerInterface {
   ProductDetailController({required this.code, required this.productCode});
@@ -80,12 +81,16 @@ class ProductDetailController extends BaseControllerInterface {
     selectedSize.value = -1;
     selectProduct(selectedColorName, selectedSizeName);
     update();
+    cartProduct = cartProduct.copyWith(id: 0);
+
   }
 
   void onTapSize(int index) {
     selectedSize.value = index;
     selectedSizeName = product.sizes?[index];
     selectProduct(selectedColorName, selectedSizeName);
+    
+    // cartProduct = cartProduct.copyWith(id: 0);
   }
 
   void selectProduct(String? colorName, String? sizeName) {
@@ -96,9 +101,21 @@ class ProductDetailController extends BaseControllerInterface {
         )
         .firstOrNull;
     selectedUnitPrice?.value = selectedProductVariant?.unitPrice ?? 0.0;
-    cQty.text = (selectedProductVariant?.productCountInPackage == null
-        ? '0'
-        : selectedProductVariant?.productCountInPackage.toString())!;
+    
+    // Check if product exists in cart
+    final cartController = Get.find<CartController>();
+    final cartItem = cartController.itemList.firstWhereOrNull(
+      (item) => 
+          item.code == selectedProductVariant?.productCode &&
+          item.colorName == selectedProductVariant?.colorName &&
+          item.sizeName == selectedProductVariant?.sizeName
+    );
+
+    // Set quantity from cart if exists, otherwise use product count in package
+    cQty.text = cartItem != null 
+        ? cartItem.quantity.toString()
+        : (selectedProductVariant?.productCountInPackage ?? 0).toString();
+
     if (selectedProductVariant?.productCode == null) return;
     fillCartModel();
     update();

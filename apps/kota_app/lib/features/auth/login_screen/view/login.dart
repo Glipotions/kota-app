@@ -27,7 +27,7 @@ class Login extends StatelessWidget {
       onTap: controller.unFocus,
       child: Scaffold(
         key: controller.scaffoldKey,
-        appBar: AppBar(title: Text('Giriş'),),
+        appBar: AppBar(title: const Text('Giriş'),),
         body: BaseView<LoginController>(
           controller: controller,
           child: Container(
