@@ -12,6 +12,7 @@ class AppService extends BaseClient {
   ///Client to use in requests
   final DioClient dioClient;
 
+
   ///Request that returns all characters
   Future<BaseHttpModel<LoginResponseModel>> login({
     required LoginRequestModel request,
@@ -64,7 +65,7 @@ class AppService extends BaseClient {
 
   ///Request that returns all characters
   Future<BaseHttpModel<OrdersHistoryDetailResponseModel>> orderHistoryDetail({
-required int id,
+    required int id,
   }) async {
     return baseRequest<OrdersHistoryDetailResponseModel, OrdersHistoryDetailResponseModel>(
       responseModel: OrdersHistoryDetailResponseModel(),
@@ -96,7 +97,7 @@ required int id,
     );
   }
 
-    Future<BaseHttpModel<CreateOrderResponseModel>> updateOrder({
+  Future<BaseHttpModel<CreateOrderResponseModel>> updateOrder({
     required CreateOrderRequestModel request
   }) async {
     return baseRequest<CreateOrderResponseModel, CreateOrderResponseModel>(
@@ -127,7 +128,7 @@ required int id,
   }) async {
     return baseRequest<BalanceResponseModel, BalanceResponseModel>(
       responseModel: BalanceResponseModel(),
-      httpUrl: AppServicePath.balance.withPath(id.toString()),
+      httpUrl: AppServicePath.currentAccounts.withPath(id.toString()),
       method: DioHttpMethod.get,
     );
   }
@@ -176,6 +177,37 @@ required int id,
       httpUrl: AppServicePath.productGroupItem.value,
       method: DioHttpMethod.get,
       queryParams: {'barcode': barcode},
+    );
+  }
+
+  Future<BaseHttpModel<List<UserOperationClaimResponseModel>>> getUserOperationClaims(
+    int userId,
+  ) async {
+    return baseRequest<UserOperationClaimResponseModel, List<UserOperationClaimResponseModel>>(
+      responseModel: UserOperationClaimResponseModel(),
+      httpUrl: '${AppServicePath.userOperationClaims.value}/$userId',
+      method: DioHttpMethod.get,
+      // parseModel: (json) {
+      //   final response = UserOperationClaimsResponseModel().fromJson(json);
+      //   return response.claims;
+      // },
+    );
+  }
+
+  Future<BaseHttpModel<GetCurrentAccountResponseModel>> getCurrentAccounts({
+    required int pageIndex,
+    required int pageSize,
+    String? search,
+  }) async {
+    return baseRequest<GetCurrentAccountResponseModel, GetCurrentAccountResponseModel>(
+      responseModel: GetCurrentAccountResponseModel(),
+      httpUrl: AppServicePath.currentAccountsWithBalance.value,
+      method: DioHttpMethod.get,
+      queryParams: {
+        'pageIndex': pageIndex,
+        'pageSize': pageSize,
+        if (search != null) 'search': search,
+      },
     );
   }
 }

@@ -12,6 +12,8 @@ class SessionHandler extends ChangeNotifier {
   static final SessionHandler _instance = SessionHandler._init();
 
   User? currentUser;
+  final RxList<UserOperationClaimResponseModel> _userClaims = <UserOperationClaimResponseModel>[].obs;
+  List<UserOperationClaimResponseModel> get userClaims => _userClaims;
 
   ///Returns instace for AuthHandler
   static SessionHandler get instance => _instance;
@@ -29,6 +31,36 @@ class SessionHandler extends ChangeNotifier {
 
   Future<void> init() async {
     await _initializeAuthStatus();
+    if (currentUser != null) {
+      await getUserClaims(currentUser!.id!);
+    }
+  }
+
+  Future<void> getUserClaims(int userId) async {
+    try {
+     await ProductClient.instance.appService
+          .getUserOperationClaims(userId)
+          .handleRequest(
+            onSuccess: (res) {
+              if (res != null) {
+                _userClaims.value = res;
+              }
+            },
+            ignoreException: true,
+            defaultResponse: [],
+          );
+    } catch (e) {
+      debugPrint('Error getting user claims: $e');
+    }
+  }
+
+  bool hasAuthorize(String claim) {
+    return _userClaims.any((x) =>
+        x.operationClaimName == claim || x.operationClaimName == 'admin');
+  }
+
+  bool hasClaim(String claim) {
+    return _userClaims.any((x) => x.operationClaimName == claim);
   }
 
   Future<void> _initializeAuthStatus() async {
@@ -63,26 +95,26 @@ class SessionHandler extends ChangeNotifier {
     }
   }
 
-  ///Logs out the current user.
-  ///Sets logged in to false and removes the token from cache.
   Future<void> logOut() async {
     await Future.wait([
       LocaleManager.instance.removeAt(CacheKey.token.name),
       setLoggedIn(value: false),
     ]);
+    _userClaims.clear();
     currentUser = null;
     userAuthStatus = UserAuthStatus.unAuthorized;
   }
 
-  ///Logs in the current user.
-  ///Sets logged in to true and removes the token from cache.
-  Future<void> logIn({required LoginResponseModel res}) async {
-    currentUser = res.user;
-    await Future.wait([
-      setLoggedIn(value: true),
-      setUserToken(res.accessToken!),
-    ]);
-    userAuthStatus = UserAuthStatus.authorized;
+  Future<void> logIn({LoginResponseModel? res}) async {
+    if (res != null) {
+      currentUser = res.user;
+      await Future.wait([
+        setLoggedIn(value: true),
+        setUserToken(res.accessToken!),
+      ]);
+      userAuthStatus = UserAuthStatus.authorized;
+      await getUserClaims(res.user!.id!);
+    }
   }
 
   Future<void> setLoggedIn({required bool value}) async {
@@ -92,14 +124,12 @@ class SessionHandler extends ChangeNotifier {
     );
   }
 
-  ///Gets the current user token if it's saved.
   String? getUserToken() => LocaleManager.instance.getStringValue(
         key: CacheKey.token.name,
       );
 
-  ///Sets the current user token if it's saved.
   Future<void> setUserToken(String value) async =>
-      LocaleManager.instance.setStringValue(
+      await LocaleManager.instance.setStringValue(
         key: CacheKey.token.name,
         value: value,
       );

@@ -3,30 +3,38 @@
 ///Enum that represnt all character endpoints
 enum AppServicePath {
   /// /api/character
+
+  /// no need claim
   login('api/Auth/Login'),
 
+  /// no need claim
   register('api/Auth/Register'),
 
+  /// claim: 
   transactionHistory('/api/CariHesaps/Hareket'),
 
+  /// no need claim
   orderHistory('api/AlinanSiparises/byCurrencyId'),
 
+  /// no need claim
   orderHistoryDetail('api/AlinanSiparises'),
 
-  balance('api/CariHesaps'),
-
+  /// no need claim
   createOrder('api/AlinanSiparises'),
 
+  /// no need claim
   currentUser('/api/Auth/User'),
-
-  getProductDetail('/api/ProductVariants/getByCode'),
 
   productGroupList('/api/ProductCodeGroups'),
 
-  productVariant('/api/ProductVariants/getByCode'),
-
   productGroupItem('/api/ProductCodeGroups/getByBarcode'),
 
+  productVariant('/api/ProductVariants/getByCode'),
+
+  userOperationClaims('api/UserOperationClaims/byUserId'),
+
+  currentAccounts('api/CariHesaps'),
+  currentAccountsWithBalance('api/CariHesaps/WithBalance'),
 
   ;
 

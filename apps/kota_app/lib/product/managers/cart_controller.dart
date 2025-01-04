@@ -6,9 +6,13 @@ import 'package:api/api.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kota_app/features/sub/current_account_screen/view/current_account.dart';
 import 'package:kota_app/product/base/controller/base_controller.dart';
+import 'package:kota_app/product/consts/claims.dart';
+import 'package:kota_app/product/managers/session_handler.dart';
 import 'package:kota_app/product/models/cart_product_model.dart';
 import 'package:kota_app/product/navigation/modules/sub_route/sub_route_enums.dart';
+import 'package:kota_app/product/utility/enums/general.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:widgets/widget.dart';
 
@@ -100,13 +104,46 @@ class CartController extends BaseControllerInterface {
     return totalAmount;
   }
 
-  Future<void> onTapCompleteOrder() async {
+  Future<void> completeOrder() async {
+    if (itemList.isEmpty) {
+      showErrorToastMessage('Sepetiniz boş');
+      return;
+    }
+
     if (sessionHandler.currentUser == null) {
       await context.pushNamed(SubRouteEnums.loginSubScreen.name);
+      return;
+    }
+
+    // Admin yetkisi varsa cari hesap seçme ekranını göster
+    if (SessionHandler.instance.hasClaim(saleInvoiceAdminClaim)) {
+      final result = await Navigator.push<GetCurrentAccount>(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const CurrentAccount(
+            pageStatusEnum: ScreenArgumentEnum.SelectToBack,
+          ),
+        ),
+      );
+
+      if (result == null) return;
+
+      // Seçilen cari hesap ile siparişi tamamla
+      await _completeOrder(result.id.toString());
     } else {
+      // Normal kullanıcı için kendi cari hesabı ile siparişi tamamla
+      await _completeOrder(
+        sessionHandler.currentUser!.currentAccountId!.toString(),
+      );
+    }
+  }
+
+  Future<void> _completeOrder(String cariHesapId) async {
+    LoadingProgress.start();
+    try {
       final request = CreateOrderRequestModel(
         id: editingOrderId?.value,
-        cariHesapId: sessionHandler.currentUser!.currentAccountId!.toString(),
+        cariHesapId: cariHesapId,
         description: descriptionController.text.trim(),
         orderDetails: itemList
             .map(
@@ -120,41 +157,36 @@ class CartController extends BaseControllerInterface {
             .toList(),
       );
 
-      LoadingProgress.start();
       if (editingOrderId?.value != 0) {
         // Sipariş güncelleme
-        request.id = editingOrderId!.value;
-        request.description = descriptionController.text.trim();
-        await client.appService
-            .updateOrder(
-              request: request,
-            )
-            .handleRequest(
+        await client.appService.updateOrder(request: request).handleRequest(
+              onSuccess: (res) async {
+                await clearCart();
+                showSuccessToastMessage('Sipariş basarıyla guncellendi');
+                // context.pop();
+              },
+              onIgnoreException: (error) {
+                showErrorToastMessage('Siparis guncellenirken hata olustu');
+              },
               ignoreException: true,
-              onIgnoreException: (err) {
-                showErrorToastMessage(err?.title ?? 'Bir hata oluştu.');
-              },
-              onSuccess: (res) {
-                showSuccessToastMessage('Sipariş başarı ile güncellendi.');
-                clearCart();
-              },
               defaultResponse: CreateOrderResponseModel(),
             );
       } else {
         // Yeni sipariş oluşturma
         await client.appService.createOrder(request: request).handleRequest(
+              onSuccess: (res) async {
+                await clearCart();
+                showSuccessToastMessage('Sipariş basarıyla oluşturuldu');
+                // context.pop();
+              },
+              onIgnoreException: (error) {
+                showErrorToastMessage('Sipariş olusturulurken hata olustu');
+              },
               ignoreException: true,
-              onIgnoreException: (err) {
-                showErrorToastMessage(err?.title ?? 'Bir hata oluştu.');
-              },
-              onSuccess: (res) {
-                showSuccessToastMessage('Sipariş başarı ile oluşturuldu.');
-                itemList = [];
-                clearCart();
-              },
               defaultResponse: CreateOrderResponseModel(),
             );
       }
+    } finally {
       LoadingProgress.stop();
     }
   }

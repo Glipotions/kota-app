@@ -78,4 +78,57 @@ abstract class BaseClient {
       return BaseHttpModel(status: BaseModelStatus.inAppError);
     }
   }
+
+  Future<BaseHttpModel<List<T>>> fetchData<T>(String url, 
+      {int? pageIndex,
+      int? pageSize,
+      T Function(Map<String, dynamic>)? fromJson,
+      int? id = null,
+      String? search = null}) async {
+    try {
+      final Map<String, dynamic> bodyParam = {
+        if (pageIndex != null) 'PageIndex': pageIndex.toString(),
+        if (pageSize != null) 'PageSize': pageSize.toString(),
+        if (id != null) 'id': id.toString(),
+        if (search != null) 'searchText': search,
+      };
+
+      var response = await dio.request(
+        DioHttpMethod.get,
+        url,
+        // headerParam: createHeader(),
+        bodyParam: bodyParam,
+      );
+
+      if (response!.statusCode == HttpStatus.ok) {
+        final responseModel =
+            BaseListModel<T>.fromJsonList(response.data.toString(), fromJson!);
+        return BaseHttpListModel<List<T>>(
+          status: BaseModelStatus.ok,
+          data: responseModel.data,
+          hasNext: responseModel.hasNext,
+          pageSize: responseModel.size,
+          pages: responseModel.pages,
+          pageIndex: responseModel.index,
+        );
+      } else if (response.statusCode == HttpStatus.notFound) {
+        return BaseHttpListModel(status: BaseModelStatus.notFound);
+      } else {
+        // final responseModel =
+        //     BaseErrorModel().jsonParser(utf8.decode(response.));
+        return BaseHttpListModel(
+          status: BaseModelStatus.error,
+          message: response.statusMessage,
+        );
+      }
+    } on AppException catch (e) {
+      return BaseHttpListModel(
+        status: BaseModelStatus.error,
+        message: e.toString(),
+      );
+    } catch (e) {
+      return BaseHttpListModel(status: BaseModelStatus.error);
+    }
+  }
 }
+
