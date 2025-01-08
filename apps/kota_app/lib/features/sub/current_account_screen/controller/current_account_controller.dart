@@ -2,8 +2,8 @@ import 'package:api/api.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kota_app/product/base/controller/base_controller.dart';
-import 'package:kota_app/product/service/product_client.dart';
 import 'package:kota_app/product/utility/enums/general.dart';
+import 'package:values/values.dart';
 
 class CurrentAccountController extends BaseControllerInterface {
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -22,8 +22,11 @@ class CurrentAccountController extends BaseControllerInterface {
   var isPaginationLoading = false;
   var pageCount = 0.obs;
 
-  final RxList<GetCurrentAccount> _currentAccounts = <GetCurrentAccount>[].obs;
-  List<GetCurrentAccount> get currentAccounts => _currentAccounts;
+  final Rx<List<GetCurrentAccount>> _currentAccounts = Rx([]);
+  List<GetCurrentAccount> get currentAccounts => _currentAccounts.value;
+  set currentAccounts(List<GetCurrentAccount> value) => _currentAccounts
+    ..firstRebuild = true
+    ..value = value;
 
   @override
   void onReady() {
@@ -52,15 +55,19 @@ class CurrentAccountController extends BaseControllerInterface {
     isLoading.value = true;
     await client.appService
         .getCurrentAccounts(
-      pageIndex: 0,
-      pageSize: pageSize,
-      search: searchQuery,
+      request: CurrentAccountListRequestModel(
+        pageIndex: 0,
+        pageSize: pageSize,
+        searchText: searchQuery,
+      ),
     )
         .handleRequest(
       onSuccess: (res) {
-        _currentAccounts.value = res!.items!;
+        var newList = List<GetCurrentAccount>.from([]);
+        newList.addAll(res!.items!);
+        _currentAccounts.value = newList;
         hasMoreData = res.hasNext!;
-        pageCount.value = _currentAccounts.length;
+        pageCount.value = _currentAccounts.value.length;
         pageIndex = 0;
       },
     );
@@ -76,31 +83,40 @@ class CurrentAccountController extends BaseControllerInterface {
   Future<void> refreshPage() async {
     pageIndex = 0;
     hasMoreData = true;
-    _currentAccounts.clear();
+    _currentAccounts.value = [];
     await getData();
   }
 
   Future<void> getData() async {
-    isLoading.value = true;
+    loadingStatus = LoadingStatus.loading;
     await client.appService
         .getCurrentAccounts(
-          pageIndex: pageIndex,
-          pageSize: pageSize,
-          search: searchController.text,
+          request: CurrentAccountListRequestModel(
+            pageIndex: pageIndex,
+            pageSize: pageSize,
+            searchText: searchController.text,
+          ),
         )
         .handleRequest(
           onSuccess: (res) {
-            _currentAccounts.addAll(res!.items!);
-            hasMoreData = res.hasNext!;
-            pageCount.value = _currentAccounts.length;
+            if (res?.items != null) {
+              final newList = List<GetCurrentAccount>.from(currentAccounts);
+              newList.addAll(res!.items!);
+              _currentAccounts.value = newList;
+              hasMoreData = res.hasNext!;
+              pageCount.value = newList.length;
+              loadingStatus = LoadingStatus.loaded;
+            }
           },
           ignoreException: true,
           defaultResponse: GetCurrentAccountResponseModel(),
-          onIgnoreException: (err) => showErrorToastMessage(
-            err?.detail ?? 'Bir hata oluştu.',
-          ),
+          onIgnoreException: (err) {
+            loadingStatus = LoadingStatus.error;
+            showErrorToastMessage(
+              err?.detail ?? 'Bir hata oluştu.',
+            );
+          },
         );
-    isLoading.value = false;
   }
 
   void onTapCard(int id, String name) {

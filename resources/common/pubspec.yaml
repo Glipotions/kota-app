@@ -8,7 +8,7 @@ environment:
 
 dependencies:
   device_info_plus: ^10.1.0
-  firebase_core: ^3.1.1
+  firebase_core: ^3.10.0
   firebase_dynamic_links: ^6.0.1
   firebase_messaging: ^15.0.1
   flutter:
@@ -28,5 +28,3 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   very_good_analysis: ^5.1.0
-
-flutter:

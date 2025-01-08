@@ -22,7 +22,7 @@ class CurrentAccount extends StatelessWidget {
 
     return Scaffold(
       key: controller.scaffoldKey,
-      appBar: GeneralAppBar(
+      appBar: const GeneralAppBar(
         title: 'Cari Hesap Listesi',
       ),
       body: Column(
@@ -30,7 +30,7 @@ class CurrentAccount extends StatelessWidget {
           Padding(
             padding: EdgeInsets.all(ModulePadding.m.value),
             child: TextField(
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: 'Ara',
               ),
               onChanged: (text) async {
@@ -41,22 +41,21 @@ class CurrentAccount extends StatelessWidget {
           Expanded(
             child: Obx(
               () => controller.loadingStatus != LoadingStatus.loaded
-                  ? SizedBox()
+                  ? const SizedBox()
                   : Padding(
                       padding: EdgeInsets.symmetric(
                           horizontal: ModulePadding.m.value),
                       child: RefreshIndicator(
                         onRefresh: controller.refreshPage,
-                        child: ListView.separated(
+                        child: Obx(() => ListView.separated(
                           controller: controller.scrollController,
                           itemBuilder: (context, index) {
                             if (index == controller.currentAccounts.length &&
                                 controller.hasMoreData) {
-                              return Center(
+                              return const Center(
                                 child: CircularProgressIndicator(),
                               );
-                            } else if (index <
-                                    controller.currentAccounts.length &&
+                            } else if (index < controller.currentAccounts.length &&
                                 !controller.isPaginationLoading) {
                               final item = controller.currentAccounts[index];
                               return Padding(
@@ -74,7 +73,7 @@ class CurrentAccount extends StatelessWidget {
                                 ),
                               );
                             } else if (!controller.hasMoreData) {
-                              return const  Center(
+                              return const Center(
                                   child: Text(
                                 'Daha fazla veri yok.',
                                 style: TextStyle(
@@ -89,7 +88,7 @@ class CurrentAccount extends StatelessWidget {
                             height: ModulePadding.xxs.value,
                           ),
                           itemCount: controller.pageCount.value + 1,
-                        ),
+                        )),
                       ),
                     ),
             ),

@@ -17,7 +17,7 @@ enum LoadingStatus {
   ///Screen is loaded and there is no operation
   loaded,
   ///Error occured during action.
-  error,
+  error, idle,
 }
 
 ///Enum That represent socket statusses.

@@ -69,6 +69,7 @@ class CartController extends BaseControllerInterface {
     itemList = [];
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_cartKey);
+    descriptionController.text = '';
   }
 
   void onTapAddProduct(CartProductModel item) {
@@ -127,6 +128,44 @@ class CartController extends BaseControllerInterface {
       );
 
       if (result == null) return;
+
+      // Onay dialogu göster
+      final confirmed = await showDialog<bool>(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => AlertDialog(
+          backgroundColor: Colors.white,
+          title: Text(
+            'Sipariş Onayı',
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          content: Text(
+            '${result.firma} adına siparişi tamamlamak istediğinize emin misiniz?',
+            style: TextStyle(color: Colors.black87),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.grey[800],
+              ),
+              child: const Text('İptal'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context, true),
+              style: TextButton.styleFrom(
+                foregroundColor: Theme.of(context).primaryColor,
+              ),
+              child: const Text('Onayla'),
+            ),
+          ],
+        ),
+      );
+
+      if (confirmed != true) return;
 
       // Seçilen cari hesap ile siparişi tamamla
       await _completeOrder(result.id.toString());

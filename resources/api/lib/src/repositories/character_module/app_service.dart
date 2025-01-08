@@ -12,7 +12,6 @@ class AppService extends BaseClient {
   ///Client to use in requests
   final DioClient dioClient;
 
-
   ///Request that returns all characters
   Future<BaseHttpModel<LoginResponseModel>> login({
     required LoginRequestModel request,
@@ -67,7 +66,8 @@ class AppService extends BaseClient {
   Future<BaseHttpModel<OrdersHistoryDetailResponseModel>> orderHistoryDetail({
     required int id,
   }) async {
-    return baseRequest<OrdersHistoryDetailResponseModel, OrdersHistoryDetailResponseModel>(
+    return baseRequest<OrdersHistoryDetailResponseModel,
+        OrdersHistoryDetailResponseModel>(
       responseModel: OrdersHistoryDetailResponseModel(),
       httpUrl: AppServicePath.orderHistoryDetail.withPath(id.toString()),
       method: DioHttpMethod.get,
@@ -77,7 +77,8 @@ class AppService extends BaseClient {
   Future<BaseHttpModel<OrdersHistoryDetailResponseModel>> deleteOrder({
     required int id,
   }) async {
-    return baseRequest<OrdersHistoryDetailResponseModel, OrdersHistoryDetailResponseModel>(
+    return baseRequest<OrdersHistoryDetailResponseModel,
+        OrdersHistoryDetailResponseModel>(
       responseModel: OrdersHistoryDetailResponseModel(),
       httpUrl: AppServicePath.orderHistoryDetail.withPath(id.toString()),
       method: DioHttpMethod.delete,
@@ -97,9 +98,8 @@ class AppService extends BaseClient {
     );
   }
 
-  Future<BaseHttpModel<CreateOrderResponseModel>> updateOrder({
-    required CreateOrderRequestModel request
-  }) async {
+  Future<BaseHttpModel<CreateOrderResponseModel>> updateOrder(
+      {required CreateOrderRequestModel request}) async {
     return baseRequest<CreateOrderResponseModel, CreateOrderResponseModel>(
       responseModel: CreateOrderResponseModel(),
       httpUrl: AppServicePath.createOrder.value,
@@ -180,10 +180,12 @@ class AppService extends BaseClient {
     );
   }
 
-  Future<BaseHttpModel<List<UserOperationClaimResponseModel>>> getUserOperationClaims(
+  Future<BaseHttpModel<List<UserOperationClaimResponseModel>>>
+      getUserOperationClaims(
     int userId,
   ) async {
-    return baseRequest<UserOperationClaimResponseModel, List<UserOperationClaimResponseModel>>(
+    return baseRequest<UserOperationClaimResponseModel,
+        List<UserOperationClaimResponseModel>>(
       responseModel: UserOperationClaimResponseModel(),
       httpUrl: '${AppServicePath.userOperationClaims.value}/$userId',
       method: DioHttpMethod.get,
@@ -195,19 +197,14 @@ class AppService extends BaseClient {
   }
 
   Future<BaseHttpModel<GetCurrentAccountResponseModel>> getCurrentAccounts({
-    required int pageIndex,
-    required int pageSize,
-    String? search,
+    required CurrentAccountListRequestModel request,
   }) async {
-    return baseRequest<GetCurrentAccountResponseModel, GetCurrentAccountResponseModel>(
+    return baseRequest<GetCurrentAccountResponseModel,
+        GetCurrentAccountResponseModel>(
       responseModel: GetCurrentAccountResponseModel(),
       httpUrl: AppServicePath.currentAccountsWithBalance.value,
       method: DioHttpMethod.get,
-      queryParams: {
-        'pageIndex': pageIndex,
-        'pageSize': pageSize,
-        if (search != null) 'search': search,
-      },
+      queryParams: request.toJson(),
     );
   }
 }
