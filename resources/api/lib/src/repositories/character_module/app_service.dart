@@ -125,11 +125,15 @@ class AppService extends BaseClient {
   ///Request that returns all characters
   Future<BaseHttpModel<BalanceResponseModel>> balanceInformation({
     required int id,
+    int? branchCurrentInfoId,
   }) async {
     return baseRequest<BalanceResponseModel, BalanceResponseModel>(
       responseModel: BalanceResponseModel(),
       httpUrl: AppServicePath.currentAccounts.withPath(id.toString()),
       method: DioHttpMethod.get,
+      queryParams: {
+        'branchCurrentInfoId': branchCurrentInfoId?.toString(),
+      },
     );
   }
 

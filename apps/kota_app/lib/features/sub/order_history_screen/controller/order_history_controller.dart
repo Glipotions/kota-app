@@ -60,6 +60,8 @@ class OrderHistoryController extends BaseControllerInterface {
           : transactionsResponse.index! + 1,
       pageSize: 5,
       id: sessionHandler.currentUser!.currentAccountId!,
+      connectedBranchCurrentInfoId:
+          sessionHandler.currentUser!.connectedBranchCurrentInfoId,
     );
 
     await client.appService.orderHistory(request: request).handleRequest(

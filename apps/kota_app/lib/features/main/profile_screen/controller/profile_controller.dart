@@ -29,6 +29,8 @@ class ProfileController extends BaseControllerInterface {
       await client.appService
           .balanceInformation(
             id: SessionHandler.instance.currentUser!.currentAccountId!,
+            branchCurrentInfoId: SessionHandler
+                .instance.currentUser!.connectedBranchCurrentInfoId,
           )
           .handleRequest(
             onSuccess: (res) => balance = res!,

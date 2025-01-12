@@ -6,16 +6,20 @@ class TransactionsHistoryRequestModel
     required this.pageIndex,
     required this.pageSize,
     required this.id,
+    this.connectedBranchCurrentInfoId,
   });
   int pageIndex;
   int pageSize;
   int id;
+  int? connectedBranchCurrentInfoId;
 
   @override
   Map<String, dynamic> toJson() => {
         'PageIndex': pageIndex.toString(),
         'PageSize': pageSize.toString(),
         'id': id.toString(),
+        'connectedBranchCurrentInfoId':
+            connectedBranchCurrentInfoId?.toString(),
       };
 
   @override

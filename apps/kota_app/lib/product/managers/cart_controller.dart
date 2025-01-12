@@ -183,6 +183,8 @@ class CartController extends BaseControllerInterface {
       final request = CreateOrderRequestModel(
         id: editingOrderId?.value,
         cariHesapId: cariHesapId,
+        connectedBranchCurrentInfoId: SessionHandler
+            .instance.currentUser!.connectedBranchCurrentInfoId,
         description: descriptionController.text.trim(),
         orderDetails: itemList
             .map(

@@ -66,6 +66,8 @@ class TransactionHistoryController extends BaseControllerInterface {
           : transactionsResponse.index! + 1,
       pageSize: 10,
       id: sessionHandler.currentUser!.currentAccountId!,
+      connectedBranchCurrentInfoId:
+          sessionHandler.currentUser!.connectedBranchCurrentInfoId,
     );
 
     await client.appService.transactionHistory(request: request).handleRequest(
