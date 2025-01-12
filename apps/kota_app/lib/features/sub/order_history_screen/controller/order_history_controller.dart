@@ -134,6 +134,7 @@ class OrderHistoryController extends BaseControllerInterface {
           date: res.tarih,
           items: cartProductItems,
           totalPrice: res.toplamTutar,
+          description: res.aciklama,
         );
 
         final pdf =

@@ -86,11 +86,13 @@ class CartProductPdfModel {
     this.totalPrice,
     this.totalQuantity,
     this.items,
+    this.description,
   });
 
   int? id;
   String? code;
   DateTime? date;
+  String? description;
   double? totalPrice;
   int? totalQuantity;
   List<CartProductModel>? items;

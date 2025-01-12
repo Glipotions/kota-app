@@ -405,7 +405,7 @@ class _CartState extends State<Cart> {
   }
 
   Future<void> _generateAndOpenPdf(List<CartProductModel> products) async {
-    final pdf = pw.Document();
+    var pdf = pw.Document();
 
     // Group products by productCodeGroupId and sort them
     final groupedProducts = <int?, List<CartProductModel>>{};
@@ -426,84 +426,160 @@ class _CartState extends State<Cart> {
     // Create table header
     pw.TableRow buildTableHeader(pw.Font ttf) => pw.TableRow(
           decoration: pw.BoxDecoration(
-            color: PdfColors.grey200,
+            color: PdfColors.blue900,
+            borderRadius: const pw.BorderRadius.vertical(top: pw.Radius.circular(4)),
           ),
           children: [
             pw.Padding(
-              padding: const pw.EdgeInsets.all(5),
+              padding: const pw.EdgeInsets.symmetric(vertical: 8, horizontal: 4),
               child: pw.Text(
                 'Ürün Adı',
                 style: pw.TextStyle(
                   font: ttf,
                   fontWeight: pw.FontWeight.bold,
+                  color: PdfColors.white,
                 ),
               ),
             ),
             pw.Padding(
-              padding: const pw.EdgeInsets.all(5),
+              padding: const pw.EdgeInsets.symmetric(vertical: 8, horizontal: 4),
               child: pw.Text(
                 'Kod',
                 style: pw.TextStyle(
                   font: ttf,
                   fontWeight: pw.FontWeight.bold,
+                  color: PdfColors.white,
                 ),
               ),
             ),
             pw.Padding(
-              padding: const pw.EdgeInsets.all(5),
+              padding: const pw.EdgeInsets.symmetric(vertical: 8, horizontal: 4),
               child: pw.Text(
                 'Beden',
                 style: pw.TextStyle(
                   font: ttf,
                   fontWeight: pw.FontWeight.bold,
+                  color: PdfColors.white,
                 ),
               ),
             ),
             pw.Padding(
-              padding: const pw.EdgeInsets.all(5),
+              padding: const pw.EdgeInsets.symmetric(vertical: 8, horizontal: 4),
               child: pw.Text(
                 'Renk',
                 style: pw.TextStyle(
                   font: ttf,
                   fontWeight: pw.FontWeight.bold,
+                  color: PdfColors.white,
                 ),
               ),
             ),
             pw.Padding(
-              padding: const pw.EdgeInsets.all(5),
+              padding: const pw.EdgeInsets.symmetric(vertical: 8, horizontal: 4),
               child: pw.Text(
                 'Adet',
                 style: pw.TextStyle(
                   font: ttf,
                   fontWeight: pw.FontWeight.bold,
+                  color: PdfColors.white,
                 ),
               ),
             ),
             pw.Padding(
-              padding: const pw.EdgeInsets.all(5),
+              padding: const pw.EdgeInsets.symmetric(vertical: 8, horizontal: 4),
               child: pw.Text(
                 'Fiyat',
                 style: pw.TextStyle(
                   font: ttf,
                   fontWeight: pw.FontWeight.bold,
+                  color: PdfColors.white,
                 ),
               ),
             ),
             pw.Padding(
-              padding: const pw.EdgeInsets.all(5),
+              padding: const pw.EdgeInsets.symmetric(vertical: 8, horizontal: 4),
               child: pw.Text(
                 'Toplam',
                 style: pw.TextStyle(
                   font: ttf,
                   fontWeight: pw.FontWeight.bold,
+                  color: PdfColors.white,
                 ),
               ),
             ),
           ],
         );
 
-    // Calculate rows per page (approximate)
-    const rowsPerPage = 10;
+    // Footer widget'ı
+    pw.Widget buildFooter(List<CartProductModel> products, pw.Font ttf) {
+      final totalQuantity = products.fold<int>(0, (sum, product) => sum + product.quantity);
+      final totalPrice = products.fold<double>(
+          0, (sum, product) => sum + (product.price * product.quantity));
+
+      return pw.Container(
+        decoration: pw.BoxDecoration(
+          color: PdfColors.grey100,
+          borderRadius: const pw.BorderRadius.all(pw.Radius.circular(4)),
+          border: pw.Border.all(color: PdfColors.grey400),
+        ),
+        padding: const pw.EdgeInsets.all(10),
+        margin: const pw.EdgeInsets.only(top: 20),
+        child: pw.Row(
+          mainAxisAlignment: pw.MainAxisAlignment.end,
+          children: [
+            pw.Column(
+              crossAxisAlignment: pw.CrossAxisAlignment.end,
+              children: [
+                pw.Row(
+                  children: [
+                    pw.Text(
+                      'Toplam Miktar: ',
+                      style: pw.TextStyle(
+                        font: ttf,
+                        fontWeight: pw.FontWeight.bold,
+                        color: PdfColors.blue900,
+                      ),
+                    ),
+                    pw.Text(
+                      totalQuantity.toString(),
+                      style: pw.TextStyle(
+                        font: ttf,
+                        fontWeight: pw.FontWeight.bold,
+                        color: PdfColors.blue900,
+                      ),
+                    ),
+                  ],
+                ),
+                pw.SizedBox(height: 8),
+                pw.Row(
+                  children: [
+                    pw.Text(
+                      'Toplam Tutar: ',
+                      style: pw.TextStyle(
+                        font: ttf,
+                        fontWeight: pw.FontWeight.bold,
+                        fontSize: 14,
+                        color: PdfColors.blue900,
+                      ),
+                    ),
+                    pw.Text(
+                      totalPrice.toStringAsFixed(2),
+                      style: pw.TextStyle(
+                        font: ttf,
+                        fontWeight: pw.FontWeight.bold,
+                        fontSize: 14,
+                        color: PdfColors.blue900,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+    }
+
     final allRows = groupedProducts.entries.expand((entry) {
       bool isEvenGroup =
           groupedProducts.keys.toList().indexOf(entry.key) % 2 == 0;
@@ -565,61 +641,70 @@ class _CartState extends State<Cart> {
           ));
     }).toList();
 
-    // Split rows into pages
-    for (var i = 0; i < allRows.length; i += rowsPerPage) {
-      final endIndex = (i + rowsPerPage < allRows.length)
-          ? i + rowsPerPage
-          : allRows.length;
-      final pageRows = allRows.sublist(i, endIndex);
+    // Her sayfada kaç ürün gösterileceğini belirle
+    int rowsPerPage = 20;
+    bool success = false;
 
-      pdf.addPage(
-        pw.Page(
-          pageFormat: PdfPageFormat.a4.copyWith(
-            marginLeft: 30,
-            marginRight: 30,
-            marginTop: 40,
-            marginBottom: 40,
-          ),
-          theme: pw.ThemeData.withFont(
-            base: ttf,
-          ),
-          build: (context) {
-            return pw.Column(
-              crossAxisAlignment: pw.CrossAxisAlignment.start,
-              children: [
-                pw.Text(
-                  'Sepet Ürünleri - Sayfa ${(i ~/ rowsPerPage) + 1}',
-                  style: pw.TextStyle(
-                    font: ttf,
-                    fontSize: 20,
-                    fontWeight: pw.FontWeight.bold,
-                  ),
-                ),
-                pw.SizedBox(height: 10),
-                pw.Container(
-                  width: PdfPageFormat.a4.availableWidth,
-                  child: pw.Table(
-                    border: pw.TableBorder.all(),
-                    columnWidths: {
-                      0: const pw.FlexColumnWidth(4), // Ürün Adı - daha geniş
-                      1: const pw.FlexColumnWidth(1.6), // Kod
-                      2: const pw.FlexColumnWidth(1.2), // Beden
-                      3: const pw.FlexColumnWidth(1.5), // Renk
-                      4: const pw.FlexColumnWidth(1), // Adet
-                      5: const pw.FlexColumnWidth(1.2), // Fiyat
-                      6: const pw.FlexColumnWidth(1.5), // Toplam
-                    },
-                    children: [
-                      buildTableHeader(ttf),
-                      ...pageRows,
-                    ],
-                  ),
-                ),
-              ],
-            );
-          },
-        ),
-      );
+    while (!success && rowsPerPage > 0) {
+      pdf = pw.Document();
+      try {
+        for (var i = 0; i < allRows.length; i += rowsPerPage) {
+          final endIndex = (i + rowsPerPage < allRows.length)
+              ? i + rowsPerPage
+              : allRows.length;
+          final pageRows = allRows.sublist(i, endIndex);
+
+          pdf.addPage(
+            pw.Page(
+              pageFormat: PdfPageFormat.a4.copyWith(
+                marginLeft: 30,
+                marginRight: 30,
+                marginTop: 40,
+                marginBottom: 40,
+              ),
+              build: (context) {
+                return pw.Column(
+                  crossAxisAlignment: pw.CrossAxisAlignment.start,
+                  children: [
+                    pw.Text(
+                      'Sepet Ürünleri - Sayfa ${(i ~/ rowsPerPage) + 1}',
+                      style: pw.TextStyle(
+                        font: ttf,
+                        fontSize: 20,
+                        fontWeight: pw.FontWeight.bold,
+                      ),
+                    ),
+                    pw.SizedBox(height: 10),
+                    pw.Table(
+                      border: pw.TableBorder.all(
+                        color: PdfColors.grey400,
+                        width: 0.5,
+                      ),
+                      columnWidths: {
+                        0: const pw.FlexColumnWidth(4),
+                        1: const pw.FlexColumnWidth(1.6),
+                        2: const pw.FlexColumnWidth(1.2),
+                        3: const pw.FlexColumnWidth(1.5),
+                        4: const pw.FlexColumnWidth(1),
+                        5: const pw.FlexColumnWidth(1.2),
+                        6: const pw.FlexColumnWidth(1.5),
+                      },
+                      children: [
+                        buildTableHeader(ttf),
+                        ...pageRows,
+                      ],
+                    ),
+                    buildFooter(products, ttf),
+                  ],
+                );
+              },
+            ),
+          );
+        }
+        success = true;
+      } catch (e) {
+        rowsPerPage--;
+      }
     }
 
     final output = await getTemporaryDirectory();

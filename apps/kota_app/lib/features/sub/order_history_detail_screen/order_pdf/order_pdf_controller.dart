@@ -48,63 +48,201 @@ class OrderPdfController extends GetxController {
     const usableHeight = pageHeight - headerHeight - footerHeight - 2 * margin;
 
     pw.Widget header(CartProductPdfModel invoice) {
-      return pw.Column(
-        crossAxisAlignment: pw.CrossAxisAlignment.start,
-        children: [
-          pw.Text(
-            'Sipariş Özeti',
-            style: pw.TextStyle(fontSize: 20, fontWeight: pw.FontWeight.bold),
-          ),
-          // pw.SizedBox(height: 10),
-          // pw.Row(
-          //   mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-          //   children: [
-          //     pw.Text('Firma Unvanı: ${invoice.cariHesapAdi}'),
-          //     pw.Text('Tarih: ${formatDate(invoice.tarih!)}'),
-          //   ],
-          // ),
-          pw.SizedBox(height: 10),
-        ],
+      return pw.Container(
+        decoration: pw.BoxDecoration(
+          color: PdfColors.grey100,
+          borderRadius: const pw.BorderRadius.all(pw.Radius.circular(4)),
+          border: pw.Border.all(color: PdfColors.grey400),
+        ),
+        padding: const pw.EdgeInsets.all(10),
+        margin: const pw.EdgeInsets.only(bottom: 20),
+        child: pw.Column(
+          crossAxisAlignment: pw.CrossAxisAlignment.start,
+          children: [
+            pw.Text(
+              'Sipariş Özeti',
+              style: pw.TextStyle(
+                fontSize: 20, 
+                fontWeight: pw.FontWeight.bold,
+                color: PdfColors.blue900,
+              ),
+            ),
+            pw.SizedBox(height: 10),
+            if (invoice.description != null && invoice.description!.isNotEmpty)
+              pw.Container(
+                padding: const pw.EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                decoration: pw.BoxDecoration(
+                  color: PdfColors.white,
+                  borderRadius: const pw.BorderRadius.all(pw.Radius.circular(4)),
+                  border: pw.Border.all(color: PdfColors.grey300),
+                ),
+                child: pw.Column(
+                  crossAxisAlignment: pw.CrossAxisAlignment.start,
+                  children: [
+                    pw.Text(
+                      'Açıklama:',
+                      style: pw.TextStyle(
+                        fontSize: 12,
+                        fontWeight: pw.FontWeight.bold,
+                        color: PdfColors.blue900,
+                      ),
+                    ),
+                    pw.SizedBox(height: 4),
+                    pw.Text(
+                      invoice.description ?? '',
+                      style: const pw.TextStyle(
+                        fontSize: 11,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+          ],
+        ),
       );
     }
 
     pw.Widget footer(CartProductPdfModel invoice) {
+      final summaryBoxDecoration = pw.BoxDecoration(
+        color: PdfColors.grey100,
+        borderRadius: const pw.BorderRadius.all(pw.Radius.circular(4)),
+        border: pw.Border.all(color: PdfColors.grey400),
+      );
+
       return pw.Column(
         crossAxisAlignment: pw.CrossAxisAlignment.end,
         children: [
           pw.SizedBox(height: 20),
-          pw.Table(
-            columnWidths: {
-              0: const pw.FlexColumnWidth(2),
-              1: const pw.FlexColumnWidth(2),
-              2: const pw.FlexColumnWidth(2),
-              3: const pw.FlexColumnWidth(2),
-            },
-            children: [
-              pw.TableRow(
-                children: [
-                  pw.Container(),
-                  pw.Container(),
-                  pw.Text(
-                    'Sipariş Toplami:',
-                    style: pw.TextStyle(
-                      fontWeight: pw.FontWeight.bold,
-                      fontSize: 12,
+          pw.Container(
+            decoration: summaryBoxDecoration,
+            padding: const pw.EdgeInsets.all(10),
+            child: pw.Table(
+              columnWidths: {
+                0: const pw.FlexColumnWidth(2),
+                1: const pw.FlexColumnWidth(2),
+                2: const pw.FlexColumnWidth(2),
+                3: const pw.FlexColumnWidth(2),
+              },
+              children: [
+                pw.TableRow(
+                  decoration: pw.BoxDecoration(
+                    border: pw.Border(
+                      bottom: pw.BorderSide(color: PdfColors.grey300),
                     ),
                   ),
-                  pw.Text(
-                    invoice.totalPrice!.toStringAsFixed(2),
-                    style: pw.TextStyle(
-                      fontWeight: pw.FontWeight.bold,
-                      fontSize: 12,
+                  children: [
+                    pw.Container(),
+                    pw.Container(),
+                    pw.Padding(
+                      padding: const pw.EdgeInsets.symmetric(vertical: 4),
+                      child: pw.Text(
+                        'Miktar Toplamı:',
+                        style: pw.TextStyle(
+                          fontWeight: pw.FontWeight.bold,
+                          fontSize: 12,
+                          color: PdfColors.blue900,
+                        ),
+                      ),
                     ),
-                    textAlign: pw.TextAlign.right,
-                  ),
-                ],
-              ),
-            ],
+                    pw.Padding(
+                      padding: const pw.EdgeInsets.symmetric(vertical: 4),
+                      child: pw.Text(
+                        invoice.items!.map((product) => product.quantity).fold<int>(
+                          0,
+                          (sum, product) => sum + product,
+                        ).toString(),
+                        style: pw.TextStyle(
+                          fontWeight: pw.FontWeight.bold,
+                          fontSize: 12,
+                          color: PdfColors.blue900,
+                        ),
+                        textAlign: pw.TextAlign.right,
+                      ),
+                    ),
+                  ],
+                ),
+                pw.TableRow(
+                  children: [
+                    pw.Container(),
+                    pw.Container(),
+                    pw.Padding(
+                      padding: const pw.EdgeInsets.only(top: 8),
+                      child: pw.Text(
+                        'Sipariş Toplam Fiyat:',
+                        style: pw.TextStyle(
+                          fontWeight: pw.FontWeight.bold,
+                          fontSize: 14,
+                          color: PdfColors.blue900,
+                        ),
+                      ),
+                    ),
+                    pw.Padding(
+                      padding: const pw.EdgeInsets.only(top: 8),
+                      child: pw.Text(
+                        invoice.totalPrice!.toStringAsFixed(2),
+                        style: pw.TextStyle(
+                          fontWeight: pw.FontWeight.bold,
+                          fontSize: 14,
+                          color: PdfColors.blue900,
+                        ),
+                        textAlign: pw.TextAlign.right,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ],
+      );
+    }
+
+    pw.TableRow buildTableHeader() {
+      return pw.TableRow(
+        decoration: pw.BoxDecoration(
+          color: PdfColors.blue900,
+          borderRadius: const pw.BorderRadius.vertical(top: pw.Radius.circular(4)),
+        ),
+        children: [
+          'Ürün Kodu',
+          'Ürün Adı',
+          'Miktar',
+          'Birim Fiyat',
+          'Tutar',
+        ].map((text) => pw.Container(
+          padding: const pw.EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+          child: pw.Text(
+            text,
+            style: pw.TextStyle(
+              color: PdfColors.white,
+              fontWeight: pw.FontWeight.bold,
+              fontSize: 12,
+            ),
+            textAlign: pw.TextAlign.center,
+          ),
+        )).toList(),
+      );
+    }
+
+    pw.TableRow buildTableRow(CartProductModel item, bool oddRow) {
+      return pw.TableRow(
+        decoration: pw.BoxDecoration(
+          color: oddRow ? PdfColors.grey100 : PdfColors.white,
+        ),
+        children: [
+          item.code ?? '',
+          item.name ?? '',
+          item.quantity.toString(),
+          item.price.toStringAsFixed(2),
+          (item.price * item.quantity).toStringAsFixed(2),
+        ].map((text) => pw.Container(
+          padding: const pw.EdgeInsets.symmetric(vertical: 4, horizontal: 4),
+          child: pw.Text(
+            text,
+            style: pw.TextStyle(fontSize: 10),
+            textAlign: text == item.name ? pw.TextAlign.left : pw.TextAlign.center,
+          ),
+        )).toList(),
       );
     }
 
@@ -127,63 +265,9 @@ class OrderPdfController extends GetxController {
                 4: const pw.FlexColumnWidth(),
               },
               children: [
-                pw.TableRow(
-                  children: [
-                    pw.Text(
-                      'Ürün Kodu',
-                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
-                    ),
-                    pw.Text(
-                      'Ürün Adı',
-                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
-                      textAlign: pw.TextAlign.center,
-                    ),
-                    pw.Text(
-                      'Miktar',
-                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
-                      textAlign: pw.TextAlign.center,
-                    ),
-                    pw.Text(
-                      'Birim Fiyat',
-                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
-                      textAlign: pw.TextAlign.right,
-                    ),
-                    pw.Text(
-                      'Tutar',
-                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
-                      textAlign: pw.TextAlign.right,
-                    ),
-                  ],
-                ),
-                for (final product in invoice.items!)
-                  pw.TableRow(
-                    children: [
-                      pw.Text(
-                        product.code,
-                        style: const pw.TextStyle(fontSize: 9),
-                      ),
-                      pw.Text(
-                        '${product.name}',
-                        style: const pw.TextStyle(fontSize: 9),
-                        textAlign: pw.TextAlign.center,
-                      ),
-                      pw.Text(
-                        '${product.quantity}',
-                        style: const pw.TextStyle(fontSize: 12),
-                        textAlign: pw.TextAlign.center,
-                      ),
-                      pw.Text(
-                        '${product.price}',
-                        style: const pw.TextStyle(fontSize: 12),
-                        textAlign: pw.TextAlign.right,
-                      ),
-                      pw.Text(
-                        (product.price * product.quantity).formatPrice(),
-                        style: const pw.TextStyle(fontSize: 12),
-                        textAlign: pw.TextAlign.right,
-                      ),
-                    ],
-                  ),
+                buildTableHeader(),
+                for (int i = 0; i < invoice.items!.length; i++)
+                  buildTableRow(invoice.items![i], i % 2 == 1),
               ],
             ),
             footer(invoice),
