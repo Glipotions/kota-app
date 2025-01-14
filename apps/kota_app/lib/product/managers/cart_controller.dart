@@ -135,7 +135,7 @@ class CartController extends BaseControllerInterface {
         barrierDismissible: false,
         builder: (context) => AlertDialog(
           backgroundColor: Colors.white,
-          title: Text(
+          title: const Text(
             'Sipariş Onayı',
             style: TextStyle(
               color: Colors.black,
@@ -144,7 +144,7 @@ class CartController extends BaseControllerInterface {
           ),
           content: Text(
             '${result.firma} adına siparişi tamamlamak istediğinize emin misiniz?',
-            style: TextStyle(color: Colors.black87),
+            style: const TextStyle(color: Colors.black87),
           ),
           actions: [
             TextButton(

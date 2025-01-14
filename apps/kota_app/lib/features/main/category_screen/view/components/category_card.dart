@@ -20,13 +20,13 @@ class CategoryCard extends StatelessWidget {
         child: Stack(
           alignment: Alignment.bottomLeft,
           children: [
-            AspectRatio(
-              aspectRatio: 343 / 250,
-              child: GeneralCachedImage(
-                imageUrl: category.pictureUrl,
-                fit: BoxFit.cover,
-              ),
-            ),
+            // AspectRatio(
+            //   aspectRatio: 343 / 250,
+            //   child: GeneralCachedImage(
+            //     imageUrl: category.pictureUrl,
+            //     fit: BoxFit.cover,
+            //   ),
+            // ),
             Container(
               width: double.infinity,
               height: ModulePadding.xs.value,
@@ -52,13 +52,6 @@ class CategoryCard extends StatelessWidget {
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                       fontSize: ModulePadding.m.value,
-                    ),
-                  ),
-                  Text(
-                    '${category.productCount} Products',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: ModulePadding.s.value,
                     ),
                   ),
                 ],

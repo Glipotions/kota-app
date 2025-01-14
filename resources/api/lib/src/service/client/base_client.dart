@@ -34,11 +34,14 @@ abstract class BaseClient {
         queryParams: queryParams,
         headerParam: headerParam,
       );
+      print('Raw API Response: ${response?.data}'); // Debug print
       if (response!.statusCode == (successStatus ?? HttpStatus.ok)) {
         R? returnResponse;
         if (responseModel != null) {
+          final jsonString = jsonEncode(response.data);
+          print('Response JSON string: $jsonString'); // Debug print
           returnResponse =
-              responseModel.jsonParser(jsonEncode(response.data)) as R;
+              responseModel.jsonParser(jsonString) as R;
         }
         return BaseHttpModel(
           status: BaseModelStatus.ok,
@@ -131,4 +134,3 @@ abstract class BaseClient {
     }
   }
 }
-

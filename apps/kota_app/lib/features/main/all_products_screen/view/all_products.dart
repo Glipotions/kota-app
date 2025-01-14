@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:get/get.dart';
 import 'package:kota_app/features/main/all_products_screen/controller/all_products_controller.dart';
+import 'package:kota_app/features/main/all_products_screen/view/components/filter_bottom_sheet.dart';
 import 'package:kota_app/product/base/base_view.dart';
 import 'package:kota_app/product/utility/enums/module_padding_enums.dart';
 import 'package:kota_app/product/widgets/app_bar/general_app_bar.dart';
@@ -46,30 +47,68 @@ class AllProducts extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              Container(
+                margin: EdgeInsets.only(bottom: ModulePadding.s.value),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      ActionChip(
+                        avatar: const Icon(Icons.filter_list, size: 20),
+                        label: const Text('Filtrele'),
+                        onPressed: () {
+                          showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            builder: (context) => Padding(
+                              padding: EdgeInsets.only(
+                                bottom: MediaQuery.of(context).viewInsets.bottom,
+                              ),
+                              child: FilterBottomSheet(controller: controller),
+                            ),
+                          );
+                        },
+                      ),
+                      const SizedBox(width: 8),
+                      Obx(() => Visibility(
+                        visible: controller.hasActiveFilters,
+                        child: ActionChip(
+                          avatar: const Icon(Icons.clear, size: 20),
+                          label: const Text('Filtreleri Temizle'),
+                          onPressed: () => controller.clearFilters(),
+                        ),
+                      )),
+                    ],
+                  ),
+                ),
+              ),
               Flexible(
                 child: OrientationBuilder(
                   builder: (context, orientation) => Obx(
-                    () => GridView.builder(
-                      controller: controller.scrollController,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount:
-                            orientation == Orientation.portrait ? 2 : 4,
-                        childAspectRatio: 0.645,
-                        crossAxisSpacing: ModulePadding.s.value,
-                        mainAxisSpacing: ModulePadding.xxs.value,
-                      ),
-                      itemBuilder: (context, index) {
-                        final item = controller.products[index];
-                        return ProductCard(
-                          onTap: () => controller.onTapProductDetail(
-                            item.code!,
-                            item.name,
-                          ),
-                          item: item,
-                        );
-                      },
-                      itemCount: controller.products.length,
-                    ),
+                    () {
+                      final items = controller.products;
+                      return GridView.builder(
+                        controller: controller.scrollController,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount:
+                              orientation == Orientation.portrait ? 2 : 4,
+                          childAspectRatio: 0.645,
+                          crossAxisSpacing: ModulePadding.s.value,
+                          mainAxisSpacing: ModulePadding.xxs.value,
+                        ),
+                        itemBuilder: (context, index) {
+                          final item = items[index];
+                          return ProductCard(
+                            onTap: () => controller.onTapProductDetail(
+                              item.code!,
+                              item.name,
+                            ),
+                            item: item,
+                          );
+                        },
+                        itemCount: items.length,
+                      );
+                    },
                   ),
                 ),
               ),

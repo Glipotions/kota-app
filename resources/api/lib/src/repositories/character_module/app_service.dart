@@ -141,12 +141,12 @@ class AppService extends BaseClient {
   Future<BaseHttpModel<ProductGroupListResponseModel>> allProducts({
     required ProductGroupListRequestModel request,
   }) async {
-    return baseRequest<ProductGroupListResponseModel,
-        ProductGroupListResponseModel>(
+    return baseRequest<ProductGroupListResponseModel, ProductGroupListResponseModel>(
       responseModel: ProductGroupListResponseModel(),
       httpUrl: AppServicePath.productGroupList.value,
       method: DioHttpMethod.get,
       queryParams: request.toJson(),
+      // requestModel: request,
     );
   }
 
@@ -209,6 +209,18 @@ class AppService extends BaseClient {
       httpUrl: AppServicePath.currentAccountsWithBalance.value,
       method: DioHttpMethod.get,
       queryParams: request.toJson(),
+    );
+  }
+
+  Future<BaseHttpModel<ProductCategoryListResponseModel>> getCategories({
+    required ProductGroupListRequestModel request,
+  }) async {
+    return baseRequest<ProductCategoryListResponseModel,
+        ProductCategoryListResponseModel>(
+      responseModel: ProductCategoryListResponseModel(),
+      httpUrl: AppServicePath.productCategoryList.value,
+      method: DioHttpMethod.get,
+      // queryParams: request.toJson(),
     );
   }
 }

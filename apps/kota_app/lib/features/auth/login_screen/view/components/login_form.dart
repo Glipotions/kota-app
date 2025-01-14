@@ -10,21 +10,21 @@ class _LoginForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    
+
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: isDarkMode 
-            ? [Colors.grey[900]!, Colors.grey[850]!]
-            : [Colors.grey[100]!, Colors.white],
+          colors: isDarkMode
+              ? [Colors.grey[900]!, Colors.grey[850]!]
+              : [Colors.grey[100]!, Colors.white],
         ),
       ),
       child: Form(
         key: controller.fKey,
         child: Padding(
-          padding: const EdgeInsets.all(24.0),
+          padding: const EdgeInsets.all(24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisSize: MainAxisSize.min,
@@ -79,7 +79,8 @@ class _LoginForm extends StatelessWidget {
                             onChanged: (bool? value) {
                               controller.rememberMe.value = value!;
                             },
-                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            materialTapTargetSize:
+                                MaterialTapTargetSize.shrinkWrap,
                           ),
                         ),
                       ),
@@ -88,7 +89,8 @@ class _LoginForm extends StatelessWidget {
                         'Beni hatırla',
                         style: TextStyle(
                           fontSize: 14,
-                          color: isDarkMode ? Colors.grey[300] : Colors.grey[700],
+                          color:
+                              isDarkMode ? Colors.grey[300] : Colors.grey[700],
                         ),
                       ),
                     ],
@@ -219,7 +221,7 @@ class _SocialLoginButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    
+
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(12),

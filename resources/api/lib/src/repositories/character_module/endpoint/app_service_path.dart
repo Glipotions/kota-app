@@ -26,6 +26,8 @@ enum AppServicePath {
   currentUser('/api/Auth/User'),
 
   productGroupList('/api/ProductCodeGroups'),
+  
+  productCategoryList('/api/ProductCategories'),
 
   productGroupItem('/api/ProductCodeGroups/getByBarcode'),
 

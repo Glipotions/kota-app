@@ -245,7 +245,9 @@ class _CartState extends State<Cart> {
                               height: 54,
                               child: ModuleButton.primary(
                                 onTap: controller.completeOrder,
-                                title: 'Siparişi Tamamla',
+                                title: controller.editingOrderId?.value != 0
+                                    ? 'Sipariş Güncelle'
+                                    : 'Siparişi Tamamla',
                               ),
                             ),
                           ],
@@ -427,11 +429,13 @@ class _CartState extends State<Cart> {
     pw.TableRow buildTableHeader(pw.Font ttf) => pw.TableRow(
           decoration: pw.BoxDecoration(
             color: PdfColors.blue900,
-            borderRadius: const pw.BorderRadius.vertical(top: pw.Radius.circular(4)),
+            borderRadius:
+                const pw.BorderRadius.vertical(top: pw.Radius.circular(4)),
           ),
           children: [
             pw.Padding(
-              padding: const pw.EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+              padding:
+                  const pw.EdgeInsets.symmetric(vertical: 8, horizontal: 4),
               child: pw.Text(
                 'Ürün Adı',
                 style: pw.TextStyle(
@@ -442,7 +446,8 @@ class _CartState extends State<Cart> {
               ),
             ),
             pw.Padding(
-              padding: const pw.EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+              padding:
+                  const pw.EdgeInsets.symmetric(vertical: 8, horizontal: 4),
               child: pw.Text(
                 'Kod',
                 style: pw.TextStyle(
@@ -453,7 +458,8 @@ class _CartState extends State<Cart> {
               ),
             ),
             pw.Padding(
-              padding: const pw.EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+              padding:
+                  const pw.EdgeInsets.symmetric(vertical: 8, horizontal: 4),
               child: pw.Text(
                 'Beden',
                 style: pw.TextStyle(
@@ -464,7 +470,8 @@ class _CartState extends State<Cart> {
               ),
             ),
             pw.Padding(
-              padding: const pw.EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+              padding:
+                  const pw.EdgeInsets.symmetric(vertical: 8, horizontal: 4),
               child: pw.Text(
                 'Renk',
                 style: pw.TextStyle(
@@ -475,7 +482,8 @@ class _CartState extends State<Cart> {
               ),
             ),
             pw.Padding(
-              padding: const pw.EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+              padding:
+                  const pw.EdgeInsets.symmetric(vertical: 8, horizontal: 4),
               child: pw.Text(
                 'Adet',
                 style: pw.TextStyle(
@@ -486,7 +494,8 @@ class _CartState extends State<Cart> {
               ),
             ),
             pw.Padding(
-              padding: const pw.EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+              padding:
+                  const pw.EdgeInsets.symmetric(vertical: 8, horizontal: 4),
               child: pw.Text(
                 'Fiyat',
                 style: pw.TextStyle(
@@ -497,7 +506,8 @@ class _CartState extends State<Cart> {
               ),
             ),
             pw.Padding(
-              padding: const pw.EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+              padding:
+                  const pw.EdgeInsets.symmetric(vertical: 8, horizontal: 4),
               child: pw.Text(
                 'Toplam',
                 style: pw.TextStyle(
@@ -512,7 +522,8 @@ class _CartState extends State<Cart> {
 
     // Footer widget'ı
     pw.Widget buildFooter(List<CartProductModel> products, pw.Font ttf) {
-      final totalQuantity = products.fold<int>(0, (sum, product) => sum + product.quantity);
+      final totalQuantity =
+          products.fold<int>(0, (sum, product) => sum + product.quantity);
       final totalPrice = products.fold<double>(
           0, (sum, product) => sum + (product.price * product.quantity));
 

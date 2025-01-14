@@ -38,7 +38,7 @@ class OrderHistoryDetailController extends BaseControllerInterface {
             CartProductModel(
               id: item.id!,
               code: item.code!,
-              price: item.tutar!,
+              price: item.birimFiyat!,
               quantity: item.miktar!,
               name: item.name,
               pictureUrl: item.pictureUrl,

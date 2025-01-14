@@ -178,7 +178,7 @@ class OrderHistoryController extends BaseControllerInterface {
   }
 
   Future<void> onCurrentAccountSelected(GetCurrentAccount account) async {
-    sessionHandler.currentUser?.currentAccountId = account.id;
+    // sessionHandler.currentUser?.currentAccountId = account.id;
     orderItems.clear();
     transactionsResponse = OrdersHistoryResponseModel();
     await _getOrders(account.id);
