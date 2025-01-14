@@ -132,7 +132,7 @@ class CurrentAccountController extends BaseControllerInterface {
         context,
         currentAccounts.singleWhere((element) => element.id == id),
       );
-    }
+    } 
   }
 
   @override

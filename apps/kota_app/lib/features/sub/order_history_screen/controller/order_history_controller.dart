@@ -53,13 +53,13 @@ class OrderHistoryController extends BaseControllerInterface {
     scrollController.dispose();
   }
 
-  Future<void> _getOrders() async {
+  Future<void> _getOrders([int? id]) async {
     final request = OrderHistoryRequestModel(
       pageIndex: transactionsResponse.index == null
           ? 0
           : transactionsResponse.index! + 1,
       pageSize: 5,
-      id: sessionHandler.currentUser!.currentAccountId!,
+      id: id ?? sessionHandler.currentUser!.currentAccountId!,
       connectedBranchCurrentInfoId:
           sessionHandler.currentUser!.connectedBranchCurrentInfoId,
     );
@@ -175,5 +175,12 @@ class OrderHistoryController extends BaseControllerInterface {
 
     context.goNamed(BottomNavigationRouteEnum.cartScreen.name);
     bottomNavController.selectedIndex = 1;
+  }
+
+  Future<void> onCurrentAccountSelected(GetCurrentAccount account) async {
+    sessionHandler.currentUser?.currentAccountId = account.id;
+    orderItems.clear();
+    transactionsResponse = OrdersHistoryResponseModel();
+    await _getOrders(account.id);
   }
 }

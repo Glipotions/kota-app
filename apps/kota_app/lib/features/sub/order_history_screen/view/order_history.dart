@@ -4,10 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kota_app/features/sub/order_history_screen/controller/order_history_controller.dart';
 import 'package:kota_app/product/base/base_view.dart';
+import 'package:kota_app/product/consts/claims.dart';
 import 'package:kota_app/product/utility/enums/module_padding_enums.dart';
 import 'package:kota_app/product/widgets/chip/custom_choice_chip.dart';
 import 'package:kota_app/product/widgets/other/empty_view.dart';
 import 'package:values/values.dart';
+import 'package:kota_app/features/sub/current_account_screen/view/current_account.dart';
+import 'package:kota_app/product/utility/enums/general.dart';
+import 'package:kota_app/product/managers/session_handler.dart';
 
 part 'components/order_card.dart';
 
@@ -23,6 +27,25 @@ class OrderHistory extends StatelessWidget {
       appBar: AppBar(
         forceMaterialTransparency: true,
         title: const Text('Geçmiş Siparişler'),
+        actions: [
+          if (SessionHandler.instance.hasClaim(saleInvoiceAdminClaim))
+            IconButton(
+              icon: const Icon(Icons.account_balance),
+              onPressed: () async {
+                final result = await Navigator.push<GetCurrentAccount>(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CurrentAccount(
+                      pageStatusEnum: ScreenArgumentEnum.SelectToBack
+                    ),
+                  ),
+                );
+                if (result != null) {
+                  controller.onCurrentAccountSelected(result);
+                }
+              },
+            ),
+        ],
       ),
       body: BaseView<OrderHistoryController>(
         controller: controller,

@@ -56,7 +56,7 @@ class AllProductsController extends BaseControllerInterface {
     final request = ProductGroupListRequestModel(
       pageIndex:
           productsResponse.index == null ? 0 : productsResponse.index! + 1,
-      pageSize: 10,
+      pageSize: 25,
     );
 
     await client.appService.allProducts(request: request).handleRequest(
