@@ -63,6 +63,8 @@ class OrderItem extends IBaseModel<OrderItem> {
     this.aciklama,
     this.durum,
     this.canBeDeleted = false,
+    this.connectedBranchCurrentInfoId,
+    this.connectedBranchCurrentInfoName,
   });
   int? id;
   String? kod;
@@ -83,6 +85,8 @@ class OrderItem extends IBaseModel<OrderItem> {
   String? aciklama;
   bool? durum;
   bool? canBeDeleted;
+  int? connectedBranchCurrentInfoId;
+  String? connectedBranchCurrentInfoName;
 
   @override
   OrderItem fromJson(Map<String, dynamic> json) => OrderItem(
@@ -105,6 +109,10 @@ class OrderItem extends IBaseModel<OrderItem> {
         aciklama: json['aciklama'],
         durum: json['durum'],
         canBeDeleted: json['canBeDeleted'],
+        connectedBranchCurrentInfoId:
+            json['connectedBranchCurrentInfoId'],
+        connectedBranchCurrentInfoName:
+            json['connectedBranchCurrentInfoName'],
       );
 
   @override
