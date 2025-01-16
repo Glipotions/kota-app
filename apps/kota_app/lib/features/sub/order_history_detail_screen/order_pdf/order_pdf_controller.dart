@@ -4,7 +4,6 @@ import 'package:intl/intl.dart';
 import 'package:kota_app/product/models/cart_product_model.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
-import 'package:values/values.dart';
 
 class OrderPdfController extends GetxController {
   String formatDate(DateTime date) {
@@ -62,7 +61,7 @@ class OrderPdfController extends GetxController {
             pw.Text(
               'Sipariş Özeti',
               style: pw.TextStyle(
-                fontSize: 20, 
+                fontSize: 20,
                 fontWeight: pw.FontWeight.bold,
                 color: PdfColors.blue900,
               ),
@@ -70,10 +69,12 @@ class OrderPdfController extends GetxController {
             pw.SizedBox(height: 10),
             if (invoice.description != null && invoice.description!.isNotEmpty)
               pw.Container(
-                padding: const pw.EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                padding:
+                    const pw.EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                 decoration: pw.BoxDecoration(
                   color: PdfColors.white,
-                  borderRadius: const pw.BorderRadius.all(pw.Radius.circular(4)),
+                  borderRadius:
+                      const pw.BorderRadius.all(pw.Radius.circular(4)),
                   border: pw.Border.all(color: PdfColors.grey300),
                 ),
                 child: pw.Column(
@@ -125,7 +126,7 @@ class OrderPdfController extends GetxController {
               },
               children: [
                 pw.TableRow(
-                  decoration: pw.BoxDecoration(
+                  decoration: const pw.BoxDecoration(
                     border: pw.Border(
                       bottom: pw.BorderSide(color: PdfColors.grey300),
                     ),
@@ -147,10 +148,13 @@ class OrderPdfController extends GetxController {
                     pw.Padding(
                       padding: const pw.EdgeInsets.symmetric(vertical: 4),
                       child: pw.Text(
-                        invoice.items!.map((product) => product.quantity).fold<int>(
-                          0,
-                          (sum, product) => sum + product,
-                        ).toString(),
+                        invoice.items!
+                            .map((product) => product.quantity)
+                            .fold<int>(
+                              0,
+                              (sum, product) => sum + product,
+                            )
+                            .toString(),
                         style: pw.TextStyle(
                           fontWeight: pw.FontWeight.bold,
                           fontSize: 12,
@@ -199,9 +203,9 @@ class OrderPdfController extends GetxController {
 
     pw.TableRow buildTableHeader() {
       return pw.TableRow(
-        decoration: pw.BoxDecoration(
+        decoration: const pw.BoxDecoration(
           color: PdfColors.blue900,
-          borderRadius: const pw.BorderRadius.vertical(top: pw.Radius.circular(4)),
+          borderRadius: pw.BorderRadius.vertical(top: pw.Radius.circular(4)),
         ),
         children: [
           'Ürün Kodu',
@@ -209,18 +213,23 @@ class OrderPdfController extends GetxController {
           'Miktar',
           'Birim Fiyat',
           'Tutar',
-        ].map((text) => pw.Container(
-          padding: const pw.EdgeInsets.symmetric(vertical: 8, horizontal: 4),
-          child: pw.Text(
-            text,
-            style: pw.TextStyle(
-              color: PdfColors.white,
-              fontWeight: pw.FontWeight.bold,
-              fontSize: 12,
-            ),
-            textAlign: pw.TextAlign.center,
-          ),
-        )).toList(),
+        ]
+            .map(
+              (text) => pw.Container(
+                padding:
+                    const pw.EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+                child: pw.Text(
+                  text,
+                  style: pw.TextStyle(
+                    color: PdfColors.white,
+                    fontWeight: pw.FontWeight.bold,
+                    fontSize: 12,
+                  ),
+                  textAlign: pw.TextAlign.center,
+                ),
+              ),
+            )
+            .toList(),
       );
     }
 
@@ -230,19 +239,26 @@ class OrderPdfController extends GetxController {
           color: oddRow ? PdfColors.grey100 : PdfColors.white,
         ),
         children: [
-          item.code ?? '',
+          item.code,
           item.name ?? '',
           item.quantity.toString(),
           item.price.toStringAsFixed(2),
           (item.price * item.quantity).toStringAsFixed(2),
-        ].map((text) => pw.Container(
-          padding: const pw.EdgeInsets.symmetric(vertical: 4, horizontal: 4),
-          child: pw.Text(
-            text,
-            style: pw.TextStyle(fontSize: 10),
-            textAlign: text == item.name ? pw.TextAlign.left : pw.TextAlign.center,
-          ),
-        )).toList(),
+        ]
+            .map(
+              (text) => pw.Container(
+                padding:
+                    const pw.EdgeInsets.symmetric(vertical: 4, horizontal: 4),
+                child: pw.Text(
+                  text,
+                  style: const pw.TextStyle(fontSize: 10),
+                  textAlign: text == item.name
+                      ? pw.TextAlign.left
+                      : pw.TextAlign.center,
+                ),
+              ),
+            )
+            .toList(),
       );
     }
 

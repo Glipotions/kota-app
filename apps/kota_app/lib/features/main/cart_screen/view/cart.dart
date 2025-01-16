@@ -2,10 +2,10 @@
 
 import 'dart:io';
 
+import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:common/common.dart';
 import 'package:kota_app/product/managers/cart_controller.dart';
 import 'package:kota_app/product/models/cart_product_model.dart';
 import 'package:kota_app/product/utility/enums/module_padding_enums.dart';
@@ -64,7 +64,9 @@ class _CartState extends State<Cart> {
   }
 
   Future<void> _showClearCartDialog(
-      BuildContext context, CartController controller) async {
+    BuildContext context,
+    CartController controller,
+  ) async {
     final labels = AppLocalization.getLabels(context);
     return showDialog(
       context: context,
@@ -115,7 +117,6 @@ class _CartState extends State<Cart> {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<CartController>();
     final labels = AppLocalization.getLabels(context);
 
     return GetBuilder<CartController>(
@@ -187,7 +188,7 @@ class _CartState extends State<Cart> {
                                 Obx(
                                   () => Text(
                                     controller.totalAmount().formatPrice(),
-                                    style: context.headlineSmall?.copyWith(
+                                    style: context.headlineSmall.copyWith(
                                       fontWeight: FontWeight.bold,
                                       color: Theme.of(context).primaryColor,
                                     ),
@@ -232,7 +233,8 @@ class _CartState extends State<Cart> {
                                         hintText: labels.addOrderNote,
                                         border: OutlineInputBorder(
                                           borderRadius: BorderRadius.circular(
-                                              ModuleRadius.s.value),
+                                            ModuleRadius.s.value,
+                                          ),
                                         ),
                                       ),
                                       maxLines: 3,
@@ -287,7 +289,8 @@ class _CartState extends State<Cart> {
                                       background: Container(
                                         alignment: Alignment.centerRight,
                                         padding: EdgeInsets.only(
-                                            right: ModulePadding.m.value),
+                                          right: ModulePadding.m.value,
+                                        ),
                                         color: Colors.red,
                                         child: const Icon(
                                           Icons.delete_outline,
@@ -336,7 +339,7 @@ class _CartState extends State<Cart> {
 
     // Group products by productCodeGroupId and sort them
     final groupedProducts = <int?, List<CartProductModel>>{};
-    for (var product in products) {
+    for (final product in products) {
       if (!groupedProducts.containsKey(product.productCodeGroupId)) {
         groupedProducts[product.productCodeGroupId] = [];
       }
@@ -450,7 +453,9 @@ class _CartState extends State<Cart> {
       final totalQuantity =
           products.fold<int>(0, (sum, product) => sum + product.quantity);
       final totalPrice = products.fold<double>(
-          0, (sum, product) => sum + (product.price * product.quantity));
+        0,
+        (sum, product) => sum + (product.price * product.quantity),
+      );
 
       return pw.Container(
         decoration: pw.BoxDecoration(
@@ -517,69 +522,71 @@ class _CartState extends State<Cart> {
     }
 
     final allRows = groupedProducts.entries.expand((entry) {
-      bool isEvenGroup =
+      var isEvenGroup =
           groupedProducts.keys.toList().indexOf(entry.key) % 2 == 0;
-      return entry.value.map((product) => pw.TableRow(
-            decoration: pw.BoxDecoration(
-              color: isEvenGroup ? PdfColors.white : PdfColors.grey400,
+      return entry.value.map(
+        (product) => pw.TableRow(
+          decoration: pw.BoxDecoration(
+            color: isEvenGroup ? PdfColors.white : PdfColors.grey400,
+          ),
+          children: [
+            pw.Padding(
+              padding: const pw.EdgeInsets.all(2),
+              child: pw.Text(
+                product.name ?? '',
+                style: pw.TextStyle(font: ttf),
+              ),
             ),
-            children: [
-              pw.Padding(
-                padding: const pw.EdgeInsets.all(2),
-                child: pw.Text(
-                  product.name ?? '',
-                  style: pw.TextStyle(font: ttf),
-                ),
+            pw.Padding(
+              padding: const pw.EdgeInsets.all(2),
+              child: pw.Text(
+                product.code,
+                style: pw.TextStyle(font: ttf),
               ),
-              pw.Padding(
-                padding: const pw.EdgeInsets.all(2),
-                child: pw.Text(
-                  product.code,
-                  style: pw.TextStyle(font: ttf),
-                ),
+            ),
+            pw.Padding(
+              padding: const pw.EdgeInsets.all(2),
+              child: pw.Text(
+                product.sizeName ?? '-',
+                style: pw.TextStyle(font: ttf),
               ),
-              pw.Padding(
-                padding: const pw.EdgeInsets.all(2),
-                child: pw.Text(
-                  product.sizeName ?? '-',
-                  style: pw.TextStyle(font: ttf),
-                ),
+            ),
+            pw.Padding(
+              padding: const pw.EdgeInsets.all(2),
+              child: pw.Text(
+                product.colorName ?? '-',
+                style: pw.TextStyle(font: ttf),
               ),
-              pw.Padding(
-                padding: const pw.EdgeInsets.all(2),
-                child: pw.Text(
-                  product.colorName ?? '-',
-                  style: pw.TextStyle(font: ttf),
-                ),
+            ),
+            pw.Padding(
+              padding: const pw.EdgeInsets.all(2),
+              child: pw.Text(
+                product.quantity.toString(),
+                style: pw.TextStyle(font: ttf),
               ),
-              pw.Padding(
-                padding: const pw.EdgeInsets.all(2),
-                child: pw.Text(
-                  product.quantity.toString(),
-                  style: pw.TextStyle(font: ttf),
-                ),
+            ),
+            pw.Padding(
+              padding: const pw.EdgeInsets.all(2),
+              child: pw.Text(
+                product.price.toStringAsFixed(2),
+                style: pw.TextStyle(font: ttf),
               ),
-              pw.Padding(
-                padding: const pw.EdgeInsets.all(2),
-                child: pw.Text(
-                  product.price.toStringAsFixed(2),
-                  style: pw.TextStyle(font: ttf),
-                ),
+            ),
+            pw.Padding(
+              padding: const pw.EdgeInsets.all(2),
+              child: pw.Text(
+                (product.price * product.quantity).toStringAsFixed(2),
+                style: pw.TextStyle(font: ttf),
               ),
-              pw.Padding(
-                padding: const pw.EdgeInsets.all(2),
-                child: pw.Text(
-                  (product.price * product.quantity).toStringAsFixed(2),
-                  style: pw.TextStyle(font: ttf),
-                ),
-              ),
-            ],
-          ));
+            ),
+          ],
+        ),
+      );
     }).toList();
 
     // Her sayfada kaç ürün gösterileceğini belirle
-    int rowsPerPage = 20;
-    bool success = false;
+    var rowsPerPage = 20;
+    var success = false;
 
     while (!success && rowsPerPage > 0) {
       pdf = pw.Document();

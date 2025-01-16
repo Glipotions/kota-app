@@ -1,15 +1,6 @@
 import 'dart:convert';
 
 class BaseListModel<T> {
-  final List<T>? data;
-  // final BaseModelStatus status;
-  // final String? message;
-  final int? count;
-  final int? index;
-  final int? size;
-  final int? pages;
-  final bool? hasNext;
-  final T? entity;
 
   BaseListModel({
     this.data,
@@ -27,7 +18,7 @@ class BaseListModel<T> {
       String json, T Function(Map<String, dynamic>) fromJson) {
     final jsonData = jsonDecode(json);
     final item = jsonData as dynamic;
-    var entity = fromJson(item);
+    final entity = fromJson(item);
 
     return BaseListModel(
       entity: entity,
@@ -38,11 +29,11 @@ class BaseListModel<T> {
       String json, T Function(Map<String, dynamic>) fromJson) {
     final jsonData = jsonDecode(json);
     final items = jsonData['items'] as List<dynamic>;
-    var data = items.map((itemJson) => fromJson(itemJson)).toList();
-    var index = jsonData['index'] as int;
-    var size = jsonData['size'] as int;
-    var hasNext = jsonData['hasNext'] as bool;
-    var pages = jsonData['pages'] as int;
+    final data = items.map((itemJson) => fromJson(itemJson)).toList();
+    final index = jsonData['index'] as int;
+    final size = jsonData['size'] as int;
+    final hasNext = jsonData['hasNext'] as bool;
+    final pages = jsonData['pages'] as int;
 
     return BaseListModel(
       data: data,
@@ -55,6 +46,15 @@ class BaseListModel<T> {
       count: jsonData['count'],
     );
   }
+  final List<T>? data;
+  // final BaseModelStatus status;
+  // final String? message;
+  final int? count;
+  final int? index;
+  final int? size;
+  final int? pages;
+  final bool? hasNext;
+  final T? entity;
 }
 
 // enum BaseModelStatus {

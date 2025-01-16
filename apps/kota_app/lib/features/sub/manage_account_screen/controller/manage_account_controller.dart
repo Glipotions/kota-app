@@ -1,14 +1,12 @@
-// ignore_for_file: use_setters_to_change_properties, 
+// ignore_for_file: use_setters_to_change_properties,
 // ignore_for_file: avoid_positional_boolean_parameters
 
 import 'dart:ui';
 
 import 'package:api/api.dart';
-import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kota_app/product/base/controller/base_controller.dart';
-import 'package:kota_app/product/managers/session_handler.dart';
 import 'package:kota_app/product/controllers/localization_controller.dart';
 
 class ManageAccountController extends BaseControllerInterface {
@@ -26,7 +24,8 @@ class ManageAccountController extends BaseControllerInterface {
 
   void changeLanguage(String languageCode) {
     final countryCode = languageCode.toUpperCase();
-    LocalizationController.instance.changeLocale(Locale(languageCode, countryCode));
+    LocalizationController.instance
+        .changeLocale(Locale(languageCode, countryCode));
   }
 
   @override
@@ -40,9 +39,9 @@ class ManageAccountController extends BaseControllerInterface {
       await sessionHandler.init();
       _user.value = sessionHandler.currentUser;
     }
-    
+
     if (_user.value == null) {
-      throw AppException('User data could not be loaded',1);
+      throw AppException('User data could not be loaded', 1);
     }
   }
 

@@ -38,7 +38,8 @@ class _ProductCard extends StatelessWidget {
                         topLeft: Radius.circular(ModuleRadius.m.value),
                       ),
                       aspectRatio: 1,
-                      imageUrl: item.pictureUrl ?? 'https://kota-app.b-cdn.net/logo.jpg',
+                      imageUrl: item.pictureUrl ??
+                          'https://kota-app.b-cdn.net/logo.jpg',
                     ),
                   ),
                 ),
@@ -60,7 +61,7 @@ class _ProductCard extends StatelessWidget {
                         item.name!,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                        style: context.labelMedium?.copyWith(
+                        style: context.labelMedium.copyWith(
                           fontWeight: FontWeight.w500,
                           color: Theme.of(context).hintColor,
                         ),
@@ -79,7 +80,7 @@ class _ProductCard extends StatelessWidget {
                                     _buildChip(
                                       context,
                                       Icons.local_offer,
-                                      item.code!,
+                                      item.code,
                                       Colors.grey.shade100,
                                     ),
                                     SizedBox(width: ModulePadding.xxs.value),
@@ -97,7 +98,8 @@ class _ProductCard extends StatelessWidget {
                                 SingleChildScrollView(
                                   scrollDirection: Axis.horizontal,
                                   child: Padding(
-                                    padding: EdgeInsets.only(top: ModulePadding.xxs.value),
+                                    padding: EdgeInsets.only(
+                                        top: ModulePadding.xxs.value),
                                     child: _buildChip(
                                       context,
                                       Icons.palette_outlined,
@@ -127,7 +129,7 @@ class _ProductCard extends StatelessWidget {
                             ),
                             child: Text(
                               '${item.quantity}x',
-                              style: context.titleSmall?.copyWith(
+                              style: context.titleSmall.copyWith(
                                 color: Theme.of(context).primaryColor,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -143,7 +145,7 @@ class _ProductCard extends StatelessWidget {
                           ),
                           Text(
                             (item.price * item.quantity).formatPrice(),
-                            style: context.titleMedium?.copyWith(
+                            style: context.titleMedium.copyWith(
                               fontWeight: FontWeight.bold,
                               color: Theme.of(context).primaryColor,
                             ),
@@ -214,7 +216,7 @@ class _ProductCard extends StatelessWidget {
           const SizedBox(width: 4),
           Text(
             text,
-            style: context.labelSmall?.copyWith(
+            style: context.labelSmall.copyWith(
               color: Colors.black87,
               fontWeight: FontWeight.w500,
             ),

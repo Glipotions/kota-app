@@ -7,8 +7,8 @@ class _TransactionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isDebit = item.borc != 0;
-    final double amount = isDebit ? item.borc ?? 0 : item.alacak ?? 0;
+    final isDebit = item.borc != 0;
+    final amount = isDebit ? item.borc ?? 0 : item.alacak ?? 0;
 
     return Hero(
       tag: 'transaction_${item.fisNo}',

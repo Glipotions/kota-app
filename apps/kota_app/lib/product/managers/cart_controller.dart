@@ -44,8 +44,9 @@ class CartController extends BaseControllerInterface {
         final List<dynamic> decodedList =
             json.decode(cartJson) as List<dynamic>;
         itemList = decodedList
-            .map((item) =>
-                CartProductModel.fromJson(item as Map<String, dynamic>))
+            .map(
+              (item) => CartProductModel.fromJson(item as Map<String, dynamic>),
+            )
             .toList();
       }
     } catch (e) {
@@ -183,8 +184,8 @@ class CartController extends BaseControllerInterface {
       final request = CreateOrderRequestModel(
         id: editingOrderId?.value,
         cariHesapId: cariHesapId,
-        connectedBranchCurrentInfoId: SessionHandler
-            .instance.currentUser!.connectedBranchCurrentInfoId,
+        connectedBranchCurrentInfoId:
+            SessionHandler.instance.currentUser!.connectedBranchCurrentInfoId,
         description: descriptionController.text.trim(),
         orderDetails: itemList
             .map(

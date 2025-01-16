@@ -20,35 +20,89 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
   late ProductFilter _filter;
   final _minPriceController = TextEditingController();
   final _maxPriceController = TextEditingController();
-  ProductCategory? _selectedMainCategory;
-  ProductCategory? _selectedSubCategory;
+  List<ProductCategory> _selectedCategories = [];
 
   @override
   void initState() {
     super.initState();
     _filter = widget.controller.currentFilter;
-    _selectedMainCategory = _filter.category;
+    if (_filter.category != null) {
+      _initializeSelectedCategories(_filter.category!);
+    }
     _minPriceController.text = _filter.minPrice?.toString() ?? '';
     _maxPriceController.text = _filter.maxPrice?.toString() ?? '';
   }
 
-  void _updateCategory(ProductCategory? category, {bool isMainCategory = false}) {
-    setState(() {
-      if (isMainCategory) {
-        _selectedMainCategory = category;
-        _selectedSubCategory = null;
-      } else {
-        _selectedSubCategory = category;
+  void _initializeSelectedCategories(ProductCategory category) {
+    _selectedCategories = [];
+    ProductCategory? currentCategory = category;
+
+    while (currentCategory != null) {
+      _selectedCategories.insert(0, currentCategory);
+      try {
+        currentCategory = widget.controller.categories
+            .expand((c) => _getAllSubCategories(c))
+            .firstWhere(
+              (c) => c.id == currentCategory!.parentCategoryId,
+            );
+      } catch (e) {
+        currentCategory = null;
       }
-      final selectedCategory = _selectedSubCategory ?? _selectedMainCategory;
-      _filter = _filter.copyWith(category: selectedCategory);
+    }
+  }
+
+  List<ProductCategory> _getAllSubCategories(ProductCategory category) {
+    List<ProductCategory> result = [category];
+    for (var subCategory in category.subCategories) {
+      result.addAll(_getAllSubCategories(subCategory));
+    }
+    return result;
+  }
+
+  void _updateCategory(
+    ProductCategory? category, {
+    bool isMainCategory = false,
+  }) {
+    setState(() {
+      if (category == null) {
+        _selectedCategories.clear();
+        _filter = _filter.copyWith(category: null);
+        return;
+      }
+
+      if (isMainCategory) {
+        _selectedCategories = [category];
+      } else {
+        // Find the index of the parent category if it exists in the selected categories
+        final parentIndex = _selectedCategories
+            .indexWhere((c) => c.id == category.parentCategoryId);
+
+        if (parentIndex != -1) {
+          // If parent exists, remove all categories after parent and add the new one
+          _selectedCategories = _selectedCategories.sublist(0, parentIndex + 1);
+          _selectedCategories.add(category);
+        } else {
+          // If no parent found (shouldn't happen in normal flow), just add the category
+          _selectedCategories.add(category);
+        }
+      }
+
+      _filter = _filter.copyWith(category: category);
     });
+  }
+
+  bool _isCategorySelected(ProductCategory category) {
+    return _selectedCategories.any((c) => c.id == category.id);
+  }
+
+  bool _shouldShowSubCategories(ProductCategory category) {
+    return _isCategorySelected(category) && category.hasSubCategories;
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Container(
       decoration: BoxDecoration(
         color: theme.scaffoldBackgroundColor,
@@ -73,7 +127,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                   ),
                 ),
               ),
-              
+
               // Header
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -91,7 +145,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                 ],
               ),
               const Divider(height: 24),
-              
+
               // Scrollable content
               Flexible(
                 child: SingleChildScrollView(
@@ -106,7 +160,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                         ),
                       ),
                       const SizedBox(height: 12),
-                      
+
                       // Main categories
                       Wrap(
                         spacing: 8,
@@ -114,38 +168,37 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                         children: [
                           FilterChip(
                             label: const Text('Tümü'),
-                            selected: _filter.category == null,
+                            selected: _selectedCategories.isEmpty,
                             onSelected: (_) {
-                              setState(() {
-                                _selectedMainCategory = null;
-                                _selectedSubCategory = null;
-                                _filter = _filter.copyWith(category: null);
-                              });
+                              _updateCategory(null);
                             },
                             showCheckmark: false,
-                            avatar: _filter.category == null
-                              ? const Icon(Icons.check_circle, size: 18)
-                              : const Icon(Icons.circle_outlined, size: 18),
+                            avatar: _selectedCategories.isEmpty
+                                ? const Icon(Icons.check_circle, size: 18)
+                                : const Icon(Icons.circle_outlined, size: 18),
                           ),
                           ...widget.controller.categories.map((category) {
-                            final isSelected = _selectedMainCategory?.id == category.id;
+                            final isSelected = _isCategorySelected(category);
                             return FilterChip(
                               label: Text(category.name),
                               selected: isSelected,
                               onSelected: (selected) {
-                                _updateCategory(selected ? category : null, isMainCategory: true);
+                                _updateCategory(
+                                  selected ? category : null,
+                                  isMainCategory: true,
+                                );
                               },
                               showCheckmark: false,
                               avatar: isSelected
-                                ? const Icon(Icons.check_circle, size: 18)
-                                : const Icon(Icons.circle_outlined, size: 18),
+                                  ? const Icon(Icons.check_circle, size: 18)
+                                  : const Icon(Icons.circle_outlined, size: 18),
                             );
-                          }).toList(),
+                          }),
                         ],
                       ),
-                      
+
                       // Sub categories
-                      if (_selectedMainCategory?.hasSubCategories ?? false) ...[
+                      if (_selectedCategories.isNotEmpty) ...[
                         const SizedBox(height: 16),
                         Row(
                           children: [
@@ -159,7 +212,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                               ),
                             ),
                             Text(
-                              _selectedMainCategory!.name,
+                              _selectedCategories.first.name,
                               style: theme.textTheme.titleSmall?.copyWith(
                                 fontWeight: FontWeight.w500,
                               ),
@@ -167,41 +220,29 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                           ],
                         ),
                         const SizedBox(height: 8),
-                        Wrap(
-                          spacing: 8,
-                          runSpacing: 8,
-                          children: [
-                            FilterChip(
-                              label: Text('Tüm ${_selectedMainCategory!.name}'),
-                              selected: _filter.category?.id == _selectedMainCategory!.id,
-                              onSelected: (selected) {
-                                _updateCategory(selected ? _selectedMainCategory : null);
-                              },
-                              showCheckmark: false,
-                              avatar: _filter.category?.id == _selectedMainCategory!.id
-                                ? const Icon(Icons.check_circle, size: 18)
-                                : const Icon(Icons.circle_outlined, size: 18),
-                            ),
-                            ..._selectedMainCategory!.subCategories.map((subCategory) {
-                              final isSelected = _filter.category?.id == subCategory.id;
-                              return FilterChip(
-                                label: Text(subCategory.name),
-                                selected: isSelected,
-                                onSelected: (selected) {
-                                  _updateCategory(selected ? subCategory : null);
-                                },
-                                showCheckmark: false,
-                                avatar: isSelected
-                                  ? const Icon(Icons.check_circle, size: 18)
-                                  : const Icon(Icons.circle_outlined, size: 18),
-                              );
-                            }).toList(),
-                          ],
+                        Padding(
+                          padding: const EdgeInsets.only(left: 24.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Alt Kategoriler',
+                                style: theme.textTheme.titleSmall?.copyWith(
+                                  color: theme.hintColor,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              _buildSubCategories(
+                                _selectedCategories.first,
+                                1,
+                                theme,
+                              ),
+                            ],
+                          ),
                         ),
                       ],
-                      
                       const SizedBox(height: 24),
-                      
+
                       // Price Range Section
                       Text(
                         'Fiyat Aralığı',
@@ -263,9 +304,9 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                           ),
                         ],
                       ),
-                      
+
                       const SizedBox(height: 24),
-                      
+
                       // Sorting Section
                       Text(
                         'Sıralama',
@@ -304,9 +345,9 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                   ),
                 ),
               ),
-              
+
               const Divider(height: 24),
-              
+
               // Action Buttons
               Row(
                 children: [
@@ -330,16 +371,18 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                   Expanded(
                     child: ElevatedButton.icon(
                       onPressed: () {
-                        final minPrice = double.tryParse(_minPriceController.text);
-                        final maxPrice = double.tryParse(_maxPriceController.text);
-                        
+                        final minPrice =
+                            double.tryParse(_minPriceController.text);
+                        final maxPrice =
+                            double.tryParse(_maxPriceController.text);
+
                         final newFilter = ProductFilter(
                           minPrice: minPrice,
                           maxPrice: maxPrice,
                           category: _filter.category,
                           sortType: _filter.sortType,
                         );
-                        
+
                         widget.controller.applyFilter(newFilter);
                         if (mounted) Navigator.pop(context);
                       },
@@ -386,6 +429,82 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
         });
       },
       showCheckmark: false,
+    );
+  }
+
+  Widget _buildSubCategories(
+    ProductCategory category,
+    int level,
+    ThemeData theme,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            ...category.subCategories.map((subCategory) {
+              final isSelected = _isCategorySelected(subCategory);
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  FilterChip(
+                    label: Text(subCategory.name),
+                    selected: isSelected,
+                    onSelected: (selected) {
+                      _updateCategory(selected ? subCategory : null);
+                    },
+                    showCheckmark: false,
+                    avatar: isSelected
+                        ? const Icon(Icons.check_circle, size: 18)
+                        : const Icon(Icons.circle_outlined, size: 18),
+                  ),
+                  if (_shouldShowSubCategories(subCategory)) ...[
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        Container(
+                          width: 4,
+                          height: 20,
+                          margin: EdgeInsets.only(right: 8, left: level * 16.0),
+                          decoration: BoxDecoration(
+                            color: theme.primaryColor,
+                            borderRadius: BorderRadius.circular(2),
+                          ),
+                        ),
+                        Text(
+                          subCategory.name,
+                          style: theme.textTheme.titleSmall?.copyWith(
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Padding(
+                      padding: EdgeInsets.only(left: level * 24.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Alt Kategoriler',
+                            style: theme.textTheme.titleSmall?.copyWith(
+                              color: theme.hintColor,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          _buildSubCategories(subCategory, level + 1, theme),
+                        ],
+                      ),
+                    ),
+                  ],
+                ],
+              );
+            }),
+          ],
+        ),
+      ],
     );
   }
 }

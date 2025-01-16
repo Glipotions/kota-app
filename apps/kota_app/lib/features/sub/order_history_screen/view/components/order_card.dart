@@ -36,7 +36,7 @@ class _OrderCard extends StatelessWidget {
                       children: [
                         Text(
                           'Sipariş #${item.kod ?? ''}',
-                          style: context.titleMedium?.copyWith(
+                          style: context.titleMedium.copyWith(
                             fontWeight: FontWeight.bold,
                             color: isDarkMode ? Colors.white : Colors.black87,
                           ),
@@ -44,7 +44,8 @@ class _OrderCard extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                         ),
                         if (item.connectedBranchCurrentInfoName != null &&
-                            item.connectedBranchCurrentInfoName!.isNotEmpty) ...[
+                            item.connectedBranchCurrentInfoName!
+                                .isNotEmpty) ...[
                           const SizedBox(height: 4),
                           Row(
                             children: [
@@ -59,7 +60,7 @@ class _OrderCard extends StatelessWidget {
                               Expanded(
                                 child: Text(
                                   'Alt cari: ${item.connectedBranchCurrentInfoName}',
-                                  style: context.bodySmall?.copyWith(
+                                  style: context.bodySmall.copyWith(
                                     color: isDarkMode
                                         ? Colors.grey[400]
                                         : Colors.grey[600],
@@ -75,7 +76,7 @@ class _OrderCard extends StatelessWidget {
                         const SizedBox(height: 4),
                         Text(
                           item.tarih?.displayToDateFormat() ?? '',
-                          style: context.bodySmall?.copyWith(
+                          style: context.bodySmall.copyWith(
                             color: isDarkMode
                                 ? Colors.grey[300]
                                 : Colors.grey[600],
@@ -111,7 +112,7 @@ class _OrderCard extends StatelessWidget {
                                 Expanded(
                                   child: Text(
                                     item.aciklama!,
-                                    style: context.bodySmall?.copyWith(
+                                    style: context.bodySmall.copyWith(
                                       color: isDarkMode
                                           ? Colors.grey[300]
                                           : Colors.grey[700],
@@ -139,10 +140,8 @@ class _OrderCard extends StatelessWidget {
                       switch (value) {
                         case 'Gör':
                           controller.onTapOrderHistoryDetail(item.id!);
-                          break;
                         case 'Düzenle':
                           controller.onTapEditOrder(item.id!);
-                          break;
                         case 'Sil':
                           showDialog<bool>(
                             context: context,
@@ -160,33 +159,45 @@ class _OrderCard extends StatelessWidget {
                               title: Text(
                                 'Siparişi Sil',
                                 style: TextStyle(
-                                  color: Theme.of(context).textTheme.titleLarge?.color,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .titleLarge
+                                      ?.color,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
                               content: Text(
                                 'Bu siparişi silmek istediğinizden emin misiniz?',
                                 style: TextStyle(
-                                  color: Theme.of(context).textTheme.bodyMedium?.color,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.color,
                                 ),
                               ),
                               actions: [
                                 TextButton(
-                                  onPressed: () => Navigator.of(context).pop(false),
+                                  onPressed: () =>
+                                      Navigator.of(context).pop(false),
                                   child: Text(
                                     'İptal',
                                     style: TextStyle(
-                                      color: Theme.of(context).textTheme.bodyMedium?.color,
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.color,
                                     ),
                                   ),
                                 ),
                                 ElevatedButton(
                                   onPressed: () {
                                     Navigator.of(context).pop(true);
-                                    controller.onTapDeleteOrderHistory(item.id!);
+                                    controller
+                                        .onTapDeleteOrderHistory(item.id!);
                                   },
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: Theme.of(context).colorScheme.error,
+                                    backgroundColor:
+                                        Theme.of(context).colorScheme.error,
                                     foregroundColor: Colors.white,
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(8),
@@ -198,10 +209,8 @@ class _OrderCard extends StatelessWidget {
                               actionsPadding: const EdgeInsets.all(16),
                             ),
                           );
-                          break;
                         case 'Pdf':
                           controller.onTapOrderPdfCard(item.id!);
-                          break;
                       }
                     },
                     itemBuilder: (BuildContext context) {
@@ -262,7 +271,8 @@ class _OrderCard extends StatelessWidget {
               Row(
                 children: [
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
                       color: item.canBeDeleted!
                           ? Colors.amber.shade50
@@ -276,7 +286,6 @@ class _OrderCard extends StatelessWidget {
                             : !item.durum!
                                 ? Colors.green.shade300
                                 : Colors.blue.shade300,
-                        width: 1,
                       ),
                     ),
                     child: Row(
@@ -302,7 +311,7 @@ class _OrderCard extends StatelessWidget {
                               : !item.durum!
                                   ? 'Tamamlandı'
                                   : 'Hazırlanıyor',
-                          style: context.labelMedium?.copyWith(
+                          style: context.labelMedium.copyWith(
                             color: item.canBeDeleted!
                                 ? Colors.amber.shade700
                                 : !item.durum!
@@ -320,7 +329,7 @@ class _OrderCard extends StatelessWidget {
                     children: [
                       Text(
                         'Toplam Tutar',
-                        style: context.labelSmall?.copyWith(
+                        style: context.labelSmall.copyWith(
                           color:
                               isDarkMode ? Colors.grey[300] : Colors.grey[600],
                         ),
@@ -328,7 +337,7 @@ class _OrderCard extends StatelessWidget {
                       const SizedBox(height: 2),
                       Text(
                         (item.toplamTutar ?? 0).formatPrice(),
-                        style: context.titleMedium?.copyWith(
+                        style: context.titleMedium.copyWith(
                           fontWeight: FontWeight.bold,
                           color: Theme.of(context).primaryColor,
                         ),

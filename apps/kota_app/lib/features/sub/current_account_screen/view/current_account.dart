@@ -1,4 +1,3 @@
-import 'package:api/api.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kota_app/features/sub/current_account_screen/controller/current_account_controller.dart';
@@ -6,7 +5,6 @@ import 'package:kota_app/features/sub/current_account_screen/view/current_accoun
 import 'package:kota_app/product/utility/enums/general.dart';
 import 'package:kota_app/product/utility/enums/module_padding_enums.dart';
 import 'package:kota_app/product/widgets/app_bar/general_app_bar.dart';
-import 'package:kota_app/product/widgets/card/current_account_card.dart';
 import 'package:values/values.dart';
 
 class CurrentAccount extends StatelessWidget {
@@ -44,7 +42,7 @@ class CurrentAccount extends StatelessWidget {
                   ? const SizedBox()
                   : Padding(
                       padding: EdgeInsets.symmetric(
-                          horizontal: ModulePadding.m.value),
+                          horizontal: ModulePadding.m.value,),
                       child: RefreshIndicator(
                         onRefresh: controller.refreshPage,
                         child: Obx(() => ListView.separated(
@@ -60,12 +58,12 @@ class CurrentAccount extends StatelessWidget {
                               final item = controller.currentAccounts[index];
                               return Padding(
                                 padding: EdgeInsets.only(
-                                    top: ModulePadding.xxs.value),
+                                    top: ModulePadding.xxs.value,),
                                 child: CurrentAccountInformationCard(
                                   onTap: controller.onTapCard,
                                   id: item.id!,
                                   cariHesapAdi: item.firma,
-                                  caseType: "",
+                                  caseType: '',
                                   balance: item.bakiye,
                                   foreignBalance: item.dovizliBakiye,
                                   aciklama: item.aciklama,
@@ -80,7 +78,7 @@ class CurrentAccount extends StatelessWidget {
                                   color: Colors.grey,
                                   fontSize: 15,
                                 ),
-                              ));
+                              ),);
                             }
                             return null;
                           },
@@ -88,7 +86,7 @@ class CurrentAccount extends StatelessWidget {
                             height: ModulePadding.xxs.value,
                           ),
                           itemCount: controller.pageCount.value + 1,
-                        )),
+                        ),),
                       ),
                     ),
             ),

@@ -1,11 +1,10 @@
 import 'package:api/api.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:kota_app/features/sub/product_detail_screen/view/product_detail.dart';
 import 'package:kota_app/product/base/controller/base_controller.dart';
 import 'package:kota_app/product/consts/general.dart';
-import 'package:kota_app/product/models/cart_product_model.dart';
 import 'package:kota_app/product/managers/cart_controller.dart';
+import 'package:kota_app/product/models/cart_product_model.dart';
 
 class ProductDetailController extends BaseControllerInterface {
   ProductDetailController({required this.code, required this.productCode});

@@ -34,14 +34,11 @@ abstract class BaseClient {
         queryParams: queryParams,
         headerParam: headerParam,
       );
-      print('Raw API Response: ${response?.data}'); // Debug print
       if (response!.statusCode == (successStatus ?? HttpStatus.ok)) {
         R? returnResponse;
         if (responseModel != null) {
           final jsonString = jsonEncode(response.data);
-          print('Response JSON string: $jsonString'); // Debug print
-          returnResponse =
-              responseModel.jsonParser(jsonString) as R;
+          returnResponse = responseModel.jsonParser(jsonString) as R;
         }
         return BaseHttpModel(
           status: BaseModelStatus.ok,
@@ -82,21 +79,23 @@ abstract class BaseClient {
     }
   }
 
-  Future<BaseHttpModel<List<T>>> fetchData<T>(String url, 
-      {int? pageIndex,
-      int? pageSize,
-      T Function(Map<String, dynamic>)? fromJson,
-      int? id = null,
-      String? search = null}) async {
+  Future<BaseHttpModel<List<T>>> fetchData<T>(
+    String url, {
+    int? pageIndex,
+    int? pageSize,
+    T Function(Map<String, dynamic>)? fromJson,
+    int? id,
+    String? search,
+  }) async {
     try {
-      final Map<String, dynamic> bodyParam = {
+      final bodyParam = <String, dynamic>{
         if (pageIndex != null) 'PageIndex': pageIndex.toString(),
         if (pageSize != null) 'PageSize': pageSize.toString(),
         if (id != null) 'id': id.toString(),
         if (search != null) 'searchText': search,
       };
 
-      var response = await dio.request(
+      final response = await dio.request(
         DioHttpMethod.get,
         url,
         // headerParam: createHeader(),

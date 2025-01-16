@@ -98,8 +98,9 @@ class AppService extends BaseClient {
     );
   }
 
-  Future<BaseHttpModel<CreateOrderResponseModel>> updateOrder(
-      {required CreateOrderRequestModel request}) async {
+  Future<BaseHttpModel<CreateOrderResponseModel>> updateOrder({
+    required CreateOrderRequestModel request,
+  }) async {
     return baseRequest<CreateOrderResponseModel, CreateOrderResponseModel>(
       responseModel: CreateOrderResponseModel(),
       httpUrl: AppServicePath.createOrder.value,
@@ -141,7 +142,8 @@ class AppService extends BaseClient {
   Future<BaseHttpModel<ProductGroupListResponseModel>> allProducts({
     required ProductGroupListRequestModel request,
   }) async {
-    return baseRequest<ProductGroupListResponseModel, ProductGroupListResponseModel>(
+    return baseRequest<ProductGroupListResponseModel,
+        ProductGroupListResponseModel>(
       responseModel: ProductGroupListResponseModel(),
       httpUrl: AppServicePath.productGroupList.value,
       method: DioHttpMethod.get,

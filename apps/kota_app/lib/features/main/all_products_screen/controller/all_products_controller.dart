@@ -2,10 +2,10 @@ import 'package:api/api.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_rx/get_rx.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kota_app/features/main/all_products_screen/model/product_category.dart';
+import 'package:kota_app/features/main/all_products_screen/model/product_filter.dart';
 import 'package:kota_app/product/base/controller/base_controller.dart';
 import 'package:kota_app/product/navigation/modules/sub_route/sub_route_enums.dart';
-import 'package:kota_app/features/main/all_products_screen/model/product_filter.dart';
-import 'package:kota_app/features/main/all_products_screen/model/product_category.dart';
 
 class AllProductsController extends BaseControllerInterface {
   ProductGroupListResponseModel productsResponse =
@@ -22,6 +22,8 @@ class AllProductsController extends BaseControllerInterface {
   final Rx<bool> _hasMoreItems = Rx(true);
   final Rx<bool> _hasActiveFilters = Rx(false);
 
+  static List<ProductCategory>? _cachedCategories;
+
   bool get isPaginationLoading => _isPaginationLoading.value;
   set isPaginationLoading(bool value) => _isPaginationLoading.value = value;
 
@@ -36,19 +38,17 @@ class AllProductsController extends BaseControllerInterface {
   ProductFilter get currentFilter => _currentFilter.value;
   set currentFilter(ProductFilter value) {
     _currentFilter.value = value;
-    _hasActiveFilters.value = value.category != null || 
-        value.minPrice != null || 
+    _hasActiveFilters.value = value.category != null ||
+        value.minPrice != null ||
         value.maxPrice != null;
   }
 
   List<ProductGroupItem> get products => _products.value;
-  set products(List<ProductGroupItem> value) {
-    print('Setting products: ${value.length}'); // Debug print
-    _products.value = value;
-  }
+  set products(List<ProductGroupItem> value) => _products.value = value;
 
   List<ProductGroupItem> get filteredProducts => _filteredProducts.value;
-  set filteredProducts(List<ProductGroupItem> value) => _filteredProducts.value = value;
+  set filteredProducts(List<ProductGroupItem> value) =>
+      _filteredProducts.value = value;
 
   List<ProductCategory> get categories => _categories.value;
   set categories(List<ProductCategory> value) => _categories.value = value;
@@ -75,26 +75,27 @@ class AllProductsController extends BaseControllerInterface {
   }
 
   Future<void> _getCategories() async {
-    print('Fetching categories...'); // Debug print
-    await client.appService.getCategories(
+    if (_cachedCategories != null) {
+      categories = _cachedCategories!;
+      return;
+    }
+
+    await client.appService
+        .getCategories(
       request: ProductGroupListRequestModel(),
-    ).handleRequest(
+    )
+        .handleRequest(
       onSuccess: (res) {
-        print('Categories API Response success: ${res?.items?.length} items'); // Debug print
         if (res?.items != null) {
-          categories = res!.items!
-              .map((e) => ProductCategory.fromModel(e))
-              .toList();
-          print('Processed ${categories.length} categories'); // Debug print
+          _cachedCategories =
+              res!.items!.map(ProductCategory.fromModel).toList();
+          categories = _cachedCategories!;
         }
       },
     );
   }
 
   Future<void> _getProducts({bool isRefresh = false}) async {
-    print('Starting to fetch products. isRefresh: $isRefresh, isPaginationLoading: $isPaginationLoading, hasMoreItems: $hasMoreItems'); // Debug print
-    print('Current filter category before request: ${currentFilter.category?.id}'); // Debug print
-
     isPaginationLoading = true;
 
     final request = ProductGroupListRequestModel(
@@ -107,22 +108,18 @@ class AllProductsController extends BaseControllerInterface {
       sortDirection: _getSortDirection(),
     );
 
-    print('Request with filter: ${request.toJson()}'); // Debug print
-
     await client.appService.allProducts(request: request).handleRequest(
       onSuccess: (res) {
-        print('API Response success: ${res?.items?.length} items'); // Debug print
         if (res != null) {
           productsResponse = res;
-          
+
           if (isRefresh) {
             products = res.items ?? [];
           } else if (res.items != null) {
-            final updatedList = List<ProductGroupItem>.from(products)..addAll(res.items!);
+            final updatedList = List<ProductGroupItem>.from(products)
+              ..addAll(res.items!);
             products = updatedList;
           }
-          
-          print('Updated products length: ${products.length}'); // Debug print
           hasMoreItems = res.hasNext ?? false;
         }
       },
@@ -133,7 +130,7 @@ class AllProductsController extends BaseControllerInterface {
 
   String? _getSortByField() {
     if (currentFilter.sortType == null) return null;
-    
+
     switch (currentFilter.sortType!) {
       case ProductSortType.priceAsc:
       case ProductSortType.priceDesc:
@@ -146,7 +143,7 @@ class AllProductsController extends BaseControllerInterface {
 
   String? _getSortDirection() {
     if (currentFilter.sortType == null) return null;
-    
+
     switch (currentFilter.sortType!) {
       case ProductSortType.priceAsc:
       case ProductSortType.nameAsc:
@@ -187,9 +184,6 @@ class AllProductsController extends BaseControllerInterface {
   }
 
   Future<void> applyFilter(ProductFilter filter) async {
-    print('Applying filter with category: ${filter.category?.id}'); // Debug print
-    currentFilter = filter;
-    print('Current filter category after setting: ${currentFilter.category?.id}'); // Debug print
     await _getProducts(isRefresh: true);
   }
 

@@ -102,7 +102,7 @@ class ProductCard extends StatelessWidget {
                             ),
                             child: Text(
                               '${item.quantity}x',
-                              style: context.labelMedium?.copyWith(
+                              style: context.labelMedium.copyWith(
                                 color: Theme.of(context).primaryColor,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -113,7 +113,7 @@ class ProductCard extends StatelessWidget {
                           Expanded(
                             child: Text(
                               item.price.formatPrice(),
-                              style: context.bodyMedium?.copyWith(
+                              style: context.bodyMedium.copyWith(
                                 color: isDarkMode ? Colors.grey[300] : Colors.grey[600],
                               ),
                               maxLines: 1,
@@ -124,7 +124,7 @@ class ProductCard extends StatelessWidget {
                           // Total Price
                           Text(
                             (item.price * item.quantity).formatPrice(),
-                            style: context.titleSmall?.copyWith(
+                            style: context.titleSmall.copyWith(
                               fontWeight: FontWeight.bold,
                               color: Theme.of(context).primaryColor,
                             ),

@@ -64,7 +64,8 @@ class AllProducts extends StatelessWidget {
                             isScrollControlled: true,
                             builder: (context) => Padding(
                               padding: EdgeInsets.only(
-                                bottom: MediaQuery.of(context).viewInsets.bottom,
+                                bottom:
+                                    MediaQuery.of(context).viewInsets.bottom,
                               ),
                               child: FilterBottomSheet(controller: controller),
                             ),
@@ -72,14 +73,16 @@ class AllProducts extends StatelessWidget {
                         },
                       ),
                       const SizedBox(width: 8),
-                      Obx(() => Visibility(
-                        visible: controller.hasActiveFilters,
-                        child: ActionChip(
-                          avatar: const Icon(Icons.clear, size: 20),
-                          label: Text(labels.clearFilters),
-                          onPressed: () => controller.clearFilters(),
+                      Obx(
+                        () => Visibility(
+                          visible: controller.hasActiveFilters,
+                          child: ActionChip(
+                            avatar: const Icon(Icons.clear, size: 20),
+                            label: Text(labels.clearFilters),
+                            onPressed: controller.clearFilters,
+                          ),
                         ),
-                      )),
+                      ),
                     ],
                   ),
                 ),
@@ -130,7 +133,6 @@ class CustomSearchDelegate extends SearchDelegate<ProductGroupItem?> {
 
   @override
   List<Widget>? buildActions(BuildContext context) {
-    final labels = AppLocalization.getLabels(context);
     return [
       IconButton(
         icon: const Icon(Icons.clear),
@@ -144,7 +146,6 @@ class CustomSearchDelegate extends SearchDelegate<ProductGroupItem?> {
 
   @override
   Widget? buildLeading(BuildContext context) {
-    final labels = AppLocalization.getLabels(context);
     return IconButton(
       icon: const Icon(Icons.arrow_back),
       onPressed: () {

@@ -111,7 +111,8 @@ class ProductDetail extends StatelessWidget {
                       Obx(() {
                         final totalQuantity = cartController.itemList
                             .where((item) =>
-                                item.productCodeGroupId == currentProductGroupId)
+                                item.productCodeGroupId ==
+                                currentProductGroupId)
                             .fold<int>(
                                 0, (sum, item) => sum + (item.quantity ?? 0));
 
@@ -121,10 +122,13 @@ class ProductDetail extends StatelessWidget {
                             vertical: 4,
                           ),
                           decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColor.withOpacity(0.1),
+                            color:
+                                Theme.of(context).primaryColor.withOpacity(0.1),
                             borderRadius: BorderRadius.circular(20),
                             border: Border.all(
-                              color: Theme.of(context).primaryColor.withOpacity(0.3),
+                              color: Theme.of(context)
+                                  .primaryColor
+                                  .withOpacity(0.3),
                               width: 1,
                             ),
                           ),
@@ -139,7 +143,10 @@ class ProductDetail extends StatelessWidget {
                               const SizedBox(width: 4),
                               Text(
                                 '$totalQuantity adet',
-                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(
                                       color: Theme.of(context).primaryColor,
                                       fontWeight: FontWeight.bold,
                                     ),

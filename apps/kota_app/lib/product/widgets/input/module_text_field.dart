@@ -43,7 +43,7 @@ class _ModuleTextFieldState extends State<ModuleTextField> {
   @override
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    
+
     return Focus(
       onFocusChange: (hasFocus) {
         setState(() {
@@ -55,27 +55,29 @@ class _ModuleTextFieldState extends State<ModuleTextField> {
           labelText: widget.labelText,
           hintText: widget.hintText,
           errorText: widget.errorText,
-          prefixIcon: widget.prefixIcon != null 
-            ? Icon(widget.prefixIcon,
-                color: _isFocused 
-                  ? Theme.of(context).primaryColor 
-                  : Theme.of(context).hintColor)
-            : null,
+          prefixIcon: widget.prefixIcon != null
+              ? Icon(
+                  widget.prefixIcon,
+                  color: _isFocused
+                      ? Theme.of(context).primaryColor
+                      : Theme.of(context).hintColor,
+                )
+              : null,
           suffixIcon: widget.obscureText
-            ? IconButton(
-                icon: Icon(
-                  _obscureText ? Icons.visibility_off : Icons.visibility,
-                  color: _isFocused 
-                    ? Theme.of(context).primaryColor 
-                    : Theme.of(context).hintColor,
-                ),
-                onPressed: () {
-                  setState(() {
-                    _obscureText = !_obscureText;
-                  });
-                },
-              )
-            : null,
+              ? IconButton(
+                  icon: Icon(
+                    _obscureText ? Icons.visibility_off : Icons.visibility,
+                    color: _isFocused
+                        ? Theme.of(context).primaryColor
+                        : Theme.of(context).hintColor,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _obscureText = !_obscureText;
+                    });
+                  },
+                )
+              : null,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
             borderSide: BorderSide(
@@ -102,9 +104,7 @@ class _ModuleTextFieldState extends State<ModuleTextField> {
             ),
           ),
           filled: true,
-          fillColor: isDarkMode 
-            ? Colors.grey[900] 
-            : Colors.grey[50],
+          fillColor: isDarkMode ? Colors.grey[900] : Colors.grey[50],
           contentPadding: const EdgeInsets.symmetric(
             horizontal: 16,
             vertical: 16,

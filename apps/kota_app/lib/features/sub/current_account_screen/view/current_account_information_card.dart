@@ -4,16 +4,16 @@ import 'package:kota_app/product/utility/enums/module_radius_enums.dart';
 
 class CurrentAccountInformationCard extends StatelessWidget {
   const CurrentAccountInformationCard({
-    Key? key,
     required this.onTap,
-    this.cariHesapAdi,
     required this.caseType,
+    required this.id,
+    super.key,
+    this.cariHesapAdi,
     this.code,
     this.aciklama,
     this.balance,
     this.foreignBalance,
-    required this.id,
-  }) : super(key: key);
+  });
 
   final Function(int, String) onTap;
   final String? cariHesapAdi;
@@ -42,13 +42,20 @@ class CurrentAccountInformationCard extends StatelessWidget {
     //   balanceColor = AppColor.error;
     // }
 
-    Color cardAccentColor = balance != null && balance! >= 0
-        ? Color(0xFF0D9488) // Teal for positive balance
-        : Color.fromARGB(255, 183, 41, 60); // Purple for negative/null balance
+    final cardAccentColor = balance != null && balance! >= 0
+        ? const Color(0xFF0D9488) // Teal for positive balance
+        : const Color.fromARGB(
+            255,
+            183,
+            41,
+            60,
+          ); // Purple for negative/null balance
 
     return Container(
       margin: EdgeInsets.symmetric(
-          vertical: ModulePadding.xxs.value, horizontal: ModulePadding.m.value),
+        vertical: ModulePadding.xxs.value,
+        horizontal: ModulePadding.m.value,
+      ),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
@@ -66,7 +73,7 @@ class CurrentAccountInformationCard extends StatelessWidget {
                 BoxShadow(
                   color: Colors.black.withOpacity(0.05),
                   blurRadius: 10,
-                  offset: Offset(0, 4),
+                  offset: const Offset(0, 4),
                 ),
               ],
             ),
@@ -85,7 +92,7 @@ class CurrentAccountInformationCard extends StatelessWidget {
                         gradient: LinearGradient(
                           colors: [
                             cardAccentColor,
-                            cardAccentColor.withOpacity(0.7)
+                            cardAccentColor.withOpacity(0.7),
                           ],
                           begin: Alignment.centerLeft,
                           end: Alignment.centerRight,
@@ -136,7 +143,7 @@ class CurrentAccountInformationCard extends StatelessWidget {
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                   if (code != null && code!.isNotEmpty) ...[
-                                    SizedBox(height: 2),
+                                    const SizedBox(height: 2),
                                     Text(
                                       code!,
                                       style: const TextStyle(
@@ -164,9 +171,12 @@ class CurrentAccountInformationCard extends StatelessWidget {
                             ),
                             child: Row(
                               children: [
-                                Icon(Icons.info_outline,
-                                    size: 16, color: Colors.grey[600]),
-                                SizedBox(width: 8),
+                                Icon(
+                                  Icons.info_outline,
+                                  size: 16,
+                                  color: Colors.grey[600],
+                                ),
+                                const SizedBox(width: 8),
                                 Expanded(
                                   child: Text(
                                     aciklama!,

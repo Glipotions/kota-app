@@ -39,7 +39,7 @@ class _LoginForm extends StatelessWidget {
               const SizedBox(height: 8),
               Text(
                 context.i10n.loginToYourAccount,
-                style: context.titleMedium?.copyWith(
+                style: context.titleMedium.copyWith(
                   color: isDarkMode ? Colors.grey[300] : Colors.grey[700],
                 ),
               ),
@@ -162,19 +162,16 @@ class _LoginForm extends StatelessWidget {
               //     _SocialLoginButton(
               //       icon: 'assets/icons/google.png',
               //       onTap: () {
-              //         // TODO: Implement Google login
               //       },
               //     ),
               //     _SocialLoginButton(
               //       icon: 'assets/icons/facebook.png',
               //       onTap: () {
-              //         // TODO: Implement Facebook login
               //       },
               //     ),
               //     _SocialLoginButton(
               //       icon: 'assets/icons/apple.png',
               //       onTap: () {
-              //         // TODO: Implement Apple login
               //       },
               //     ),
               //   ],
@@ -202,52 +199,6 @@ class _LoginForm extends StatelessWidget {
                 ],
               ),
             ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _SocialLoginButton extends StatelessWidget {
-  const _SocialLoginButton({
-    required this.icon,
-    required this.onTap,
-  });
-
-  final String icon;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
-      child: Container(
-        width: 60,
-        height: 60,
-        decoration: BoxDecoration(
-          color: isDarkMode ? Colors.grey[850] : Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: isDarkMode ? Colors.grey[700]! : Colors.grey[300]!,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 10,
-              offset: const Offset(0, 5),
-            ),
-          ],
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Image.asset(
-            icon,
-            width: 24,
-            height: 24,
           ),
         ),
       ),

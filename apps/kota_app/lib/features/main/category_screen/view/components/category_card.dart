@@ -2,7 +2,6 @@ import 'package:api/api.dart';
 import 'package:flutter/material.dart';
 import 'package:kota_app/product/utility/enums/module_padding_enums.dart';
 import 'package:kota_app/product/utility/enums/module_radius_enums.dart';
-import 'package:widgets/widget.dart';
 
 class CategoryCard extends StatelessWidget {
   const CategoryCard({required this.category, super.key});

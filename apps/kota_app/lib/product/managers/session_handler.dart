@@ -12,7 +12,8 @@ class SessionHandler extends ChangeNotifier {
   static final SessionHandler _instance = SessionHandler._init();
 
   User? currentUser;
-  final RxList<UserOperationClaimResponseModel> _userClaims = <UserOperationClaimResponseModel>[].obs;
+  final RxList<UserOperationClaimResponseModel> _userClaims =
+      <UserOperationClaimResponseModel>[].obs;
   List<UserOperationClaimResponseModel> get userClaims => _userClaims;
 
   ///Returns instace for AuthHandler
@@ -38,25 +39,26 @@ class SessionHandler extends ChangeNotifier {
 
   Future<void> getUserClaims(int userId) async {
     try {
-     await ProductClient.instance.appService
+      await ProductClient.instance.appService
           .getUserOperationClaims(userId)
           .handleRequest(
-            onSuccess: (res) {
-              if (res != null) {
-                _userClaims.value = res;
-              }
-            },
-            ignoreException: true,
-            defaultResponse: [],
-          );
+        onSuccess: (res) {
+          if (res != null) {
+            _userClaims.value = res;
+          }
+        },
+        ignoreException: true,
+        defaultResponse: [],
+      );
     } catch (e) {
       debugPrint('Error getting user claims: $e');
     }
   }
 
   bool hasAuthorize(String claim) {
-    return _userClaims.any((x) =>
-        x.operationClaimName == claim || x.operationClaimName == 'admin');
+    return _userClaims.any(
+      (x) => x.operationClaimName == claim || x.operationClaimName == 'admin',
+    );
   }
 
   bool hasClaim(String claim) {
@@ -77,7 +79,7 @@ class SessionHandler extends ChangeNotifier {
   Future<void> getCurrentUser() async {
     await ProductClient.instance.appService.currentUser().handleRequest(
           onSuccess: (res) async {
-            await logIn(res: res!);
+            await logIn(res: res);
           },
           onIgnoreException: (err) async {
             await logOut();

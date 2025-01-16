@@ -1,13 +1,12 @@
+import 'package:common/common.dart';
+import 'package:common/src/i10n/lan/en.dart';
+import 'package:common/src/i10n/lan/tr.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:common/common.dart';
-import 'package:common/src/i10n/lan/tr.dart';
-import 'package:common/src/i10n/lan/en.dart';
 import 'package:kota_app/features/sub/manage_account_screen/controller/manage_account_controller.dart';
 import 'package:kota_app/product/base/base_view.dart';
 import 'package:kota_app/product/utility/enums/module_padding_enums.dart';
 import 'package:kota_app/product/widgets/app_bar/general_app_bar.dart';
-import 'package:values/values.dart';
 
 class ManageAccount extends StatelessWidget {
   const ManageAccount({required this.controller, super.key});
@@ -69,19 +68,23 @@ class ManageAccount extends StatelessWidget {
             ),
           ),
           SizedBox(height: ModulePadding.s.value),
-          Obx(() => Text(
-                controller.user?.fullName ?? '',
-                style: context.textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-              )),
+          Obx(
+            () => Text(
+              controller.user?.fullName ?? '',
+              style: context.textTheme.headlineSmall?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
           SizedBox(height: ModulePadding.xxs.value),
-          Obx(() => Text(
-                controller.user?.email ?? '',
-                style: context.textTheme.bodyMedium?.copyWith(
-                  color: context.theme.hintColor,
-                ),
-              )),
+          Obx(
+            () => Text(
+              controller.user?.email ?? '',
+              style: context.textTheme.bodyMedium?.copyWith(
+                color: context.theme.hintColor,
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -112,15 +115,25 @@ class ManageAccount extends StatelessWidget {
     return Card(
       child: Padding(
         padding: EdgeInsets.all(ModulePadding.m.value),
-        child: Obx(() => Column(
-          children: [
-            _buildInfoRow(context, labels.username, controller.user?.username),
-            Divider(height: ModulePadding.m.value * 2),
-            _buildInfoRow(context, labels.fullName, controller.user?.fullName),
-            Divider(height: ModulePadding.m.value * 2),
-            _buildInfoRow(context, labels.email, controller.user?.email),
-          ],
-        )),
+        child: Obx(
+          () => Column(
+            children: [
+              _buildInfoRow(
+                context,
+                labels.username,
+                controller.user?.username,
+              ),
+              Divider(height: ModulePadding.m.value * 2),
+              _buildInfoRow(
+                context,
+                labels.fullName,
+                controller.user?.fullName,
+              ),
+              Divider(height: ModulePadding.m.value * 2),
+              _buildInfoRow(context, labels.email, controller.user?.email),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -156,7 +169,8 @@ class ManageAccount extends StatelessWidget {
             trailing: MaterialRxStreamBuilder<AppStateModel>(
               stream: AppStateController.instance.outModel,
               builder: (context, snapshot) {
-                final currentLocale = snapshot.data?.locale.languageCode ?? 'tr';
+                final currentLocale =
+                    snapshot.data?.locale.languageCode ?? 'tr';
                 return DropdownButton<String>(
                   value: currentLocale,
                   items: [
@@ -178,16 +192,22 @@ class ManageAccount extends StatelessWidget {
               },
             ),
           ),
-          Divider(height: 1, indent: ModulePadding.m.value, endIndent: ModulePadding.m.value),
+          Divider(
+            height: 1,
+            indent: ModulePadding.m.value,
+            endIndent: ModulePadding.m.value,
+          ),
           ListTile(
             title: Text(
               labels.darkMode,
               style: context.textTheme.bodyMedium,
             ),
-            trailing: Obx(() => Switch(
-                  value: controller.isDarkMode.value,
-                  onChanged: controller.setDarkMode,
-                )),
+            trailing: Obx(
+              () => Switch(
+                value: controller.isDarkMode.value,
+                onChanged: controller.setDarkMode,
+              ),
+            ),
           ),
         ],
       ),

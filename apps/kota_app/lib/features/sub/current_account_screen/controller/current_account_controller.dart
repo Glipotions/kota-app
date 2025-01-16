@@ -6,21 +6,23 @@ import 'package:kota_app/product/utility/enums/general.dart';
 import 'package:values/values.dart';
 
 class CurrentAccountController extends BaseControllerInterface {
+  CurrentAccountController({required this.pageStatusEnum});
+  @override
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  @override
   BuildContext get context => scaffoldKey.currentContext!;
 
   late final ScreenArgumentEnum pageStatusEnum;
-  CurrentAccountController({required this.pageStatusEnum});
 
   final ScrollController scrollController = ScrollController();
   final TextEditingController searchController = TextEditingController();
 
-  var pageIndex = 0;
-  var pageSize = 20;
-  var hasMoreData = true;
-  var isLoading = false.obs;
-  var isPaginationLoading = false;
-  var pageCount = 0.obs;
+  int pageIndex = 0;
+  int pageSize = 20;
+  bool hasMoreData = true;
+  RxBool isLoading = false.obs;
+  bool isPaginationLoading = false;
+  RxInt pageCount = 0.obs;
 
   final Rx<List<GetCurrentAccount>> _currentAccounts = Rx([]);
   List<GetCurrentAccount> get currentAccounts => _currentAccounts.value;
