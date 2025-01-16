@@ -108,5 +108,45 @@ abstract class AppLocalizationLabel {
   ///Succesfully logged in
   String get succesfullyLoggedIn;
 
+  // Account Management
+  String get accountSettings;
+  String get language;
+  String get selectLanguage;
+  String get username;
+  String get fullName;
+  String get email;
+  String get darkMode;
+  String get deleteAccount;
+  String get deleteAccountSubtitle;
+  String get deleteAccountDialogTitle;
+  String get deleteAccountDialogMessage;
+  String get deleteAccountDescription;
+  String get deleteAccountConfirmation;
+  String get deleteAccountWarning;
+  String get cancel;
+  String get delete;
 
+  // Products Screen
+  String get products;
+  String get filter;
+  String get clearFilters;
+  String get searchTermRequired;
+  String get noProductsFound;
+  String get searchAndSelect;
+  String get accountInfo;
+  String get preferences;
+  String get accountManagement;
+
+  // Cart Screen
+  String get cart;
+  String get clearCart;
+  String get clearCartConfirmation;
+  String get clear;
+  String get totalAmount;
+  String get orderNote;
+  String get addOrderNote;
+  String get completeOrder;
+  String get updateOrder;
+  String get emptyCartMessage;
+  String get removeFromCart;
 }

@@ -1,50 +1,55 @@
 // ignore_for_file: use_setters_to_change_properties, 
 // ignore_for_file: avoid_positional_boolean_parameters
 
+import 'dart:ui';
+
 import 'package:api/api.dart';
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
+import 'package:common/common.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:kota_app/product/base/controller/base_controller.dart';
 import 'package:kota_app/product/managers/session_handler.dart';
+import 'package:kota_app/product/controllers/localization_controller.dart';
 
 class ManageAccountController extends BaseControllerInterface {
   ManageAccountController();
 
-  @override
-  SessionHandler get sessionHandler => SessionHandler.instance;
+  final _user = Rxn<User>();
+  User? get user => _user.value;
 
-  final Rx<User> _user =
-      Rx(User());
+  final isDarkMode = false.obs;
 
-  User get user => _user.value;
-  set user(User value) => _user.value = value;
-  // Dil ve tema için Rx değişkenleri
-  final RxString currentLanguage = 'English'.obs;
-  final RxBool isDarkMode = false.obs;
-
-  // Kullanıcı dili değiştirme
-  void setLanguage(String newLanguage) {
-    currentLanguage.value = newLanguage;
-    // Burada dil ayarlarını uygulamak için ek işlemler yapılabilir
-  }
-
-  // Tema modunu ayarlama
   void setDarkMode(bool value) {
     isDarkMode.value = value;
     // Burada tema ayarlarını uygulamak için ek işlemler yapılabilir
   }
+
+  void changeLanguage(String languageCode) {
+    final countryCode = languageCode.toUpperCase();
+    LocalizationController.instance.changeLocale(Locale(languageCode, countryCode));
+  }
+
   @override
   Future<void> onReady() async {
-    super.onReady();
-    await onReadyGeneric(() async {
-      await _getUser();
-    });
+    await onReadyGeneric(_loadUserData);
   }
 
-  Future<void> _getUser() async {
-    user = sessionHandler.currentUser!;
-  }
-
-  void onTapRemoveAccount() {
+  Future<void> _loadUserData() async {
+    _user.value = sessionHandler.currentUser;
+    if (_user.value == null) {
+      await sessionHandler.init();
+      _user.value = sessionHandler.currentUser;
+    }
     
+    if (_user.value == null) {
+      throw AppException('User data could not be loaded',1);
+    }
   }
+
+  @override
+  void onClose() {
+    super.onClose();
+  }
+
+  void onTapRemoveAccount() {}
 }

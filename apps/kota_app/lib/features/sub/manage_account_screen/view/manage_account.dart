@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:common/common.dart';
+import 'package:common/src/i10n/lan/tr.dart';
+import 'package:common/src/i10n/lan/en.dart';
 import 'package:kota_app/features/sub/manage_account_screen/controller/manage_account_controller.dart';
 import 'package:kota_app/product/base/base_view.dart';
 import 'package:kota_app/product/utility/enums/module_padding_enums.dart';
 import 'package:kota_app/product/widgets/app_bar/general_app_bar.dart';
+import 'package:values/values.dart';
 
 class ManageAccount extends StatelessWidget {
   const ManageAccount({required this.controller, super.key});
@@ -12,10 +16,12 @@ class ManageAccount extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final labels = AppLocalization.getLabels(context);
     return Scaffold(
-      appBar: const GeneralAppBar(title: 'Kullanıcı Bilgilerim'),
+      appBar: GeneralAppBar(title: labels.accountSettings),
       body: BaseView<ManageAccountController>(
         controller: controller,
+        onTapTryAgain: () => controller.onReady(),
         child: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.all(ModulePadding.m.value),
@@ -26,19 +32,19 @@ class ManageAccount extends StatelessWidget {
                 SizedBox(height: ModulePadding.l.value),
                 _buildSection(
                   context,
-                  title: 'Hesap Bilgileri',
+                  title: labels.accountInfo,
                   child: userInfoCard(context),
                 ),
                 SizedBox(height: ModulePadding.l.value),
                 _buildSection(
                   context,
-                  title: 'Tercihler',
+                  title: labels.preferences,
                   child: _buildPreferences(context),
                 ),
                 SizedBox(height: ModulePadding.l.value),
                 _buildSection(
                   context,
-                  title: 'Hesap Yönetimi',
+                  title: labels.accountManagement,
                   child: _buildAccountManagement(context),
                 ),
               ],
@@ -53,29 +59,25 @@ class ManageAccount extends StatelessWidget {
     return Center(
       child: Column(
         children: [
-          Container(
-            width: 100,
-            height: 100,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: context.theme.primaryColor.withOpacity(0.1),
-            ),
+          const CircleAvatar(
+            radius: 50,
+            backgroundColor: Colors.grey,
             child: Icon(
               Icons.person,
               size: 50,
-              color: context.theme.primaryColor,
+              color: Colors.white,
             ),
           ),
           SizedBox(height: ModulePadding.s.value),
           Obx(() => Text(
-                controller.user.fullName ?? '',
+                controller.user?.fullName ?? '',
                 style: context.textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
               )),
           SizedBox(height: ModulePadding.xxs.value),
           Obx(() => Text(
-                controller.user.email ?? '',
+                controller.user?.email ?? '',
                 style: context.textTheme.bodyMedium?.copyWith(
                   color: context.theme.hintColor,
                 ),
@@ -85,7 +87,11 @@ class ManageAccount extends StatelessWidget {
     );
   }
 
-  Widget _buildSection(BuildContext context, {required String title, required Widget child}) {
+  Widget _buildSection(
+    BuildContext context, {
+    required String title,
+    required Widget child,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -93,7 +99,6 @@ class ManageAccount extends StatelessWidget {
           title,
           style: context.textTheme.titleMedium?.copyWith(
             fontWeight: FontWeight.bold,
-            color: context.theme.primaryColor,
           ),
         ),
         SizedBox(height: ModulePadding.s.value),
@@ -103,24 +108,17 @@ class ManageAccount extends StatelessWidget {
   }
 
   Widget userInfoCard(BuildContext context) {
+    final labels = AppLocalization.getLabels(context);
     return Card(
-      elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-        side: BorderSide(
-          color: context.theme.dividerColor,
-          width: 1,
-        ),
-      ),
       child: Padding(
         padding: EdgeInsets.all(ModulePadding.m.value),
         child: Obx(() => Column(
           children: [
-            _buildInfoRow(context, 'Kullanıcı Adı', controller.user.username),
+            _buildInfoRow(context, labels.username, controller.user?.username),
             Divider(height: ModulePadding.m.value * 2),
-            _buildInfoRow(context, 'Ad Soyad', controller.user.fullName),
+            _buildInfoRow(context, labels.fullName, controller.user?.fullName),
             Divider(height: ModulePadding.m.value * 2),
-            _buildInfoRow(context, 'E-posta', controller.user.email),
+            _buildInfoRow(context, labels.email, controller.user?.email),
           ],
         )),
       ),
@@ -129,24 +127,18 @@ class ManageAccount extends StatelessWidget {
 
   Widget _buildInfoRow(BuildContext context, String label, String? value) {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Expanded(
-          flex: 2,
-          child: Text(
-            label,
-            style: context.textTheme.bodyMedium?.copyWith(
-              color: context.theme.hintColor,
-            ),
+        Text(
+          label,
+          style: context.textTheme.bodyMedium?.copyWith(
+            color: context.theme.hintColor,
           ),
         ),
-        Expanded(
-          flex: 3,
-          child: Text(
-            value ?? '',
-            style: context.textTheme.bodyMedium?.copyWith(
-              fontWeight: FontWeight.w500,
-            ),
+        Text(
+          value ?? '',
+          style: context.textTheme.bodyMedium?.copyWith(
+            fontWeight: FontWeight.bold,
           ),
         ),
       ],
@@ -154,44 +146,48 @@ class ManageAccount extends StatelessWidget {
   }
 
   Widget _buildPreferences(BuildContext context) {
+    final labels = AppLocalization.getLabels(context);
     return Card(
-      elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-        side: BorderSide(
-          color: context.theme.dividerColor,
-          width: 1,
-        ),
-      ),
       child: Column(
         children: [
           ListTile(
-            title: Text(
-              'Dil Seçimi',
-              style: context.textTheme.bodyMedium,
-            ),
-            trailing: Obx(() => DropdownButton<String>(
-              value: controller.currentLanguage.value,
-              underline: const SizedBox(),
-              items: <String>['English', 'Türkçe'].map((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
+            leading: const Icon(Icons.language),
+            title: Text(labels.language),
+            trailing: MaterialRxStreamBuilder<AppStateModel>(
+              stream: AppStateController.instance.outModel,
+              builder: (context, snapshot) {
+                final currentLocale = snapshot.data?.locale.languageCode ?? 'tr';
+                return DropdownButton<String>(
+                  value: currentLocale,
+                  items: [
+                    DropdownMenuItem(
+                      value: 'tr',
+                      child: Text(TrLocalization().localizationTitle),
+                    ),
+                    DropdownMenuItem(
+                      value: 'en',
+                      child: Text(EnLocalization().localizationTitle),
+                    ),
+                  ],
+                  onChanged: (String? value) {
+                    if (value != null) {
+                      controller.changeLanguage(value);
+                    }
+                  },
                 );
-              }).toList(),
-              onChanged: (newValue) => controller.setLanguage(newValue!),
-            )),
+              },
+            ),
           ),
           Divider(height: 1, indent: ModulePadding.m.value, endIndent: ModulePadding.m.value),
           ListTile(
             title: Text(
-              'Karanlık Mod',
+              labels.darkMode,
               style: context.textTheme.bodyMedium,
             ),
             trailing: Obx(() => Switch(
-              value: controller.isDarkMode.value,
-              onChanged: controller.setDarkMode,
-            )),
+                  value: controller.isDarkMode.value,
+                  onChanged: controller.setDarkMode,
+                )),
           ),
         ],
       ),
@@ -199,65 +195,53 @@ class ManageAccount extends StatelessWidget {
   }
 
   Widget _buildAccountManagement(BuildContext context) {
+    final labels = AppLocalization.getLabels(context);
     return Card(
-      elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-        side: BorderSide(
-          color: context.theme.dividerColor,
-          width: 1,
-        ),
-      ),
-      child: ListTile(
-        leading: const Icon(Icons.delete_outline, color: Colors.red),
-        title: Text(
-          'Hesabı Sil',
-          style: context.textTheme.bodyMedium?.copyWith(
-            color: Colors.red,
+      child: Column(
+        children: [
+          ListTile(
+            leading: const Icon(Icons.delete_forever, color: Colors.red),
+            title: Text(
+              labels.deleteAccount,
+              style: context.textTheme.bodyMedium?.copyWith(color: Colors.red),
+            ),
+            subtitle: Text(
+              labels.deleteAccountDescription,
+              style: context.textTheme.bodySmall?.copyWith(
+                color: Colors.red.withOpacity(0.7),
+              ),
+            ),
+            onTap: () => _showDeleteAccountDialog(context),
           ),
-        ),
-        subtitle: Text(
-          'Bu işlem geri alınamaz',
-          style: context.textTheme.bodySmall?.copyWith(
-            color: Colors.red.withOpacity(0.7),
-          ),
-        ),
-        onTap: () => _showDeleteAccountDialog(context),
+        ],
       ),
     );
   }
 
   void _showDeleteAccountDialog(BuildContext context) {
+    final labels = AppLocalization.getLabels(context);
     showDialog(
       context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Hesap Silme Onayı'),
-          content: const Text(
-            'Hesabınızı silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.',
+      builder: (context) => AlertDialog(
+        title: Text(labels.deleteAccountConfirmation),
+        content: Text(labels.deleteAccountWarning),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(labels.cancel),
           ),
-          actions: <Widget>[
-            TextButton(
-              child: Text(
-                'İptal',
-                style: TextStyle(color: context.theme.hintColor),
-              ),
-              onPressed: () => Navigator.of(context).pop(),
+          TextButton(
+            onPressed: () {
+              controller.onTapRemoveAccount();
+              Navigator.pop(context);
+            },
+            child: Text(
+              labels.delete,
+              style: const TextStyle(color: Colors.red),
             ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red,
-                foregroundColor: Colors.white,
-              ),
-              child: const Text('Hesabı Sil'),
-              onPressed: () {
-                controller.onTapRemoveAccount();
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
+          ),
+        ],
+      ),
     );
   }
 }

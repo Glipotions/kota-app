@@ -88,8 +88,91 @@ class EnLocalization extends AppLocalizationLabel {
   String get logout => 'Logout';
   
   @override
-  String get succesfullyLoggedIn => 'Succesfully logged in.';
+  String get succesfullyLoggedIn => 'Successfully logged in.';
   
   @override
   String get succesfullyLoggedOut => 'Succesfully logged out.';
+
+  // Account Management
+  @override
+  String get accountSettings => 'Account Settings';
+  @override
+  String get language => 'Language';
+  @override
+  String get selectLanguage => 'Select Language';
+
+  // Products Screen
+  @override
+  String get products => 'Products';
+  @override
+  String get filter => 'Filter';
+  @override
+  String get clearFilters => 'Clear Filters';
+  @override
+  String get searchTermRequired => 'Enter search term.';
+  @override
+  String get noProductsFound => 'No products found';
+  @override
+  String get searchAndSelect => 'Search and press enter...';
+  @override
+  String get accountInfo => 'Account Information';
+  @override
+  String get preferences => 'Preferences';
+  @override
+  String get accountManagement => 'Account Management';
+
+  @override
+  String get username => 'Username';
+  @override
+  String get fullName => 'Full Name';
+  @override
+  String get email => 'Email';
+  @override
+  String get darkMode => 'Dark Mode';
+  @override
+  String get deleteAccount => 'Delete Account';
+  @override
+  String get deleteAccountSubtitle => 'This action cannot be undone';
+  @override
+  String get deleteAccountDialogTitle => 'Delete Account Confirmation';
+  @override
+  String get deleteAccountDialogMessage => 'Are you sure you want to delete your account? This action cannot be undone.';
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get deleteAccountDescription => 'Are you sure you want to delete your account?';
+
+  @override
+  String get deleteAccountConfirmation => 'Delete Account';
+
+  @override
+  String get deleteAccountWarning => 'This action cannot be undone. All your data will be deleted.';
+
+  @override
+  String get delete => 'Delete';
+
+  // Cart Screen
+  @override
+  String get cart => 'My Cart';
+  @override
+  String get clearCart => 'Clear Cart';
+  @override
+  String get clearCartConfirmation => 'Are you sure you want to remove all items from your cart?';
+  @override
+  String get clear => 'Clear';
+  @override
+  String get totalAmount => 'Total Amount:';
+  @override
+  String get orderNote => 'Order Note';
+  @override
+  String get addOrderNote => 'Add a note for your order...';
+  @override
+  String get completeOrder => 'Complete Order';
+  @override
+  String get updateOrder => 'Update Order';
+  @override
+  String get emptyCartMessage => 'No items in cart.\nAll items you add to cart will be listed here!';
+  @override
+  String get removeFromCart => 'Remove from Cart';
 }

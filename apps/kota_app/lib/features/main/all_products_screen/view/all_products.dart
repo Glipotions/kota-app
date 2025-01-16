@@ -4,6 +4,7 @@ import 'package:api/api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:get/get.dart';
+import 'package:common/common.dart';
 import 'package:kota_app/features/main/all_products_screen/controller/all_products_controller.dart';
 import 'package:kota_app/features/main/all_products_screen/view/components/filter_bottom_sheet.dart';
 import 'package:kota_app/product/base/base_view.dart';
@@ -21,10 +22,11 @@ class AllProducts extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final labels = AppLocalization.getLabels(context);
     return Scaffold(
       key: controller.scaffoldKey,
       appBar: GeneralAppBar(
-        title: 'Ürünler',
+        title: labels.products,
         additionalIcon: IconButton(
           icon: const Icon(Icons.search),
           onPressed: () {
@@ -55,7 +57,7 @@ class AllProducts extends StatelessWidget {
                     children: [
                       ActionChip(
                         avatar: const Icon(Icons.filter_list, size: 20),
-                        label: const Text('Filtrele'),
+                        label: Text(labels.filter),
                         onPressed: () {
                           showModalBottomSheet(
                             context: context,
@@ -74,7 +76,7 @@ class AllProducts extends StatelessWidget {
                         visible: controller.hasActiveFilters,
                         child: ActionChip(
                           avatar: const Icon(Icons.clear, size: 20),
-                          label: const Text('Filtreleri Temizle'),
+                          label: Text(labels.clearFilters),
                           onPressed: () => controller.clearFilters(),
                         ),
                       )),
@@ -128,6 +130,7 @@ class CustomSearchDelegate extends SearchDelegate<ProductGroupItem?> {
 
   @override
   List<Widget>? buildActions(BuildContext context) {
+    final labels = AppLocalization.getLabels(context);
     return [
       IconButton(
         icon: const Icon(Icons.clear),
@@ -141,6 +144,7 @@ class CustomSearchDelegate extends SearchDelegate<ProductGroupItem?> {
 
   @override
   Widget? buildLeading(BuildContext context) {
+    final labels = AppLocalization.getLabels(context);
     return IconButton(
       icon: const Icon(Icons.arrow_back),
       onPressed: () {
@@ -149,9 +153,10 @@ class CustomSearchDelegate extends SearchDelegate<ProductGroupItem?> {
     );
   }
 
-  Widget _buildSearchResults() {
+  Widget _buildSearchResults(BuildContext context) {
+    final labels = AppLocalization.getLabels(context);
     if (query.isEmpty) {
-      return const Center(child: Text('Arama terimi giriniz.'));
+      return Center(child: Text(labels.searchTermRequired));
     }
 
     return FutureBuilder<List<ProductGroupItem>>(
@@ -164,7 +169,7 @@ class CustomSearchDelegate extends SearchDelegate<ProductGroupItem?> {
         } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
           return _buildProductList(snapshot.data!);
         } else {
-          return const Center(child: Text('Ürün bulunamadı'));
+          return Center(child: Text(labels.noProductsFound));
         }
       },
     );
@@ -172,12 +177,13 @@ class CustomSearchDelegate extends SearchDelegate<ProductGroupItem?> {
 
   @override
   Widget buildResults(BuildContext context) {
-    return _buildSearchResults();
+    return _buildSearchResults(context);
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    return const Center(child: Text("Arama yapıp tamam'a tıklayınız..."));
+    final labels = AppLocalization.getLabels(context);
+    return Center(child: Text(labels.searchAndSelect));
   }
 
   @override

@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:common/common.dart';
 import 'package:kota_app/product/managers/cart_controller.dart';
 import 'package:kota_app/product/models/cart_product_model.dart';
 import 'package:kota_app/product/utility/enums/module_padding_enums.dart';
@@ -64,20 +65,21 @@ class _CartState extends State<Cart> {
 
   Future<void> _showClearCartDialog(
       BuildContext context, CartController controller) async {
+    final labels = AppLocalization.getLabels(context);
     return showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           backgroundColor: Theme.of(context).cardColor,
           title: Text(
-            'Sepeti Temizle',
+            labels.clearCart,
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: Theme.of(context).colorScheme.onSurface,
                 ),
           ),
           content: Text(
-            'Sepetteki tüm ürünleri silmek istediğinizden emin misiniz?',
+            labels.clearCartConfirmation,
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   color: Theme.of(context).colorScheme.onSurface,
                 ),
@@ -85,7 +87,7 @@ class _CartState extends State<Cart> {
           actions: <Widget>[
             TextButton(
               child: Text(
-                'İptal',
+                labels.cancel,
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.primary,
                 ),
@@ -94,7 +96,7 @@ class _CartState extends State<Cart> {
             ),
             TextButton(
               child: Text(
-                'Temizle',
+                labels.clear,
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.error,
                   fontWeight: FontWeight.bold,
@@ -114,13 +116,14 @@ class _CartState extends State<Cart> {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<CartController>();
+    final labels = AppLocalization.getLabels(context);
 
     return GetBuilder<CartController>(
       builder: (controller) {
         return Scaffold(
           key: controller.scaffoldKey,
           appBar: AppBar(
-            title: const Text('Sepetim'),
+            title: Text(labels.cart),
             actions: [
               if (controller.itemList.isNotEmpty)
                 IconButton(
@@ -178,7 +181,7 @@ class _CartState extends State<Cart> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  'Toplam Tutar:',
+                                  labels.totalAmount,
                                   style: context.titleMedium,
                                 ),
                                 Obx(
@@ -204,7 +207,7 @@ class _CartState extends State<Cart> {
                                       ),
                                       SizedBox(width: ModulePadding.xs.value),
                                       Text(
-                                        'Sipariş Notu',
+                                        labels.orderNote,
                                         style: context.titleSmall,
                                       ),
                                       const Spacer(),
@@ -226,8 +229,7 @@ class _CartState extends State<Cart> {
                                       controller:
                                           controller.descriptionController,
                                       decoration: InputDecoration(
-                                        hintText:
-                                            'Siparişiniz için not ekleyin...',
+                                        hintText: labels.addOrderNote,
                                         border: OutlineInputBorder(
                                           borderRadius: BorderRadius.circular(
                                               ModuleRadius.s.value),
@@ -246,8 +248,8 @@ class _CartState extends State<Cart> {
                               child: ModuleButton.primary(
                                 onTap: controller.completeOrder,
                                 title: controller.editingOrderId?.value != 0
-                                    ? 'Sipariş Güncelle'
-                                    : 'Siparişi Tamamla',
+                                    ? labels.updateOrder
+                                    : labels.completeOrder,
                               ),
                             ),
                           ],
@@ -269,9 +271,8 @@ class _CartState extends State<Cart> {
                       child: AnimatedSwitcher(
                         duration: const Duration(milliseconds: 300),
                         child: controller.itemList.isEmpty
-                            ? const EmptyView(
-                                message:
-                                    'Sepete ürün eklenmemiştir.\nSepete eklediğiniz bütün ürünler burada listelenecektir!',
+                            ? EmptyView(
+                                message: labels.emptyCartMessage,
                               )
                             : Padding(
                                 padding: EdgeInsets.all(ModulePadding.s.value),
@@ -293,78 +294,7 @@ class _CartState extends State<Cart> {
                                           color: Colors.white,
                                         ),
                                       ),
-                                      confirmDismiss: (direction) async {
-                                        return await showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return AlertDialog(
-                                              backgroundColor:
-                                                  Theme.of(context).cardColor,
-                                              title: Text(
-                                                'Ürünü Sil',
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .titleLarge
-                                                    ?.copyWith(
-                                                      color: Colors.red,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                              ),
-                                              content: Text(
-                                                'Ürünü sepetten silmek istediğinize emin misiniz?\n\n${item.name}',
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyMedium
-                                                    ?.copyWith(
-                                                      color: Theme.of(context)
-                                                          .textTheme
-                                                          .bodyLarge
-                                                          ?.color,
-                                                    ),
-                                              ),
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
-                                              ),
-                                              actions: <Widget>[
-                                                TextButton(
-                                                  onPressed: () =>
-                                                      Navigator.of(context)
-                                                          .pop(false),
-                                                  style: TextButton.styleFrom(
-                                                    foregroundColor:
-                                                        Colors.grey[600],
-                                                  ),
-                                                  child: const Text('İptal'),
-                                                ),
-                                                TextButton(
-                                                  onPressed: () =>
-                                                      Navigator.of(context)
-                                                          .pop(true),
-                                                  style: TextButton.styleFrom(
-                                                    foregroundColor: Colors.red,
-                                                    backgroundColor: Colors.red
-                                                        .withOpacity(0.1),
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                      horizontal: 16,
-                                                      vertical: 8,
-                                                    ),
-                                                  ),
-                                                  child: const Text(
-                                                    'Sil',
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  ),
-                                                ),
-                                              ],
-                                            );
-                                          },
-                                        );
-                                      },
-                                      onDismissed: (direction) =>
+                                      onDismissed: (_) =>
                                           controller.onTapRemoveProduct(item),
                                       child: _ProductCard(
                                         item: item,
@@ -373,18 +303,13 @@ class _CartState extends State<Cart> {
                                       ),
                                     );
                                   },
-                                  separatorBuilder: (context, index) =>
-                                      SizedBox(
-                                    height: ModulePadding.xs.value,
+                                  separatorBuilder: (_, __) => SizedBox(
+                                    height: ModulePadding.s.value,
                                   ),
                                   itemCount: controller.itemList.length,
                                 ),
                               ),
                       ),
-                    ),
-                    // Add extra space at bottom for the floating action button
-                    const SliverToBoxAdapter(
-                      child: SizedBox(height: 160),
                     ),
                   ],
                 ),
@@ -392,7 +317,7 @@ class _CartState extends State<Cart> {
               if (_showScrollButton)
                 Positioned(
                   right: ModulePadding.m.value,
-                  bottom: 200,
+                  bottom: ModulePadding.m.value,
                   child: FloatingActionButton(
                     mini: true,
                     onPressed: _scrollToBottom,

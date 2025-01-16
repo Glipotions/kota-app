@@ -58,7 +58,7 @@ class _OrderCard extends StatelessWidget {
                               const SizedBox(width: 4),
                               Expanded(
                                 child: Text(
-                                  'Alt şube: ${item.connectedBranchCurrentInfoName}',
+                                  'Alt cari: ${item.connectedBranchCurrentInfoName}',
                                   style: context.bodySmall?.copyWith(
                                     color: isDarkMode
                                         ? Colors.grey[400]
