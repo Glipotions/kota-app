@@ -1,6 +1,8 @@
 import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:get/get.dart';
+import 'package:kota_app/product/controllers/localization_controller.dart';
 import 'package:kota_app/product/init/application_initialize.dart';
 import 'package:kota_app/product/init/theme/module_theme.dart';
 import 'package:kota_app/product/navigation/routing_manager.dart';
@@ -12,6 +14,10 @@ import 'package:widgets/widget.dart';
 Future<void> run(EnvironmentConfigModel config) async {
   await ApplicationInitialize().make(config);
   HttpOverrides.global = MyHttpOverrides();
+  
+  // Initialize LocalizationController before GetMaterialApp
+  Get.put(LocalizationController(), permanent: true);
+  
   runApp(App(title: config.appName));
 }
 
@@ -35,8 +41,11 @@ class App extends StatelessWidget {
           final model = snapshot.data;
           return LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {
-              return MaterialApp.router(
-                routerConfig: RoutingManager.instance.router,
+              return GetMaterialApp.router(
+                routerDelegate: RoutingManager.instance.router.routerDelegate,
+                routeInformationParser: RoutingManager.instance.router.routeInformationParser,
+                routeInformationProvider: RoutingManager.instance.router.routeInformationProvider,
+                backButtonDispatcher: RoutingManager.instance.router.backButtonDispatcher,
                 locale: model!.locale,
                 supportedLocales: getSupportedLocalList,
                 localizationsDelegates: [

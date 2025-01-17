@@ -149,4 +149,61 @@ abstract class AppLocalizationLabel {
   String get updateOrder;
   String get emptyCartMessage;
   String get removeFromCart;
+  String get addToCart;
+  String get updateCart;
+  String get inStock;
+  String get outOfStock;
+  String get selectColorAndSize;
+  String get enterValidQuantity;
+  String get productAddedToCart;
+
+  // Profile Screen
+  String get profile;
+  String get balance;
+  String get pastOrders;
+  String get pastOrdersDescription;
+  String get transactions;
+  String get transactionsDescription;
+  String get support;
+  String get supportDescription;
+  String get userAccountInfo;
+  String get userAccountInfoDescription;
+  String get signOut;
+  String get signOutDescription;
+
+  // Order History Screen
+  String get orderHistory;
+  String get noOrders;
+  String get subAccount;
+  String get orderNumber;
+  String get deleteOrder;
+  String get deleteOrderConfirmation;
+  String get details;
+  String get edit;
+  String get downloadPdf;
+  String get waiting;
+  String get completed;
+  String get preparing;
+
+  // Transaction History Screen
+  String get transactionHistory;
+  String get currentBalance;
+  String get income;
+  String get expense;
+  String get searchTransactions;
+  String get noTransactions;
+
+  // Product Detail Screen
+  String get productDetail;
+  String get productsInCart;
+  String get piece;
+  String get removeProduct;
+  String get removeProductConfirm;
+  String get remove;
+  String get colorSelection;
+  String get sizeSelection;
+  String get noProductInCart;
+
+  // Bottom Navigation Bar
+  String get home;
 }

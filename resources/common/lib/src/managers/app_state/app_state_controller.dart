@@ -79,26 +79,11 @@ class AppStateController {
       );
 
   Locale _initLocale() {
-    // if (getCurrentLanCode == null) {
-    //   var isLanguageExist = false;
-    //   final userLanCode = Platform.localeName.split('-')[0];
-    //   supportedLocalization.forEach((key, value) {
-    //     if (value.lanCode == userLanCode) {
-    //       isLanguageExist = true;
-    //     }
-    //   });
-    //   _localeManager.setStringValue(
-    //     key: lanCacheKey,
-    //     value: isLanguageExist ? userLanCode : 'tr',
-    //   );
-
-    //   return Locale(isLanguageExist ? userLanCode : 'tr');
-    // } else {
-    //   return Locale(_localeManager.getStringValue(key: lanCacheKey)!);
-    // }
-
-      return const Locale('tr');
-
+    final savedLanCode = _localeManager.getStringValue(key: lanCacheKey);
+    if (savedLanCode != null) {
+      return Locale(savedLanCode);
+    }
+    return const Locale('tr');
   }
 
   ///Returns current theme code.

@@ -24,8 +24,9 @@ class ManageAccountController extends BaseControllerInterface {
 
   void changeLanguage(String languageCode) {
     final countryCode = languageCode.toUpperCase();
-    LocalizationController.instance
-        .changeLocale(Locale(languageCode, countryCode));
+    final localizationController = Get.find<LocalizationController>();
+    localizationController.changeLocale(Locale(languageCode, countryCode));
+    Get.updateLocale(Locale(languageCode, countryCode));
   }
 
   @override

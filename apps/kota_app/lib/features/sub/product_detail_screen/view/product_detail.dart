@@ -13,6 +13,7 @@ import 'package:kota_app/product/widgets/card/bordered_image.dart';
 import 'package:kota_app/product/widgets/chip/custom_choice_chip.dart';
 import 'package:kota_app/product/widgets/other/stock_information.dart';
 import 'package:values/values.dart';
+import 'package:common/common.dart';
 
 class ProductDetail extends StatelessWidget {
   const ProductDetail({required this.controller, super.key});
@@ -64,6 +65,7 @@ class ProductDetail extends StatelessWidget {
   }
 
   void _showCartPopup(BuildContext context, CartController cartController) {
+    final labels = AppLocalization.getLabels(context);
     final currentProductGroupId =
         controller.selectedProductVariant?.productCodeGroupId;
     if (currentProductGroupId == null) return;
@@ -74,9 +76,9 @@ class ProductDetail extends StatelessWidget {
 
     if (cartItems.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Bu üründen sepetinizde bulunmamaktadır.'),
-          duration: Duration(seconds: 2),
+        SnackBar(
+          content: Text(labels.noProductInCart),
+          duration: const Duration(seconds: 2),
         ),
       );
       return;
@@ -104,7 +106,7 @@ class ProductDetail extends StatelessWidget {
                   child: Row(
                     children: [
                       Text(
-                        'Sepetteki Ürünler',
+                        labels.productsInCart,
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
                       const SizedBox(width: 8),
@@ -142,7 +144,7 @@ class ProductDetail extends StatelessWidget {
                               ),
                               const SizedBox(width: 4),
                               Text(
-                                '$totalQuantity adet',
+                                '$totalQuantity ${labels.piece}',
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyMedium
@@ -256,7 +258,7 @@ class ProductDetail extends StatelessWidget {
                                                       BorderRadius.circular(15),
                                                 ),
                                                 title: Text(
-                                                  'Ürünü Sil',
+                                                  labels.removeProduct,
                                                   style: Theme.of(context)
                                                       .textTheme
                                                       .titleLarge
@@ -267,7 +269,7 @@ class ProductDetail extends StatelessWidget {
                                                       ),
                                                 ),
                                                 content: Text(
-                                                  'Bu ürünü sepetten silmek istediğinize emin misiniz?',
+                                                  labels.removeProductConfirm,
                                                   style: Theme.of(context)
                                                       .textTheme
                                                       .bodyMedium
@@ -281,9 +283,9 @@ class ProductDetail extends StatelessWidget {
                                                       foregroundColor:
                                                           Colors.grey[700],
                                                     ),
-                                                    child: const Text(
-                                                      'İptal',
-                                                      style: TextStyle(
+                                                    child: Text(
+                                                      labels.cancel,
+                                                      style: const TextStyle(
                                                           fontWeight:
                                                               FontWeight.w500),
                                                     ),
@@ -297,9 +299,9 @@ class ProductDetail extends StatelessWidget {
                                                       foregroundColor:
                                                           Colors.red,
                                                     ),
-                                                    child: const Text(
-                                                      'Sil',
-                                                      style: TextStyle(
+                                                    child: Text(
+                                                      labels.remove,
+                                                      style: const TextStyle(
                                                         fontWeight:
                                                             FontWeight.bold,
                                                       ),
@@ -339,6 +341,7 @@ class ProductDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final labels = AppLocalization.getLabels(context);
     final CartController cartCont = Get.put(CartController());
 
     return GestureDetector(
@@ -346,7 +349,7 @@ class ProductDetail extends StatelessWidget {
       child: Scaffold(
         key: controller.scaffoldKey,
         appBar: GeneralAppBar(
-          title: 'Ürün Detay',
+          title: labels.productDetail,
           additionalIcon: IconButton(
             icon: const Icon(Icons.shopping_basket_outlined),
             onPressed: () => _showCartPopup(context, cartCont),
@@ -454,7 +457,7 @@ class ProductDetail extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Renk Seçimi',
+                                    labels.colorSelection,
                                     style:
                                         Theme.of(context).textTheme.titleMedium,
                                   ),
@@ -492,7 +495,7 @@ class ProductDetail extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Beden Seçimi',
+                                    labels.sizeSelection,
                                     style:
                                         Theme.of(context).textTheme.titleMedium,
                                   ),

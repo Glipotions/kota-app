@@ -63,6 +63,14 @@ class _CartState extends State<Cart> {
     );
   }
 
+  void _scrollToTop() {
+    _scrollController.animateTo(
+      0,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOut,
+    );
+  }
+
   Future<void> _showClearCartDialog(
     BuildContext context,
     CartController controller,
@@ -281,6 +289,9 @@ class _CartState extends State<Cart> {
                                 child: ListView.separated(
                                   physics: const NeverScrollableScrollPhysics(),
                                   shrinkWrap: true,
+                                  padding: const EdgeInsets.only(
+                                    bottom: 180, // Add padding for the complete order section
+                                  ),
                                   itemBuilder: (context, index) {
                                     final item = controller.itemList[index];
                                     return Dismissible(
@@ -320,6 +331,16 @@ class _CartState extends State<Cart> {
               if (_showScrollButton)
                 Positioned(
                   right: ModulePadding.m.value,
+                  bottom: ModulePadding.m.value + 180,
+                  child: FloatingActionButton(
+                    mini: true,
+                    onPressed: _scrollToTop,
+                    child: const Icon(Icons.keyboard_arrow_up),
+                  ),
+                ),
+              if (_showScrollButton)
+                Positioned(
+                  right: ModulePadding.m.value,
                   bottom: ModulePadding.m.value,
                   child: FloatingActionButton(
                     mini: true,
@@ -355,10 +376,10 @@ class _CartState extends State<Cart> {
 
     // Create table header
     pw.TableRow buildTableHeader(pw.Font ttf) => pw.TableRow(
-          decoration: pw.BoxDecoration(
+          decoration: const pw.BoxDecoration(
             color: PdfColors.blue900,
             borderRadius:
-                const pw.BorderRadius.vertical(top: pw.Radius.circular(4)),
+                pw.BorderRadius.vertical(top: pw.Radius.circular(4)),
           ),
           children: [
             pw.Padding(

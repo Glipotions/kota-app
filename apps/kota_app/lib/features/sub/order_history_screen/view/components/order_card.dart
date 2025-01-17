@@ -9,6 +9,7 @@ class _OrderCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final labels = AppLocalization.getLabels(context);
 
     return Card(
       elevation: 2,
@@ -35,7 +36,7 @@ class _OrderCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Sipariş #${item.kod ?? ''}',
+                          '${labels.orderNumber} #${item.kod ?? ''}',
                           style: context.titleMedium.copyWith(
                             fontWeight: FontWeight.bold,
                             color: isDarkMode ? Colors.white : Colors.black87,
@@ -59,7 +60,7 @@ class _OrderCard extends StatelessWidget {
                               const SizedBox(width: 4),
                               Expanded(
                                 child: Text(
-                                  'Alt cari: ${item.connectedBranchCurrentInfoName}',
+                                  '${labels.subAccount}: ${item.connectedBranchCurrentInfoName}',
                                   style: context.bodySmall.copyWith(
                                     color: isDarkMode
                                         ? Colors.grey[400]
@@ -138,11 +139,11 @@ class _OrderCard extends StatelessWidget {
                     ),
                     onSelected: (value) {
                       switch (value) {
-                        case 'Gör':
+                        case 'view':
                           controller.onTapOrderHistoryDetail(item.id!);
-                        case 'Düzenle':
+                        case 'edit':
                           controller.onTapEditOrder(item.id!);
-                        case 'Sil':
+                        case 'delete':
                           showDialog<bool>(
                             context: context,
                             barrierDismissible: false,
@@ -157,7 +158,7 @@ class _OrderCard extends StatelessWidget {
                                 size: 32,
                               ),
                               title: Text(
-                                'Siparişi Sil',
+                                labels.deleteOrder,
                                 style: TextStyle(
                                   color: Theme.of(context)
                                       .textTheme
@@ -167,7 +168,7 @@ class _OrderCard extends StatelessWidget {
                                 ),
                               ),
                               content: Text(
-                                'Bu siparişi silmek istediğinizden emin misiniz?',
+                                labels.deleteOrderConfirmation,
                                 style: TextStyle(
                                   color: Theme.of(context)
                                       .textTheme
@@ -180,7 +181,7 @@ class _OrderCard extends StatelessWidget {
                                   onPressed: () =>
                                       Navigator.of(context).pop(false),
                                   child: Text(
-                                    'İptal',
+                                    labels.cancel,
                                     style: TextStyle(
                                       color: Theme.of(context)
                                           .textTheme
@@ -203,57 +204,57 @@ class _OrderCard extends StatelessWidget {
                                       borderRadius: BorderRadius.circular(8),
                                     ),
                                   ),
-                                  child: const Text('Sil'),
+                                  child: Text(labels.delete),
                                 ),
                               ],
                               actionsPadding: const EdgeInsets.all(16),
                             ),
                           );
-                        case 'Pdf':
+                        case 'pdf':
                           controller.onTapOrderPdfCard(item.id!);
                       }
                     },
                     itemBuilder: (BuildContext context) {
                       return [
-                        const PopupMenuItem(
-                          value: 'Gör',
+                        PopupMenuItem(
+                          value: 'view',
                           child: Row(
                             children: [
-                              Icon(Icons.visibility_outlined, size: 20),
-                              SizedBox(width: 8),
-                              Text('Detaylar'),
+                              const Icon(Icons.visibility_outlined, size: 20),
+                              const SizedBox(width: 8),
+                              Text(labels.details),
                             ],
                           ),
                         ),
                         if (item.canBeDeleted ?? false || kDebugMode)
-                          const PopupMenuItem(
-                            value: 'Düzenle',
+                          PopupMenuItem(
+                            value: 'edit',
                             child: Row(
                               children: [
-                                Icon(Icons.edit_outlined, size: 20),
-                                SizedBox(width: 8),
-                                Text('Düzenle'),
+                                const Icon(Icons.edit_outlined, size: 20),
+                                const SizedBox(width: 8),
+                                Text(labels.edit),
                               ],
                             ),
                           ),
                         if (item.canBeDeleted ?? false || kDebugMode)
-                          const PopupMenuItem(
-                            value: 'Sil',
+                          PopupMenuItem(
+                            value: 'delete',
                             child: Row(
                               children: [
-                                Icon(Icons.delete_outline, size: 20),
-                                SizedBox(width: 8),
-                                Text('Sil'),
+                                const Icon(Icons.delete_outline, size: 20),
+                                const SizedBox(width: 8),
+                                Text(labels.delete),
                               ],
                             ),
                           ),
-                        const PopupMenuItem(
-                          value: 'Pdf',
+                        PopupMenuItem(
+                          value: 'pdf',
                           child: Row(
                             children: [
-                              Icon(Icons.picture_as_pdf_outlined, size: 20),
-                              SizedBox(width: 8),
-                              Text('PDF İndir'),
+                              const Icon(Icons.picture_as_pdf_outlined, size: 20),
+                              const SizedBox(width: 8),
+                              Text(labels.downloadPdf),
                             ],
                           ),
                         ),
@@ -307,10 +308,10 @@ class _OrderCard extends StatelessWidget {
                         const SizedBox(width: 4),
                         Text(
                           item.canBeDeleted!
-                              ? 'Bekliyor'
+                              ? labels.waiting
                               : !item.durum!
-                                  ? 'Tamamlandı'
-                                  : 'Hazırlanıyor',
+                                  ? labels.completed
+                                  : labels.preparing,
                           style: context.labelMedium.copyWith(
                             color: item.canBeDeleted!
                                 ? Colors.amber.shade700
@@ -328,7 +329,7 @@ class _OrderCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                        'Toplam Tutar',
+                        labels.totalAmount,
                         style: context.labelSmall.copyWith(
                           color:
                               isDarkMode ? Colors.grey[300] : Colors.grey[600],

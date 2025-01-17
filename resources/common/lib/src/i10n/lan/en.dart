@@ -175,4 +175,151 @@ class EnLocalization extends AppLocalizationLabel {
   String get emptyCartMessage => 'No items in cart.\nAll items you add to cart will be listed here!';
   @override
   String get removeFromCart => 'Remove from Cart';
+
+  @override
+  String get addToCart => 'Add to Cart';
+
+  @override
+  String get updateCart => 'Update Cart';
+
+  @override
+  String get inStock => 'In Stock';
+
+  @override
+  String get outOfStock => 'Out of Stock';
+
+  @override
+  String get selectColorAndSize => 'Please select color and size.';
+
+  @override
+  String get enterValidQuantity => 'Please enter a valid quantity.';
+
+  @override
+  String get productAddedToCart => 'Product added to cart';
+
+  // Profile Screen
+  @override
+  String get profile => 'Profile';
+
+  @override
+  String get balance => 'Balance';
+
+  @override
+  String get pastOrders => 'Past Orders';
+
+  @override
+  String get pastOrdersDescription => 'View your past orders.';
+
+  @override
+  String get transactions => 'Transactions';
+
+  @override
+  String get transactionsDescription => 'View your past transactions.';
+
+  @override
+  String get support => 'Support';
+
+  @override
+  String get supportDescription => 'Contact support for assistance.';
+
+  @override
+  String get userAccountInfo => 'Account Info';
+
+  @override
+  String get userAccountInfoDescription => 'View your account information.';
+
+  @override
+  String get signOut => 'Sign Out';
+
+  @override
+  String get signOutDescription => 'Sign out from your account.';
+
+  // Order History Screen
+  @override
+  String get orderHistory => 'Order History';
+
+  @override
+  String get noOrders => 'No past orders found.';
+
+  @override
+  String get subAccount => 'Sub Account';
+
+  @override
+  String get orderNumber => 'Order';
+
+  @override
+  String get deleteOrder => 'Delete Order';
+
+  @override
+  String get deleteOrderConfirmation => 'Are you sure you want to delete this order?';
+
+  @override
+  String get details => 'Details';
+
+  @override
+  String get edit => 'Edit';
+
+  @override
+  String get downloadPdf => 'Download PDF';
+
+  @override
+  String get waiting => 'Waiting';
+
+  @override
+  String get completed => 'Completed';
+
+  @override
+  String get preparing => 'Preparing';
+
+  // Transaction History Screen
+  @override
+  String get transactionHistory => 'Transaction History';
+
+  @override
+  String get currentBalance => 'Current Balance';
+
+  @override
+  String get income => 'Income';
+
+  @override
+  String get expense => 'Expense';
+
+  @override
+  String get searchTransactions => 'Search transactions...';
+
+  @override
+  String get noTransactions => 'No transactions found.';
+
+  // Product Detail Screen
+  @override
+  String get productDetail => 'Product Detail';
+
+  @override
+  String get productsInCart => 'Products in Cart';
+
+  @override
+  String get piece => 'pieces';
+
+  @override
+  String get removeProduct => 'Remove Product';
+
+  @override
+  String get removeProductConfirm => 'Are you sure you want to remove this product from cart?';
+
+  @override
+  String get remove => 'Remove';
+
+  @override
+  String get colorSelection => 'Color Selection';
+
+  @override
+  String get sizeSelection => 'Size Selection';
+
+  @override
+  String get noProductInCart => 'This product is not in your cart.';
+
+  // Bottom Navigation Bar
+  @override
+  String get home => 'Home';
+
 }

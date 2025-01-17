@@ -1,4 +1,5 @@
 import 'package:api/api.dart';
+import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
@@ -56,36 +57,39 @@ class ProfileController extends BaseControllerInterface {
 
   void onTapLogout() => SessionHandler.instance.logOut();
 
-  List<OptionTileModel> get profileOptions => [
-        OptionTileModel(
-          title: 'Geçmiş Siparişler',
-          subTitle: 'Geçmiş siparişlerinizi görüntüleyebilirsiniz.',
-          icon: const Icon(Icons.shopping_bag),
-          onTap: onTapPastOrders,
-        ),
-        OptionTileModel(
-          title: 'Cari Hareketler',
-          subTitle: 'Geçmiş cari hareketlerinizi görüntüleyebilirsiniz.',
-          icon: const Icon(Icons.attach_money),
-          onTap: onTapPastTransactions,
-        ),
-        OptionTileModel(
-          title: 'Destek',
-          subTitle: 'Destek ile iletişime geçebilirsiniz.',
-          icon: const Icon(Icons.call),
-          onTap: onTapSupport,
-        ),
-        OptionTileModel(
-          title: 'Kullanıcı Bilgilerim',
-          subTitle: 'Hesap bilgilerinizi görüntüleyebilirsiniz.',
-          icon: const Icon(Icons.manage_accounts),
-          onTap: onTapManageAccount,
-        ),
-        OptionTileModel(
-          title: 'Çıkış Yap',
-          subTitle: 'Çıkış yapabilirsiniz.',
-          icon: const Icon(Icons.logout),
-          onTap: onTapLogout,
-        ),
-      ];
+  List<OptionTileModel> getProfileOptions(BuildContext context) {
+    final labels = AppLocalization.getLabels(context);
+    return [
+      OptionTileModel(
+        title: labels.pastOrders,
+        subTitle: labels.pastOrdersDescription,
+        icon: const Icon(Icons.shopping_bag),
+        onTap: onTapPastOrders,
+      ),
+      OptionTileModel(
+        title: labels.transactions,
+        subTitle: labels.transactionsDescription,
+        icon: const Icon(Icons.attach_money),
+        onTap: onTapPastTransactions,
+      ),
+      OptionTileModel(
+        title: labels.support,
+        subTitle: labels.supportDescription,
+        icon: const Icon(Icons.call),
+        onTap: onTapSupport,
+      ),
+      OptionTileModel(
+        title: labels.userAccountInfo,
+        subTitle: labels.userAccountInfoDescription,
+        icon: const Icon(Icons.manage_accounts),
+        onTap: onTapManageAccount,
+      ),
+      OptionTileModel(
+        title: labels.signOut,
+        subTitle: labels.signOutDescription,
+        icon: const Icon(Icons.logout),
+        onTap: onTapLogout,
+      ),
+    ];
+  }
 }

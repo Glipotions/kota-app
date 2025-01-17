@@ -1,3 +1,4 @@
+import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kota_app/product/managers/cart_controller.dart';
@@ -18,17 +19,18 @@ class AddToCartText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cartCont = Get.find<CartController>();
+    final labels = AppLocalization.getLabels(context);
     return Obx(
       () => ModernCartButton(
         text: cartCont.inChartItemById(item.id) != null
-            ? 'Sepeti Güncelle'
-            : 'Sepete Ekle',
+            ? labels.updateCart
+            : labels.addToCart,
         icon: Icons.shopping_cart_outlined,
         onTap: () {
           final qty = int.tryParse(cCont.text);
           if (item.id == 0) {
             ToastMessage.showToastMessage(
-              message: 'Lütfen Renk ve Beden Seçiniz.',
+              message: labels.selectColorAndSize,
               type: ToastMessageType.error,
             );
           } else {
@@ -40,12 +42,12 @@ class AddToCartText extends StatelessWidget {
                 cartCont.onTapAddProduct(item.copyWith(quantity: qty));
               }
               ToastMessage.showToastMessage(
-                message: 'Ürün Sepete Eklendi',
+                message: labels.productAddedToCart,
                 type: ToastMessageType.success,
               );
             } else {
               ToastMessage.showToastMessage(
-                message: 'Lütfen geçerli bir adet giriniz.',
+                message: labels.enterValidQuantity,
                 type: ToastMessageType.error,
               );
             }

@@ -1,4 +1,5 @@
 import 'package:api/api.dart';
+import 'package:common/common.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -21,11 +22,12 @@ class OrderHistory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final labels = AppLocalization.getLabels(context);
     return Scaffold(
       key: controller.scaffoldKey,
       appBar: AppBar(
         forceMaterialTransparency: true,
-        title: const Text('Geçmiş Siparişler'),
+        title: Text(labels.orderHistory),
         actions: [
           if (SessionHandler.instance.hasClaim(saleInvoiceAdminClaim))
             IconButton(
@@ -85,8 +87,8 @@ class OrderHistory extends StatelessWidget {
                   ),
                 ).isVisible(
                   value: controller.orderItems.isNotEmpty,
-                  child: const EmptyView(
-                    message: 'Geçmiş sipariş bulunmamaktadır.',
+                  child: EmptyView(
+                    message: labels.noOrders,
                   ),
                 ),
               ),

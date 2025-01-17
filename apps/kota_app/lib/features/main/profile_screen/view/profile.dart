@@ -1,3 +1,4 @@
+import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kota_app/features/main/profile_screen/controller/profile_controller.dart';
@@ -14,13 +15,13 @@ class Profile extends StatelessWidget {
 
   final ProfileController controller;
 
-
   @override
   Widget build(BuildContext context) {
+    final labels = AppLocalization.getLabels(context);
     return Scaffold(
       key: controller.scaffoldKey,
       appBar: GeneralAppBar(
-        title: 'Profil',
+        title: labels.profile,
         leading: const SizedBox(),
         elevation: 0,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -39,7 +40,6 @@ class Profile extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // User info section if needed
                   Obx(
                     () => _BalanceCard(
                       balance: controller.balance.balance ?? 0,
@@ -53,15 +53,14 @@ class Profile extends StatelessWidget {
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
-                        final item = controller.profileOptions[index];
+                        final item = controller.getProfileOptions(context)[index];
                         return _OptionTile(item: item);
                       },
                       separatorBuilder: (context, index) =>
                           SizedBox(height: ModulePadding.xs.value),
-                      itemCount: controller.profileOptions.length,
+                      itemCount: controller.getProfileOptions(context).length,
                     ),
                   ),
-                  // Bottom padding for better scroll experience
                   SizedBox(height: ModulePadding.s.value),
                 ],
               ),

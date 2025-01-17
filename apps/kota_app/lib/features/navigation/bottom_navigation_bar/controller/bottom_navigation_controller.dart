@@ -1,3 +1,4 @@
+import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
@@ -15,26 +16,29 @@ class BottomNavigationController extends BaseControllerInterface {
   set selectedIndex(int value) => _selectedIndex.value = value;
 
   ///Items to display on bottom bar.
-  List<MyCustomBottomNavBarItem> tabs (BuildContext localeContext) => [
-        MyCustomBottomNavBarItem(
-          icon: const Icon(Icons.home),
-          activeIcon: const Icon(Icons.home),
-          label: 'Ana Sayfa',
-          location: BottomNavigationRouteEnum.allProductsScreen.name,
-        ),
-        MyCustomBottomNavBarItem(
-          icon: const Icon(Icons.shopping_cart),
-          activeIcon: const Icon(Icons.shopping_cart),
-          label: 'Sepetim',
-          location: BottomNavigationRouteEnum.cartScreen.name,
-        ),
-        MyCustomBottomNavBarItem(
-          icon: const Icon(Icons.person),
-          activeIcon: const Icon(Icons.person),
-          label: 'Profil',
-          location: BottomNavigationRouteEnum.profileScreen.name,
-        ),
-      ];
+  List<MyCustomBottomNavBarItem> tabs(BuildContext localeContext) {
+    final labels = AppLocalization.getLabels(localeContext);
+    return [
+      MyCustomBottomNavBarItem(
+        icon: const Icon(Icons.home),
+        activeIcon: const Icon(Icons.home),
+        label: labels.home,
+        location: BottomNavigationRouteEnum.allProductsScreen.name,
+      ),
+      MyCustomBottomNavBarItem(
+        icon: const Icon(Icons.shopping_cart),
+        activeIcon: const Icon(Icons.shopping_cart),
+        label: labels.cart,
+        location: BottomNavigationRouteEnum.cartScreen.name,
+      ),
+      MyCustomBottomNavBarItem(
+        icon: const Icon(Icons.person),
+        activeIcon: const Icon(Icons.person),
+        label: labels.profile,
+        location: BottomNavigationRouteEnum.profileScreen.name,
+      ),
+    ];
+  }
 
   ///Function that handles bottom bar taps.
   void onTapBottomBarItem(int index) {

@@ -174,4 +174,150 @@ class TrLocalization extends AppLocalizationLabel {
   String get emptyCartMessage => 'Sepete ürün eklenmemiştir.\nSepete eklediğiniz bütün ürünler burada listelenecektir!';
   @override
   String get removeFromCart => 'Sepetten Kaldır';
+
+  @override
+  String get profile => 'Profil';
+
+  @override
+  String get balance => 'Bakiye';
+
+  // Profile Screen
+  @override
+  String get pastOrders => 'Geçmiş Siparişler';
+
+  @override
+  String get pastOrdersDescription => 'Geçmiş siparişlerinizi görüntüleyebilirsiniz.';
+
+  @override
+  String get transactions => 'Cari Hareketler';
+
+  @override
+  String get transactionsDescription => 'Geçmiş cari hareketlerinizi görüntüleyebilirsiniz.';
+
+  @override
+  String get support => 'Destek';
+
+  @override
+  String get supportDescription => 'Destek ile iletişime geçebilirsiniz.';
+
+  @override
+  String get userAccountInfo => 'Kullanıcı Bilgilerim';
+
+  @override
+  String get userAccountInfoDescription => 'Hesap bilgilerinizi görüntüleyebilirsiniz.';
+
+  @override
+  String get signOut => 'Çıkış Yap';
+
+  @override
+  String get signOutDescription => 'Çıkış yapabilirsiniz.';
+
+  // Order History Screen
+  @override
+  String get orderHistory => 'Geçmiş Siparişler';
+
+  @override
+  String get noOrders => 'Geçmiş sipariş bulunmamaktadır.';
+
+  @override
+  String get subAccount => 'Alt cari';
+
+  @override
+  String get orderNumber => 'Sipariş';
+
+  @override
+  String get deleteOrder => 'Siparişi Sil';
+
+  @override
+  String get deleteOrderConfirmation => 'Bu siparişi silmek istediğinizden emin misiniz?';
+
+  @override
+  String get details => 'Detaylar';
+
+  @override
+  String get edit => 'Düzenle';
+
+  @override
+  String get downloadPdf => 'PDF İndir';
+
+  @override
+  String get waiting => 'Bekliyor';
+
+  @override
+  String get completed => 'Tamamlandı';
+
+  @override
+  String get preparing => 'Hazırlanıyor';
+
+  // Transaction History Screen
+  @override
+  String get transactionHistory => 'Hesap Hareketleri';
+
+  @override
+  String get currentBalance => 'Güncel Bakiye';
+
+  @override
+  String get income => 'Gelir';
+
+  @override
+  String get expense => 'Gider';
+
+  @override
+  String get searchTransactions => 'Hesap hareketleri ara...';
+
+  @override
+  String get noTransactions => 'Hesap hareketleri bulunamadı.';
+
+  // Product Detail Screen
+  @override
+  String get productDetail => 'Ürün Detay';
+
+  @override
+  String get productsInCart => 'Sepetteki Ürünler';
+
+  @override
+  String get piece => 'adet';
+
+  @override
+  String get removeProduct => 'Ürünü Sil';
+
+  @override
+  String get removeProductConfirm => 'Bu ürünü sepetten silmek istediğinize emin misiniz?';
+
+  @override
+  String get remove => 'Sil';
+
+  @override
+  String get colorSelection => 'Renk Seçimi';
+
+  @override
+  String get sizeSelection => 'Beden Seçimi';
+
+  @override
+  String get noProductInCart => 'Bu üründen sepetinizde bulunmamaktadır.';
+
+  @override
+  String get addToCart => 'Sepete Ekle';
+
+  @override
+  String get updateCart => 'Sepeti Güncelle';
+
+  @override
+  String get inStock => 'Stok Mevcut';
+
+  @override
+  String get outOfStock => 'Stok Mevcut Değil';
+
+  @override
+  String get selectColorAndSize => 'Lütfen Renk ve Beden Seçiniz.';
+
+  @override
+  String get enterValidQuantity => 'Lütfen geçerli bir adet giriniz.';
+
+  @override
+  String get productAddedToCart => 'Ürün Sepete Eklendi';
+
+  // Bottom Navigation Bar
+  @override
+  String get home => 'Ana Sayfa';
 }

@@ -49,36 +49,23 @@ class RoutingManager extends AbstractRoutingManager {
     redirect: (context, state) {
       final authHandler = SessionHandler.instance;
       if (authHandler.userAuthStatus == UserAuthStatus.notInitialized) {
-        // return AuthRouteScreens.loginScreen.path;
         return InitialRouteScreens.splashScreen.path;
       } else if (_instance.isUnauthorizedAndNotAuthScreenAndNotInitRoute(
         state.matchedLocation,
       )) {
-        // if (SessionHandler.instance.isInitRoute &&
-        //     SessionHandler.instance.isInitRoute2 == true) {
-        //   SessionHandler.instance.isInitRoute2 = false;
-        // } else {
-        //   SessionHandler.instance.isInitRoute = false;
-        // }
         if (SessionHandler.instance.isInitRoute) {
           SessionHandler.instance.isInitRoute = false;
-
           return BottomNavigationRouteEnum.allProductsScreen.path;
         }
         return state.matchedLocation;
-        // return AuthRouteScreens.loginScreen.path;
-      } else if (_instance
-          .isUnauthorizedAndNotAuthScreen(state.matchedLocation)) {
+      } else if (_instance.isUnauthorizedAndNotAuthScreen(state.matchedLocation)) {
         return AuthRouteScreens.loginScreen.path;
       } else if (_instance.isAuthorizedAndAuthScreen(state.matchedLocation)) {
         return BottomNavigationRouteEnum.allProductsScreen.path;
       }
       return null;
     },
-    errorPageBuilder: (context, state) => MaterialPage<void>(
-      key: state.pageKey,
-      child: const UnknownRouteScreen(),
-    ),
+    errorBuilder: (context, state) => const UnknownRouteScreen(),
   );
 
   @override

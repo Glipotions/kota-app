@@ -13,6 +13,7 @@ class _BalanceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final labels = AppLocalization.getLabels(context);
     return AspectRatio(
       aspectRatio: 343 / 180,
       child: InkWell(
@@ -63,7 +64,7 @@ class _BalanceCard extends StatelessWidget {
                       ),
                       SizedBox(width: ModulePadding.xs.value),
                       Text(
-                        'Bakiye',
+                        labels.balance,
                         style: context.titleLarge.copyWith(
                           fontWeight: FontWeight.w600,
                         ),

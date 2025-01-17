@@ -9,6 +9,7 @@ class _TransactionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDebit = item.borc != 0;
     final amount = isDebit ? item.borc ?? 0 : item.alacak ?? 0;
+    final labels = AppLocalization.getLabels(context);
 
     return Hero(
       tag: 'transaction_${item.fisNo}',
@@ -108,7 +109,7 @@ class _TransactionCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Bakiye',
+                        labels.balance,
                         style: context.bodyMedium.copyWith(
                           color: context.secondary.withOpacity(0.7),
                         ),

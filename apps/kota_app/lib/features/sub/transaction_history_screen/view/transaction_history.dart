@@ -1,4 +1,5 @@
 import 'package:api/api.dart';
+import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kota_app/features/sub/transaction_history_screen/controller/transaction_history_controller.dart';
@@ -16,18 +17,13 @@ class TransactionHistory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final labels = AppLocalization.getLabels(context);
     return Scaffold(
       key: controller.scaffoldKey,
       appBar: AppBar(
         forceMaterialTransparency: true,
-        title: const Text('Hesap Hareketleri'),
+        title: Text(labels.transactionHistory),
         actions: [
-          // IconButton(
-          //   icon: const Icon(Icons.person_outline),
-          //   onPressed: () {
-          //     // TODO: Implement profile settings
-          //   },
-          // ),
           IconButton(
             icon: const Icon(Icons.dark_mode),
             onPressed: () => controller.toggleTheme(),
@@ -53,7 +49,7 @@ class TransactionHistory extends StatelessWidget {
                         ),),
                     SizedBox(height: ModulePadding.xs.value),
                     Text(
-                      'Güncel Bakiye',
+                      labels.currentBalance,
                       style: context.titleSmall.copyWith(
                         color: context.secondary.withOpacity(0.7),
                       ),
@@ -66,13 +62,13 @@ class TransactionHistory extends StatelessWidget {
                           _SummaryTile(
                             icon: Icons.arrow_upward,
                             color: Colors.green,
-                            title: 'Gelir',
+                            title: labels.income,
                             amount: controller.totalIncome.formatPrice(),
                           ),
                           _SummaryTile(
                             icon: Icons.arrow_downward,
                             color: Colors.red,
-                            title: 'Gider',
+                            title: labels.expense,
                             amount: controller.totalExpense.formatPrice(),
                           ),
                         ],
@@ -95,7 +91,7 @@ class TransactionHistory extends StatelessWidget {
                     child: TextField(
                       controller: controller.searchController,
                       decoration: InputDecoration(
-                        hintText: 'Hesap hareketleri ara...',
+                        hintText: labels.searchTransactions,
                         prefixIcon: const Icon(Icons.search),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -104,11 +100,6 @@ class TransactionHistory extends StatelessWidget {
                       onChanged: controller.onSearchChanged,
                     ),
                   ),
-                  // SizedBox(width: ModulePadding.xs.value),
-                  // IconButton(
-                  //   icon: const Icon(Icons.filter_list),
-                  //   onPressed: controller.showFilterDialog,
-                  // ),
                 ],
               ),
             ),
@@ -119,8 +110,8 @@ class TransactionHistory extends StatelessWidget {
                 child: AnimatedSwitcher(
                   duration: const Duration(milliseconds: 300),
                   child: controller.transactionItems.isEmpty
-                      ? const EmptyView(
-                          message: 'Hesap hareketleri bulunamadı.',
+                      ? EmptyView(
+                          message: labels.noTransactions,
                         )
                       : ListView.separated(
                           physics: const AlwaysScrollableScrollPhysics(),

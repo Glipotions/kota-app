@@ -30,7 +30,6 @@ class ApplicationInitialize {
     WidgetsFlutterBinding.ensureInitialized();
     await LocaleManager.cacheInit();
 
-    // LocalNotificationHandler.instance;
     await ProductClient.clientInit(_config);
 
     await AppStateController.init(
