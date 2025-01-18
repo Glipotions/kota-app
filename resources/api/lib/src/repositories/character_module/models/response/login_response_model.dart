@@ -32,6 +32,7 @@ class User extends IBaseModel<User> {
     this.createdDate,
     this.updatedDate,
     this.currentAccountId,
+    this.currencyType,
   });
 
   int? id;
@@ -43,6 +44,7 @@ class User extends IBaseModel<User> {
   bool? hasConnectedBranch;
   int? periodId;
   int? connectedBranchCurrentInfoId;
+  int? currencyType;
   DateTime? createdDate;
   DateTime? updatedDate;
 
@@ -60,8 +62,8 @@ class User extends IBaseModel<User> {
             : DateTime.parse(json['createdDate']),
         updatedDate: json['updatedDate'],
         hasConnectedBranch: json['hasConnectedBranch'],
-        connectedBranchCurrentInfoId:
-            json['connectedBranchCurrentInfoId'],
+        connectedBranchCurrentInfoId: json['connectedBranchCurrentInfoId'],
+        currencyType: json['currencyType'],
       );
 
   @override

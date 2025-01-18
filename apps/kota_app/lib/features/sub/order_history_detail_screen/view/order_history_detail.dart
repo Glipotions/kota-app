@@ -1,3 +1,4 @@
+import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kota_app/features/sub/order_history_detail_screen/view/components/product_card.dart';
@@ -19,7 +20,7 @@ class OrderHistoryDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       key: controller.scaffoldKey,
-      appBar: const GeneralAppBar(title: 'Sipariş Detayı'),
+      appBar: GeneralAppBar(title: AppLocalization.getLabels(context).orderDetail),
       body: BaseView<OrderHistoryDetailController>(
         controller: controller,
         child: Padding(
@@ -48,8 +49,8 @@ class OrderHistoryDetail extends StatelessWidget {
                   ),
                 ).isVisible(
                   value: controller.cartProductItems.isNotEmpty,
-                  child: const EmptyView(
-                    message: 'Sipariş Detayı bulunmamaktadır.',
+                  child: EmptyView(
+                    message: AppLocalization.getLabels(context).noOrderDetail,
                   ),
                 ),
               ),

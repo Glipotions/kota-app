@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:api/api.dart';
+import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
@@ -106,7 +107,7 @@ class CartController extends BaseControllerInterface {
     return totalAmount;
   }
 
-  Future<void> completeOrder() async {
+  Future<void> completeOrder(BuildContext context) async {
     if (itemList.isEmpty) {
       showErrorToastMessage('Sepetiniz boş');
       return;
@@ -134,51 +135,53 @@ class CartController extends BaseControllerInterface {
       final confirmed = await showDialog<bool>(
         context: context,
         barrierDismissible: false,
-        builder: (context) => AlertDialog(
-          backgroundColor: Colors.white,
-          title: const Text(
-            'Sipariş Onayı',
-            style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          content: Text(
-            '${result.firma} adına siparişi tamamlamak istediğinize emin misiniz?',
-            style: const TextStyle(color: Colors.black87),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context, false),
-              style: TextButton.styleFrom(
-                foregroundColor: Colors.grey[800],
+        builder: (context) {
+          final labels = AppLocalization.getLabels(context);
+          return AlertDialog(
+            backgroundColor: Colors.white,
+            title: Text(
+              labels.orderConfirmationTitle,
+              style: const TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.w500,
               ),
-              child: const Text('İptal'),
             ),
-            TextButton(
-              onPressed: () => Navigator.pop(context, true),
-              style: TextButton.styleFrom(
-                foregroundColor: Theme.of(context).primaryColor,
+            content: Text(
+              labels.orderConfirmationMessage(result.firma!),
+              style: const TextStyle(color: Colors.black87),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context, false),
+                style: TextButton.styleFrom(
+                  foregroundColor: Colors.grey[800],
+                ),
+                child: Text(labels.cancel),
               ),
-              child: const Text('Onayla'),
-            ),
-          ],
-        ),
+              TextButton(
+                onPressed: () => Navigator.pop(context, true),
+                style: TextButton.styleFrom(
+                  foregroundColor: Theme.of(context).primaryColor,
+                ),
+                child: Text(labels.confirm),
+              ),
+            ],
+          );
+        },
       );
 
       if (confirmed != true) return;
 
-      // Seçilen cari hesap ile siparişi tamamla
-      await _completeOrder(result.id.toString());
+      await _completeOrder(result.id.toString(), context);
     } else {
-      // Normal kullanıcı için kendi cari hesabı ile siparişi tamamla
       await _completeOrder(
         sessionHandler.currentUser!.currentAccountId!.toString(),
+        context,
       );
     }
   }
 
-  Future<void> _completeOrder(String cariHesapId) async {
+  Future<void> _completeOrder(String cariHesapId, BuildContext context) async {
     LoadingProgress.start();
     try {
       final request = CreateOrderRequestModel(
@@ -203,12 +206,14 @@ class CartController extends BaseControllerInterface {
         // Sipariş güncelleme
         await client.appService.updateOrder(request: request).handleRequest(
               onSuccess: (res) async {
+                final labels = AppLocalization.getLabels(context);
                 await clearCart();
-                showSuccessToastMessage('Sipariş basarıyla guncellendi');
+                showSuccessToastMessage(labels.orderUpdatedSuccessfully);
                 // context.pop();
               },
               onIgnoreException: (error) {
-                showErrorToastMessage('Siparis guncellenirken hata olustu');
+                final labels = AppLocalization.getLabels(context);
+                showErrorToastMessage(labels.orderUpdateError);
               },
               ignoreException: true,
               defaultResponse: CreateOrderResponseModel(),
@@ -217,12 +222,14 @@ class CartController extends BaseControllerInterface {
         // Yeni sipariş oluşturma
         await client.appService.createOrder(request: request).handleRequest(
               onSuccess: (res) async {
+                final labels = AppLocalization.getLabels(context);
                 await clearCart();
-                showSuccessToastMessage('Sipariş basarıyla oluşturuldu');
+                showSuccessToastMessage(labels.orderCreatedSuccessfully);
                 // context.pop();
               },
               onIgnoreException: (error) {
-                showErrorToastMessage('Sipariş olusturulurken hata olustu');
+                final labels = AppLocalization.getLabels(context);
+                showErrorToastMessage(labels.orderCreateError);
               },
               ignoreException: true,
               defaultResponse: CreateOrderResponseModel(),

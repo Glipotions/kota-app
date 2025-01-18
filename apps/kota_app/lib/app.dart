@@ -4,8 +4,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:kota_app/product/controllers/localization_controller.dart';
 import 'package:kota_app/product/init/application_initialize.dart';
-import 'package:kota_app/product/init/theme/module_theme.dart';
 import 'package:kota_app/product/navigation/routing_manager.dart';
+import 'package:kota_app/product/theme/theme_manager.dart';
 import 'package:universal_io/io.dart';
 import 'package:values/values.dart';
 import 'package:widgets/widget.dart';
@@ -15,8 +15,10 @@ Future<void> run(EnvironmentConfigModel config) async {
   await ApplicationInitialize().make(config);
   HttpOverrides.global = MyHttpOverrides();
   
-  // Initialize LocalizationController before GetMaterialApp
+  // Initialize controllers
   Get.put(LocalizationController(), permanent: true);
+  final themeManager = Get.put(ThemeManager(), permanent: true);
+  await themeManager.init();
   
   runApp(App(title: config.appName));
 }
@@ -67,13 +69,9 @@ class App extends StatelessWidget {
                 ),
                 title: title,
                 debugShowCheckedModeBanner: false,
-                // darkTheme: ThemeData(
-                //   // Dark mode tema ayarları
-                //   primarySwatch: Colors.blue,
-                //   brightness: Brightness.dark,
-                // ),
-                // themeMode: ThemeMode.system,
-                theme: getTheme(ModuleTheme(appColors: model.themeData)),
+                theme: ThemeManager.instance.lightTheme,
+                darkTheme: ThemeManager.instance.darkTheme,
+                themeMode: ThemeManager.instance.isDarkMode ? ThemeMode.dark : ThemeMode.light,
               );
             },
           );

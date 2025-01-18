@@ -1,3 +1,4 @@
+import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:kota_app/features/main/all_products_screen/controller/all_products_controller.dart';
 import 'package:kota_app/features/main/all_products_screen/model/product_category.dart';
@@ -133,7 +134,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Filtrele',
+                    AppLocalization.getLabels(context).filter,
                     style: theme.textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
@@ -154,7 +155,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                     children: [
                       // Categories Section
                       Text(
-                        'Kategori',
+                        AppLocalization.getLabels(context).category,
                         style: theme.textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.w500,
                         ),
@@ -167,7 +168,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                         runSpacing: 8,
                         children: [
                           FilterChip(
-                            label: const Text('Tümü'),
+                            label: Text(AppLocalization.getLabels(context).all),
                             selected: _selectedCategories.isEmpty,
                             onSelected: (_) {
                               _updateCategory(null);
@@ -226,7 +227,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Alt Kategoriler',
+                                AppLocalization.getLabels(context).subCategories,
                                 style: theme.textTheme.titleSmall?.copyWith(
                                   color: theme.hintColor,
                                 ),
@@ -245,7 +246,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
 
                       // Price Range Section
                       Text(
-                        'Fiyat Aralığı',
+                        AppLocalization.getLabels(context).priceRange,
                         style: theme.textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.w500,
                         ),
@@ -258,7 +259,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                               controller: _minPriceController,
                               keyboardType: TextInputType.number,
                               decoration: InputDecoration(
-                                labelText: 'Min Fiyat',
+                                labelText: AppLocalization.getLabels(context).minPrice,
                                 prefixIcon: const Padding(
                                   padding: EdgeInsets.all(12),
                                   child: Text(
@@ -283,7 +284,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                               controller: _maxPriceController,
                               keyboardType: TextInputType.number,
                               decoration: InputDecoration(
-                                labelText: 'Max Fiyat',
+                                labelText: AppLocalization.getLabels(context).maxPrice,
                                 prefixIcon: const Padding(
                                   padding: EdgeInsets.all(12),
                                   child: Text(
@@ -309,7 +310,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
 
                       // Sorting Section
                       Text(
-                        'Sıralama',
+                        AppLocalization.getLabels(context).sorting,
                         style: theme.textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.w500,
                         ),
@@ -320,22 +321,22 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                         runSpacing: 8,
                         children: [
                           _buildSortChip(
-                            'Fiyat Artan',
+                            AppLocalization.getLabels(context).priceAscending,
                             Icons.arrow_upward,
                             ProductSortType.priceAsc,
                           ),
                           _buildSortChip(
-                            'Fiyat Azalan',
+                            AppLocalization.getLabels(context).priceDescending,
                             Icons.arrow_downward,
                             ProductSortType.priceDesc,
                           ),
                           _buildSortChip(
-                            'İsim A-Z',
+                            AppLocalization.getLabels(context).nameAscending,
                             Icons.sort_by_alpha,
                             ProductSortType.nameAsc,
                           ),
                           _buildSortChip(
-                            'İsim Z-A',
+                            AppLocalization.getLabels(context).nameDescending,
                             Icons.sort_by_alpha,
                             ProductSortType.nameDesc,
                           ),
@@ -358,7 +359,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                         if (mounted) Navigator.pop(context);
                       },
                       icon: const Icon(Icons.refresh),
-                      label: const Text('Temizle'),
+                      label: Text(AppLocalization.getLabels(context).clear),
                       style: OutlinedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
@@ -387,7 +388,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                         if (mounted) Navigator.pop(context);
                       },
                       icon: const Icon(Icons.check),
-                      label: const Text('Uygula'),
+                      label: Text(AppLocalization.getLabels(context).applyFilter),
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
@@ -488,7 +489,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Alt Kategoriler',
+                            AppLocalization.getLabels(context).subCategories,
                             style: theme.textTheme.titleSmall?.copyWith(
                               color: theme.hintColor,
                             ),

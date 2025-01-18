@@ -55,7 +55,28 @@ class ProfileController extends BaseControllerInterface {
   void onTapManageAccount() =>
       context.pushNamed(SubRouteEnums.manageAccount.name);
 
-  void onTapLogout() => SessionHandler.instance.logOut();
+  void onTapLogout(BuildContext context) {
+    final labels = AppLocalization.getLabels(context);
+    Get.dialog(
+      AlertDialog(
+        title: Text(labels.signOut),
+        content: Text(labels.signOutDescription),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: Text(labels.cancel),
+          ),
+          TextButton(
+            onPressed: () {
+              Get.back();
+              SessionHandler.instance.logOut();
+            },
+            child: Text(labels.logout),
+          ),
+        ],
+      ),
+    );
+  }
 
   List<OptionTileModel> getProfileOptions(BuildContext context) {
     final labels = AppLocalization.getLabels(context);
@@ -88,7 +109,7 @@ class ProfileController extends BaseControllerInterface {
         title: labels.signOut,
         subTitle: labels.signOutDescription,
         icon: const Icon(Icons.logout),
-        onTap: onTapLogout,
+        onTap: () => onTapLogout(context),
       ),
     ];
   }

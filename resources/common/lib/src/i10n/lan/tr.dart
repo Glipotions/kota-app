@@ -249,6 +249,21 @@ class TrLocalization extends AppLocalizationLabel {
   @override
   String get preparing => 'Hazırlanıyor';
 
+  @override
+  String get orderDeletedSuccessfully => 'Sipariş başarıyla silindi';
+
+  @override
+  String get orderUpdatedSuccessfully => 'Sipariş başarıyla güncellendi';
+
+  @override
+  String get orderUpdateError => 'Sipariş güncellenirken hata oluştu';
+
+  @override
+  String get orderCreatedSuccessfully => 'Sipariş başarıyla oluşturuldu';
+
+  @override
+  String get orderCreateError => 'Sipariş oluşturulurken hata oluştu';
+
   // Transaction History Screen
   @override
   String get transactionHistory => 'Hesap Hareketleri';
@@ -317,7 +332,101 @@ class TrLocalization extends AppLocalizationLabel {
   @override
   String get productAddedToCart => 'Ürün Sepete Eklendi';
 
+  // PDF Order Detail Strings
+  @override
+  String get orderSummary => 'Sipariş Özeti';
+
+  @override
+  String get description => 'Açıklama';
+
+  @override
+  String get quantityTotal => 'Miktar Toplamı';
+
+  @override
+  String get orderTotalPrice => 'Sipariş Toplam Fiyat';
+
+  @override
+  String get unitPrice => 'Birim Fiyat';
+
+  @override
+  String get amount => 'Tutar';
+
   // Bottom Navigation Bar
   @override
   String get home => 'Ana Sayfa';
+
+  @override
+  String get orderConfirmationTitle => 'Sipariş Onayı';
+
+  @override
+  String orderConfirmationMessage(String companyName) => '$companyName adına siparişi tamamlamak istediğinize emin misiniz?';
+
+  @override
+  String get confirm => 'Onayla';
+
+  @override
+  String get productName => 'Ürün Adı';
+
+  @override
+  String get productCode => 'Kod';
+
+  @override
+  String get size => 'Beden';
+
+  @override
+  String get color => 'Renk';
+
+  @override
+  String get quantity => 'Adet';
+
+  @override
+  String get price => 'Fiyat';
+
+  @override
+  String get total => 'Toplam';
+
+  @override
+  String get orderDetail => 'Sipariş Detayı';
+
+  @override
+  String get noOrderDetail => 'Sipariş Detayı bulunmamaktadır.';
+
+  @override
+  String get category => 'Kategori';
+
+  @override
+  String get all => 'Tümü';
+
+  @override
+  String get priceRange => 'Fiyat Aralığı';
+
+  @override
+  String get minPrice => 'Min. Fiyat';
+
+  @override
+  String get maxPrice => 'Max. Fiyat';
+
+  @override
+  String get applyFilter => 'Filtreyi Uygula';
+
+  @override
+  String get clearFilter => 'Filtreyi Temizle';
+
+  @override
+  String get sorting => 'Sıralama';
+
+  @override
+  String get priceAscending => 'Fiyat Artan';
+
+  @override
+  String get priceDescending => 'Fiyat Azalan';
+
+  @override
+  String get nameAscending => 'İsim A-Z';
+
+  @override
+  String get nameDescending => 'İsim Z-A';
+
+  @override
+  String get subCategories => 'Alt Kategoriler';
 }

@@ -256,7 +256,7 @@ class _CartState extends State<Cart> {
                               width: double.infinity,
                               height: 54,
                               child: ModuleButton.primary(
-                                onTap: controller.completeOrder,
+                                onTap: () => controller.completeOrder(context),
                                 title: controller.editingOrderId?.value != 0
                                     ? labels.updateOrder
                                     : labels.completeOrder,

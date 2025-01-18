@@ -1,5 +1,7 @@
 import 'package:common/src/i10n/lan/en.dart';
+import 'package:common/src/i10n/lan/ru.dart';
 import 'package:common/src/i10n/lan/tr.dart';
+import 'package:common/src/i10n/lan/ar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' show Locale;
 
@@ -10,6 +12,8 @@ const Locale kDefaultLocal = Locale('tr');
 Map<String, AppLocalizationLabel> supportedLocalization = {
   'tr': TrLocalization(),
   'en': EnLocalization(),
+  'ru': RuLocalization(),
+  'ar': ArLocalization(),
 };
 
 ///Function that returns all supported locales.
@@ -206,4 +210,62 @@ abstract class AppLocalizationLabel {
 
   // Bottom Navigation Bar
   String get home;
+
+  // Order Confirmation Dialog
+  String get orderConfirmationTitle;
+  String orderConfirmationMessage(String companyName);
+  String get confirm;
+
+  ///Order successfully deleted
+  String get orderDeletedSuccessfully;
+
+  ///Order successfully updated
+  String get orderUpdatedSuccessfully;
+
+  ///Error updating order
+  String get orderUpdateError;
+
+  ///Order successfully created
+  String get orderCreatedSuccessfully;
+
+  ///Error creating order
+  String get orderCreateError;
+
+  // PDF Table Headers
+  String get productName;
+  String get productCode;
+  String get size;
+  String get color;
+  String get quantity;
+  String get price;
+  String get total;
+
+  // Order Detail
+  String get orderDetail;
+  String get noOrderDetail;
+
+  // Filter
+  String get category;
+  String get subCategories;
+  String get all;
+  String get priceRange;
+  String get minPrice;
+  String get maxPrice;
+  String get applyFilter;
+  String get clearFilter;
+
+  // Sorting
+  String get sorting;
+  String get priceAscending;
+  String get priceDescending;
+  String get nameAscending;
+  String get nameDescending;
+
+  // PDF Order Detail
+  String get orderSummary;
+  String get description;
+  String get quantityTotal;
+  String get orderTotalPrice;
+  String get unitPrice;
+  String get amount;
 }

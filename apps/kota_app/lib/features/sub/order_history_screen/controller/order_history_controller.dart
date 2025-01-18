@@ -96,18 +96,18 @@ class OrderHistoryController extends BaseControllerInterface {
   Future<void> onTapDeleteOrderHistory(int id) async {
     LoadingProgress.start();
     await client.appService.deleteOrder(id: id).handleRequest(
-      ignoreException: true,
-      onIgnoreException: (err) {
-        showErrorToastMessage(err?.title ?? 'Bir hata oluştu.');
-      },
-      onSuccess: (res) {
-        showSuccessToastMessage('Sipariş başarıyla silindi.');
-        orderItems = [];
-        transactionsResponse = OrdersHistoryResponseModel();
-        onReady();
-      },
-      defaultResponse: OrdersHistoryDetailResponseModel(),
-    );
+          ignoreException: true,
+          onIgnoreException: (err) {
+            showErrorToastMessage(err?.title ?? 'Bir hata oluştu.');
+          },
+          onSuccess: (res) {
+            showSuccessToastMessage('Sipariş başarıyla silindi.');
+            orderItems = [];
+            transactionsResponse = OrdersHistoryResponseModel();
+            onReady();
+          },
+          defaultResponse: OrdersHistoryDetailResponseModel(),
+        );
     LoadingProgress.stop();
   }
 
@@ -138,7 +138,7 @@ class OrderHistoryController extends BaseControllerInterface {
         );
 
         final pdf =
-            await invoicePdfController.generateOrderHistoryDetailPdf(pdfModel);
+            await invoicePdfController.generateOrderHistoryDetailPdf(pdfModel, context);
         await Printing.layoutPdf(
           onLayout: (PdfPageFormat format) async => pdf.save(),
         );
@@ -171,7 +171,6 @@ class OrderHistoryController extends BaseControllerInterface {
         cartController.descriptionController.text = res.aciklama ?? '';
       },
     );
-
 
     context.goNamed(BottomNavigationRouteEnum.cartScreen.name);
     bottomNavController.selectedIndex = 1;

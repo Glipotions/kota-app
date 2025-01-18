@@ -1,3 +1,5 @@
+import 'package:common/common.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -37,8 +39,10 @@ class OrderPdfController extends GetxController {
 
   Future<pw.Document> generateOrderHistoryDetailPdf(
     CartProductPdfModel invoice,
+    BuildContext context,
   ) async {
     final pdf = pw.Document();
+    final labels = AppLocalization.getLabels(context);
 
     const pageHeight = 841.89;
     const margin = 20.0;
@@ -59,7 +63,7 @@ class OrderPdfController extends GetxController {
           crossAxisAlignment: pw.CrossAxisAlignment.start,
           children: [
             pw.Text(
-              'Sipariş Özeti',
+              labels.orderSummary,
               style: pw.TextStyle(
                 fontSize: 20,
                 fontWeight: pw.FontWeight.bold,
@@ -81,7 +85,7 @@ class OrderPdfController extends GetxController {
                   crossAxisAlignment: pw.CrossAxisAlignment.start,
                   children: [
                     pw.Text(
-                      'Açıklama:',
+                      '${labels.description}:',
                       style: pw.TextStyle(
                         fontSize: 12,
                         fontWeight: pw.FontWeight.bold,
@@ -137,7 +141,7 @@ class OrderPdfController extends GetxController {
                     pw.Padding(
                       padding: const pw.EdgeInsets.symmetric(vertical: 4),
                       child: pw.Text(
-                        'Miktar Toplamı:',
+                        '${labels.quantityTotal}:',
                         style: pw.TextStyle(
                           fontWeight: pw.FontWeight.bold,
                           fontSize: 12,
@@ -172,7 +176,7 @@ class OrderPdfController extends GetxController {
                     pw.Padding(
                       padding: const pw.EdgeInsets.only(top: 8),
                       child: pw.Text(
-                        'Sipariş Toplam Fiyat:',
+                        '${labels.orderTotalPrice}:',
                         style: pw.TextStyle(
                           fontWeight: pw.FontWeight.bold,
                           fontSize: 14,
@@ -208,11 +212,11 @@ class OrderPdfController extends GetxController {
           borderRadius: pw.BorderRadius.vertical(top: pw.Radius.circular(4)),
         ),
         children: [
-          'Ürün Kodu',
-          'Ürün Adı',
-          'Miktar',
-          'Birim Fiyat',
-          'Tutar',
+          labels.productCode,
+          labels.productName,
+          labels.quantity,
+          labels.unitPrice,
+          labels.amount,
         ]
             .map(
               (text) => pw.Container(

@@ -1,5 +1,7 @@
 import 'package:common/common.dart';
+import 'package:common/src/i10n/lan/ar.dart';
 import 'package:common/src/i10n/lan/en.dart';
+import 'package:common/src/i10n/lan/ru.dart';
 import 'package:common/src/i10n/lan/tr.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -166,13 +168,8 @@ class ManageAccount extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.language),
             title: Text(labels.language),
-            trailing: MaterialRxStreamBuilder<AppStateModel>(
-              stream: AppStateController.instance.outModel,
-              builder: (context, snapshot) {
-                final currentLocale =
-                    snapshot.data?.locale.languageCode ?? 'tr';
-                return DropdownButton<String>(
-                  value: currentLocale,
+            trailing: Obx(() => DropdownButton<String>(
+                  value: controller.currentLanguage,
                   items: [
                     DropdownMenuItem(
                       value: 'tr',
@@ -182,15 +179,21 @@ class ManageAccount extends StatelessWidget {
                       value: 'en',
                       child: Text(EnLocalization().localizationTitle),
                     ),
+                    DropdownMenuItem(
+                      value: 'ru',
+                      child: Text(RuLocalization().localizationTitle),
+                    ),
+                    DropdownMenuItem(
+                      value: 'ar',
+                      child: Text(ArLocalization().localizationTitle),
+                    ),
                   ],
                   onChanged: (String? value) {
                     if (value != null) {
                       controller.changeLanguage(value);
                     }
                   },
-                );
-              },
-            ),
+                )),
           ),
           Divider(
             height: 1,

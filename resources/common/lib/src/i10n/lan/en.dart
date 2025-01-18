@@ -322,4 +322,111 @@ class EnLocalization extends AppLocalizationLabel {
   @override
   String get home => 'Home';
 
+  @override
+  String get orderConfirmationTitle => 'Order Confirmation';
+
+  @override
+  String orderConfirmationMessage(String companyName) => 'Are you sure you want to complete the order for $companyName?';
+
+  @override
+  String get confirm => 'Confirm';
+
+  @override
+  String get orderDeletedSuccessfully => 'Order successfully deleted';
+
+  @override
+  String get orderUpdatedSuccessfully => 'Order successfully updated';
+
+  @override
+  String get orderUpdateError => 'Error updating order';
+
+  @override
+  String get orderCreatedSuccessfully => 'Order successfully created';
+
+  @override
+  String get orderCreateError => 'Error creating order';
+
+  @override
+  String get productName => 'Product Name';
+
+  @override
+  String get productCode => 'Code';
+
+  @override
+  String get size => 'Size';
+
+  @override
+  String get color => 'Color';
+
+  @override
+  String get quantity => 'Quantity';
+
+  @override
+  String get price => 'Price';
+
+  @override
+  String get total => 'Total';
+
+  @override
+  String get orderDetail => 'Order Detail';
+
+  @override
+  String get noOrderDetail => 'No order detail available.';
+
+  @override
+  String get category => 'Category';
+
+  @override
+  String get all => 'All';
+
+  @override
+  String get priceRange => 'Price Range';
+
+  @override
+  String get minPrice => 'Min. Price';
+
+  @override
+  String get maxPrice => 'Max. Price';
+
+  @override
+  String get applyFilter => 'Apply Filter';
+
+  @override
+  String get clearFilter => 'Clear Filter';
+
+  @override
+  String get sorting => 'Sort By';
+
+  @override
+  String get priceAscending => 'Price Low to High';
+
+  @override
+  String get priceDescending => 'Price High to Low';
+
+  @override
+  String get nameAscending => 'Name A-Z';
+
+  @override
+  String get nameDescending => 'Name Z-A';
+
+  @override
+  String get subCategories => 'Sub Categories';
+
+  @override
+  String get orderSummary => 'Order Summary';
+
+  @override
+  String get description => 'Description';
+
+  @override
+  String get quantityTotal => 'Total Quantity';
+
+  @override
+  String get orderTotalPrice => 'Order Total Price';
+
+  @override
+  String get unitPrice => 'Unit Price';
+
+  @override
+  String get amount => 'Amount';
 }

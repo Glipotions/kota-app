@@ -59,13 +59,13 @@ class ProductDetailController extends BaseControllerInterface {
       onSuccess: (res) {
         if (res != null) {
           product = res;
-          
+
           // Önce renk seçimi yap
           if (product.colors?.isNotEmpty ?? false) {
             selectedColorName = product.colors?.first;
             selectedColor.value = 0;
           }
-          
+
           // Bedenleri sırala ve ilk bedeni seç
           if (product.sizes?.isNotEmpty ?? false) {
             final sortedSizes = product.sizes!.sortSizes();
@@ -73,8 +73,6 @@ class ProductDetailController extends BaseControllerInterface {
             // UI'daki sıralamaya göre index bul
             selectedSize.value = product.sizes!.indexOf(sortedSizes.first);
           }
-          
-          // Seçilen renk ve bedene göre ürün varyantını seç
           selectProduct(selectedColorName, selectedSizeName);
           update();
         }
@@ -90,14 +88,13 @@ class ProductDetailController extends BaseControllerInterface {
     selectProduct(selectedColorName, selectedSizeName);
     update();
     cartProduct = cartProduct.copyWith(id: 0);
-
   }
 
   void onTapSize(int index) {
     selectedSize.value = index;
     selectedSizeName = product.sizes?[index];
     selectProduct(selectedColorName, selectedSizeName);
-    
+
     // cartProduct = cartProduct.copyWith(id: 0);
   }
 
@@ -109,18 +106,16 @@ class ProductDetailController extends BaseControllerInterface {
         )
         .firstOrNull;
     selectedUnitPrice?.value = selectedProductVariant?.unitPrice ?? 0.0;
-    
+
     // Check if product exists in cart
     final cartController = Get.find<CartController>();
-    final cartItem = cartController.itemList.firstWhereOrNull(
-      (item) => 
-          item.code == selectedProductVariant?.productCode &&
-          item.colorName == selectedProductVariant?.colorName &&
-          item.sizeName == selectedProductVariant?.sizeName
-    );
+    final cartItem = cartController.itemList.firstWhereOrNull((item) =>
+        item.code == selectedProductVariant?.productCode &&
+        item.colorName == selectedProductVariant?.colorName &&
+        item.sizeName == selectedProductVariant?.sizeName);
 
     // Set quantity from cart if exists, otherwise use product count in package
-    cQty.text = cartItem != null 
+    cQty.text = cartItem != null
         ? cartItem.quantity.toString()
         : (selectedProductVariant?.productCountInPackage ?? 0).toString();
 
@@ -145,14 +140,14 @@ class ProductDetailController extends BaseControllerInterface {
 
   String getSelectedColorImageUrl() {
     if (selectedColorName == null) return product.pictureUrl ?? '';
-    
+
     // Get first product variant with selected color
     final colorVariant = product.productVariants?.firstWhereOrNull(
       (variant) => variant.colorName == selectedColorName,
     );
 
     // Return variant picture if exists, otherwise fall back to general picture
-    return colorVariant?.pictureUrl?.isNotEmpty == true 
+    return colorVariant?.pictureUrl?.isNotEmpty == true
         ? colorVariant!.pictureUrl!
         : product.pictureUrl ?? '';
   }
@@ -166,7 +161,6 @@ class ProductDetailController extends BaseControllerInterface {
 
     return false.obs;
   }
-  
 }
 
 extension SizeSortExtension on List<String>? {

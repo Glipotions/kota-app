@@ -9,74 +9,81 @@ class DarkColors implements AbstractColor {
   @override
   String get themeCode => 'dark';
 
+  /// Ana renk: Mevcut paletinizde kullanılan şeftali tonunu daha parlak bir tona çekerek,
+  /// üzerine gelecek metinlerin (onPrimary) siyah olarak okunabilirliğini sağlamaya çalıştık.
   @override
-  Color get primary => const Color(0xFF8D6E63); // Koyu Şeftali
+  Color get primary => const Color(0xFFFFB599); // Daha parlak şeftali
   @override
-  Color get onPrimary => const Color(0xFFFFFFFF); // Beyaz Metin
+  Color get onPrimary => const Color(0xFF000000); // Siyah metin
 
   @override
-  Color get primaryContainer => const Color(0xFF6D4C41); // Daha Koyu Şeftali
+  Color get primaryContainer => const Color(0xFFFFCCBC); // Açık şeftali
   @override
-  Color get onPrimaryContainer => const Color(0xFFFFAB91); // Açık Şeftali Metin
+  Color get onPrimaryContainer => const Color(0xFF442B2D); // Koyu kahverengi metin
+
+  /// İkincil renk: Daha canlı ve doygun bir turuncu tonu seçildi.
+  @override
+  Color get secondary => const Color(0xFFFF8A65); // Canlı şeftali
+  @override
+  Color get onSecondary => const Color(0xFF000000); // Siyah metin
 
   @override
-  Color get secondary => const Color(0xFF5D4037); // Koyu Kahverengi
+  Color get secondaryContainer => const Color(0xFFFFAB91); // Orta şeftali
   @override
-  Color get onSecondary => const Color(0xFFE0E0E0); // Açık Gri Metin
+  Color get onSecondaryContainer => const Color(0xFF000000); // Siyah metin
+
+  /// Üçüncül renk: Bu renk için, açık tonlu kahverengi ailelerinden seçilerek kontrast sağlandı.
+  @override
+  Color get tertiary => const Color(0xFFFFCCBC); // Açık şeftali
+  @override
+  Color get onTertiary => const Color(0xFF442B2D); // Koyu kahverengi metin
 
   @override
-  Color get secondaryContainer => const Color(0xFF4E342E); // Çok Koyu Kahverengi
+  Color get tertiaryContainer => const Color(0xFFFFDED4); // Çok açık şeftali
   @override
-  Color get onSecondaryContainer => const Color(0xFFFFAB91); // Açık Şeftali Metin
+  Color get onTertiaryContainer => const Color(0xFF442B2D); // Koyu kahverengi metin
 
+  /// Hata renk paleti: Dark mod için tipik olarak kullanılan hata renkleri,
+  /// daha belirgin kontrast ve okunabilirlik için ayarlandı.
   @override
-  Color get tertiary => const Color(0xFF795548); // Bronz
+  Color get error => const Color(0xFFFF6B6B);
   @override
-  Color get onTertiary => const Color(0xFFFFFFFF); // Beyaz Metin
+  Color get onError => const Color(0xFF000000);
+  @override
+  Color get errorContainer => const Color(0xFFFFCDD2);
+  @override
+  Color get onErrorContainer => const Color(0xFF621B16);
 
+  /// Arka plan ve yüzey renkleri: Dark modda genel arka plan, yüzey ve vurgulanacak alanlar
+  /// için koyu tonlar kullanılırken, üzerlerindeki metinlerin okunurluğu için açık renkler tercih edildi.
   @override
-  Color get tertiaryContainer => const Color(0xFF5D4037); // Koyu Kahverengi
+  Color get outline => const Color(0xFF3D3D3D); // Koyu kenar rengi
   @override
-  Color get onTertiaryContainer => const Color(0xFFFFAB91); // Açık Şeftali Metin
+  Color get background => const Color(0xFF121212); // Koyu arka plan
+  @override
+  Color get onBackground => const Color(0xFFE0E0E0); // Açık gri metin
+  @override
+  Color get surface => const Color(0xFF1D1D1D); // Daha açık card arka planı
+  @override
+  Color get onSurface => const Color(0xFFE0E0E0); // Açık gri metin
+  @override
+  Color get surfaceVariant => const Color(0xFF242424); // Alternatif card arka planı
+  @override
+  Color get onSurfaceVariant => const Color(0xFFBDBDBD); // Gri metin
+  @override
+  Color get inverseSurface => const Color(0xFFE0E0E0);
+  @override
+  Color get onInverseSurface => const Color(0xFF121212);
 
-
-  // Error color palette (can keep as it is or adjust for dark theme)
+  /// Diğer yardımcı renkler: Kenarlıklar, gölgeler ve dokular için
   @override
-  Color get error => const Color(0xFFD32F2F);
-  @override
-  Color get onError => const Color(0xFFB71C1C);
-  @override
-  Color get errorContainer => const Color(0xFF3E2723);
-  @override
-  Color get onErrorContainer => const Color(0xFFFFCDD2);
-
-  // The rest of the colors adjusted for dark theme
-  @override
-  Color get outline => const Color(0xFFBDBDBD);
-  @override
-  Color get background => const Color(0xFF303030);
-  @override
-  Color get onBackground => const Color(0xFF424242);
-  @override
-  Color get surface => const Color(0xFF37474F);
-  @override
-  Color get onSurface => const Color(0xFF78909C);
-  @override
-  Color get surfaceVariant => const Color(0xFF263238);
-  @override
-  Color get onSurfaceVariant => const Color(0xFFECEFF1);
-  @override
-  Color get inverseSurface => const Color(0xFFECEFF1);
-  @override
-  Color get onInverseSurface => const Color(0xFF212121);
-  @override
-  Color get inversePrimary => const Color(0xFF80CBC4);
+  Color get inversePrimary => const Color(0xFFFFB599); // Şeftali rengi
   @override
   Color get shadow => const Color(0xFF000000);
   @override
-  Color get surfaceTint => const Color(0xFF48A999);
+  Color get surfaceTint => const Color(0xFFFFB599); // Şeftali rengi
   @override
-  Color get outlineVariant => const Color(0xFF90A4AE);
+  Color get outlineVariant => const Color(0xFF2A2A2A);
   @override
   Color get scrim => const Color(0xFF000000);
 }

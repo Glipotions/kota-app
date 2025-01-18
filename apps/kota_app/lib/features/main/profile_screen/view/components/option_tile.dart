@@ -14,7 +14,6 @@ class _OptionTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         side: BorderSide(
           color: context.primary.withOpacity(0.05),
-          width: 1,
         ),
       ),
       child: InkWell(
@@ -44,13 +43,18 @@ class _OptionTile extends StatelessWidget {
                           item.title,
                           style: context.titleMedium.copyWith(
                             fontWeight: FontWeight.w600,
+                            color: Theme.of(context).brightness == Brightness.dark
+                                ? Colors.white
+                                : Colors.black87,
                           ),
                         ),
                         SizedBox(height: ModulePadding.xxxs.value),
                         Text(
                           item.subTitle,
                           style: context.bodyMedium.copyWith(
-                            color: context.onSurface.withOpacity(0.7),
+                            color: Theme.of(context).brightness == Brightness.dark
+                                ? Colors.white70
+                                : Colors.black54,
                           ),
                         ),
                       ],
@@ -59,7 +63,9 @@ class _OptionTile extends StatelessWidget {
                   Icon(
                     Icons.arrow_forward_ios,
                     size: 16,
-                    color: context.onSurface.withOpacity(0.3),
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.white54
+                        : Colors.black45,
                   ),
                 ],
               ),

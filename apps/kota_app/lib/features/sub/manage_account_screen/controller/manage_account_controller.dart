@@ -8,25 +8,30 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kota_app/product/base/controller/base_controller.dart';
 import 'package:kota_app/product/controllers/localization_controller.dart';
+import 'package:kota_app/product/theme/theme_manager.dart';
 
 class ManageAccountController extends BaseControllerInterface {
-  ManageAccountController();
+  ManageAccountController() {
+    _currentLanguage = Get.locale?.languageCode.obs ?? 'tr'.obs;
+  }
 
   final _user = Rxn<User>();
   User? get user => _user.value;
 
-  final isDarkMode = false.obs;
+  late final RxString _currentLanguage;
+  String get currentLanguage => _currentLanguage.value;
+
+  RxBool get isDarkMode => ThemeManager.instance.isDarkMode.obs;
 
   void setDarkMode(bool value) {
-    isDarkMode.value = value;
-    // Burada tema ayarlarını uygulamak için ek işlemler yapılabilir
+    ThemeManager.instance.toggleTheme(value);
   }
 
   void changeLanguage(String languageCode) {
     final countryCode = languageCode.toUpperCase();
     final localizationController = Get.find<LocalizationController>();
     localizationController.changeLocale(Locale(languageCode, countryCode));
-    Get.updateLocale(Locale(languageCode, countryCode));
+    _currentLanguage.value = languageCode;
   }
 
   @override

@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:kota_app/features/sub/transaction_history_screen/controller/transaction_history_controller.dart';
 import 'package:kota_app/product/base/base_view.dart';
 import 'package:kota_app/product/utility/enums/module_padding_enums.dart';
+import 'package:kota_app/product/widgets/app_bar/general_app_bar.dart';
 import 'package:kota_app/product/widgets/other/empty_view.dart';
 import 'package:values/values.dart';
 
@@ -20,15 +21,8 @@ class TransactionHistory extends StatelessWidget {
     final labels = AppLocalization.getLabels(context);
     return Scaffold(
       key: controller.scaffoldKey,
-      appBar: AppBar(
-        forceMaterialTransparency: true,
-        title: Text(labels.transactionHistory),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.dark_mode),
-            onPressed: () => controller.toggleTheme(),
-          ),
-        ],
+      appBar: GeneralAppBar(
+        title: labels.transactionHistory,
       ),
       body: BaseView<TransactionHistoryController>(
         controller: controller,

@@ -32,7 +32,7 @@
 //           child: SizedBox(
 //             width: double.infinity,
 //             child: ModuleButton.primary(
-//               onTap: controller.onTapCompleteOrder,
+//               onTap: () => controller.onTapCompleteOrder(context),
 //               title: 'Siparişi Tamamla',
 //             ),
 //           ),
