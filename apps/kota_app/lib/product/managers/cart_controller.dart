@@ -13,6 +13,7 @@ import 'package:kota_app/product/consts/claims.dart';
 import 'package:kota_app/product/managers/session_handler.dart';
 import 'package:kota_app/product/models/cart_product_model.dart';
 import 'package:kota_app/product/navigation/modules/sub_route/sub_route_enums.dart';
+import 'package:kota_app/product/utility/enums/currency_type.dart';
 import 'package:kota_app/product/utility/enums/general.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:widgets/widget.dart';
@@ -28,6 +29,8 @@ class CartController extends BaseControllerInterface {
   set itemList(List<CartProductModel> value) => _itemList
     ..firstRebuild = true
     ..value = value;
+
+  int get currencyType => sessionHandler.currentUser?.currencyType ?? 1;
 
   @override
   Future<void> onReady() async {
@@ -99,12 +102,22 @@ class CartController extends BaseControllerInterface {
 
   double totalAmount() {
     double totalAmount = 0;
+    double totalCurrencyAmount = 0;
 
     for (final element in itemList) {
       totalAmount = totalAmount + (element.price * element.quantity);
+      if (element.currencyUnitPrice != null) {
+        totalCurrencyAmount =
+            totalCurrencyAmount + (element.currencyUnitPrice! * element.quantity);
+      }
     }
 
-    return totalAmount;
+    return CurrencyType.fromValue(
+              currencyType,
+            ) !=
+            CurrencyType.tl
+        ? totalCurrencyAmount
+        : totalAmount;
   }
 
   Future<void> completeOrder(BuildContext context) async {
@@ -138,32 +151,78 @@ class CartController extends BaseControllerInterface {
         builder: (context) {
           final labels = AppLocalization.getLabels(context);
           return AlertDialog(
-            backgroundColor: Colors.white,
-            title: Text(
-              labels.orderConfirmationTitle,
-              style: const TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.w500,
-              ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            backgroundColor: Theme.of(context).cardColor,
+            title: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color:
+                        Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    Icons.shopping_cart_checkout,
+                    size: 48,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  labels.orderConfirmationTitle,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
+                ),
+              ],
             ),
             content: Text(
               labels.orderConfirmationMessage(result.firma!),
-              style: const TextStyle(color: Colors.black87),
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
             ),
+            actionsAlignment: MainAxisAlignment.spaceEvenly,
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context, false),
                 style: TextButton.styleFrom(
-                  foregroundColor: Colors.grey[800],
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                 ),
-                child: Text(labels.cancel),
+                child: Text(
+                  labels.cancel,
+                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                ),
               ),
-              TextButton(
+              ElevatedButton(
                 onPressed: () => Navigator.pop(context, true),
-                style: TextButton.styleFrom(
-                  foregroundColor: Theme.of(context).primaryColor,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                 ),
-                child: Text(labels.confirm),
+                child: Text(
+                  labels.confirm,
+                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                        color: Theme.of(context).colorScheme.onPrimary,
+                      ),
+                ),
               ),
             ],
           );
@@ -197,9 +256,11 @@ class CartController extends BaseControllerInterface {
                 amount: e.quantity.toString(),
                 productId: e.id.toString(),
                 unitPrice: e.price.toString(),
+                currencyUnitPrice: e.currencyUnitPrice.toString(),
               ),
             )
             .toList(),
+        currencyType: currencyType,
       );
 
       if (editingOrderId?.value != 0) {

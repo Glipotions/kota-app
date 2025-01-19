@@ -33,6 +33,8 @@ class OrderHistoryController extends BaseControllerInterface {
   bool get isPaginationLoading => _isPaginationLoading.value;
   set isPaginationLoading(bool value) => _isPaginationLoading.value = value;
 
+  int? get currencyType => sessionHandler.currentUser?.currencyType ?? 1;
+
   @override
   void onInit() {
     super.onInit();
@@ -58,7 +60,7 @@ class OrderHistoryController extends BaseControllerInterface {
       pageIndex: transactionsResponse.index == null
           ? 0
           : transactionsResponse.index! + 1,
-      pageSize: 5,
+      pageSize: 10,
       id: id ?? sessionHandler.currentUser!.currentAccountId!,
       connectedBranchCurrentInfoId:
           sessionHandler.currentUser!.connectedBranchCurrentInfoId,
@@ -137,8 +139,8 @@ class OrderHistoryController extends BaseControllerInterface {
           description: res.aciklama,
         );
 
-        final pdf =
-            await invoicePdfController.generateOrderHistoryDetailPdf(pdfModel, context);
+        final pdf = await invoicePdfController.generateOrderHistoryDetailPdf(
+            pdfModel, context);
         await Printing.layoutPdf(
           onLayout: (PdfPageFormat format) async => pdf.save(),
         );

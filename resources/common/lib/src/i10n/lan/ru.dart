@@ -447,4 +447,58 @@ class RuLocalization extends AppLocalizationLabel {
 
   @override
   String get amount => 'Сумма';
+
+  @override
+  String get accountNotApproved => 'Ваша учетная запись не подтверждена. Пожалуйста, повторите попытку после подтверждения вашей учетной записи.';
+
+  @override
+  String get loginError => 'Произошла ошибка при входе в систему.';
+
+  @override
+  String get warning => 'Предупреждение';
+
+  @override
+  String get noDataToReport => 'Нет данных для отчета.';
+
+  @override
+  String get date => 'Дата';
+
+  @override
+  String get receiptNo => 'Номер чека';
+
+  @override
+  String get receiptType => 'Тип чека';
+
+  @override
+  String get debit => 'Дебет';
+
+  @override
+  String get credit => 'Кредит';
+
+  @override
+  String get foreignDebit => 'Валютный дебет';
+
+  @override
+  String get foreignCredit => 'Валютный кредит';
+
+  @override
+  String get foreignBalance => 'Валютный баланс';
+
+  @override
+  String get current => 'Текущий';
+
+  @override
+  String get period => 'Период';
+
+  @override
+  String get cartProducts => 'Товары в корзине';
+
+  @override
+  String get page => 'Страница';
+
+  @override
+  String get totalQuantity => 'Общее количество';
+
+  @override
+  String get code => 'Код';
 }

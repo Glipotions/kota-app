@@ -59,6 +59,7 @@ class ProductVariant {
     this.productCode,
     this.productName,
     this.unitPrice,
+    this.currencyUnitPrice,
     this.stock,
     this.productCodeGroupId,
     this.colorId,
@@ -76,6 +77,7 @@ class ProductVariant {
         productCode: json['productCode'],
         productName: json['productName'],
         unitPrice: json['unitPrice'],
+        currencyUnitPrice: json['currencyUnitPrice'],
         stock: json['stock'],
         productCodeGroupId: json['productCodeGroupId'],
         colorId: json['colorId'],
@@ -92,6 +94,7 @@ class ProductVariant {
   String? productCode;
   String? productName;
   double? unitPrice;
+  double? currencyUnitPrice;
   int? stock;
   int? productCodeGroupId;
   int? colorId;

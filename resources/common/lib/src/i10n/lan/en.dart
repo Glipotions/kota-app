@@ -429,4 +429,58 @@ class EnLocalization extends AppLocalizationLabel {
 
   @override
   String get amount => 'Amount';
+
+  @override
+  String get accountNotApproved => 'Your account has not been approved. Please try again after your account is approved.';
+
+  @override
+  String get loginError => 'An error occurred while logging in.';
+
+  @override
+  String get warning => 'Warning';
+
+  @override
+  String get noDataToReport => 'No data found to report.';
+
+  @override
+  String get date => 'Date';
+
+  @override
+  String get receiptNo => 'Receipt No';
+
+  @override
+  String get receiptType => 'Receipt Type';
+
+  @override
+  String get debit => 'Debit';
+
+  @override
+  String get credit => 'Credit';
+
+  @override
+  String get foreignDebit => 'Foreign Debit';
+
+  @override
+  String get foreignCredit => 'Foreign Credit';
+
+  @override
+  String get foreignBalance => 'Foreign Balance';
+
+  @override
+  String get current => 'Current';
+
+  @override
+  String get period => 'Period';
+
+  @override
+  String get cartProducts => 'Cart Products';
+
+  @override
+  String get page => 'Page';
+
+  @override
+  String get totalQuantity => 'Total Quantity';
+
+  @override
+  String get code => 'Code';
 }

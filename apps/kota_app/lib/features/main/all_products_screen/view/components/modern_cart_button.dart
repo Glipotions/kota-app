@@ -35,8 +35,8 @@ class ModernCartButton extends StatelessWidget {
             gradient: isEnabled
               ? LinearGradient(
                   colors: isUpdate ? [
-                    Colors.orange.shade600,
-                    Colors.orange.shade400,
+                    Colors.orange.shade700,
+                    Colors.orange.shade500,
                   ] : [
                     theme.colorScheme.primary,
                     theme.colorScheme.primaryContainer,

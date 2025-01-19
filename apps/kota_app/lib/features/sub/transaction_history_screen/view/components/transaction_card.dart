@@ -1,14 +1,20 @@
 part of '../transaction_history.dart';
 
 class _TransactionCard extends StatelessWidget {
-  const _TransactionCard({required this.item});
+  const _TransactionCard({required this.item, this.currencyType});
 
   final TransactionItem item;
-
+  final int? currencyType;
   @override
   Widget build(BuildContext context) {
     final isDebit = item.borc != 0;
-    final amount = isDebit ? item.borc ?? 0 : item.alacak ?? 0;
+    final amount = CurrencyType.fromValue(currencyType!) == CurrencyType.tl
+        ? isDebit
+            ? item.borc ?? 0
+            : item.alacak ?? 0
+        : isDebit
+            ? item.dovizBorc ?? 0
+            : item.dovizAlacak ?? 0;
     final labels = AppLocalization.getLabels(context);
 
     return Hero(
@@ -34,13 +40,12 @@ class _TransactionCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     // Transaction Icon
                     Container(
                       padding: EdgeInsets.all(ModulePadding.xs.value),
                       decoration: BoxDecoration(
-                        color: isDebit 
+                        color: isDebit
                             ? Colors.red.withOpacity(0.1)
                             : Colors.green.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(8),
@@ -52,7 +57,7 @@ class _TransactionCard extends StatelessWidget {
                       ),
                     ),
                     SizedBox(width: ModulePadding.s.value),
-                    
+
                     // Transaction Details
                     Expanded(
                       child: Column(
@@ -76,7 +81,7 @@ class _TransactionCard extends StatelessWidget {
                         ],
                       ),
                     ),
-                    
+
                     // Amount and Date
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
@@ -99,7 +104,7 @@ class _TransactionCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                
+
                 // Balance Section
                 if (item.bakiye != null) ...[
                   SizedBox(height: ModulePadding.s.value),
@@ -115,7 +120,9 @@ class _TransactionCard extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        item.bakiye!.formatPrice(),
+                        CurrencyType.fromValue(currencyType!) == CurrencyType.tl
+                            ? item.bakiye!.formatPrice()
+                            : item.dovizBakiye!.formatPrice(),
                         style: context.titleSmall.copyWith(
                           fontWeight: FontWeight.w600,
                         ),

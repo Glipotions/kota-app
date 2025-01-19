@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kota_app/features/sub/transaction_history_screen/controller/transaction_history_controller.dart';
 import 'package:kota_app/product/base/base_view.dart';
+import 'package:kota_app/product/utility/enums/currency_type.dart';
 import 'package:kota_app/product/utility/enums/module_padding_enums.dart';
+import 'package:kota_app/product/utility/extentions/num_extension.dart';
 import 'package:kota_app/product/widgets/app_bar/general_app_bar.dart';
 import 'package:kota_app/product/widgets/other/empty_view.dart';
 import 'package:values/values.dart';
@@ -23,6 +25,16 @@ class TransactionHistory extends StatelessWidget {
       key: controller.scaffoldKey,
       appBar: GeneralAppBar(
         title: labels.transactionHistory,
+        showCartIcon: false,
+        additionalIcon: IconButton(
+          icon: const Icon(Icons.picture_as_pdf),
+          onPressed: () => controller.generatePdfReport(
+            context,
+            '',
+            controller.transactionItems,
+            false,
+          ),
+        ),
       ),
       body: BaseView<TransactionHistoryController>(
         controller: controller,
@@ -35,12 +47,14 @@ class TransactionHistory extends StatelessWidget {
                 padding: EdgeInsets.all(ModulePadding.m.value),
                 child: Column(
                   children: [
-                    Obx(() => Text(
-                          controller.currentBalance.formatPrice(),
-                          style: context.headlineMedium.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),),
+                    Obx(
+                      () => Text(
+                        controller.currentBalance.formatPrice(),
+                        style: context.headlineMedium.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
                     SizedBox(height: ModulePadding.xs.value),
                     Text(
                       labels.currentBalance,
@@ -72,7 +86,7 @@ class TransactionHistory extends StatelessWidget {
                 ),
               ),
             ),
-            
+
             // Search and Filter Bar
             Padding(
               padding: EdgeInsets.symmetric(
@@ -112,7 +126,8 @@ class TransactionHistory extends StatelessWidget {
                           controller: controller.scrollController,
                           padding: EdgeInsets.all(ModulePadding.s.value),
                           itemBuilder: (context, index) {
-                            if (index == 0 || controller.shouldShowDateHeader(index)) {
+                            if (index == 0 ||
+                                controller.shouldShowDateHeader(index)) {
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -130,12 +145,14 @@ class TransactionHistory extends StatelessWidget {
                                   ),
                                   _TransactionCard(
                                     item: controller.transactionItems[index],
+                                    currencyType: controller.currencyType,
                                   ),
                                 ],
                               );
                             }
                             return _TransactionCard(
                               item: controller.transactionItems[index],
+                              currencyType: controller.currencyType,
                             );
                           },
                           separatorBuilder: (context, index) =>
@@ -145,7 +162,7 @@ class TransactionHistory extends StatelessWidget {
                 ),
               ),
             ),
-            
+
             // Loading Indicator
             Obx(
               () => Padding(

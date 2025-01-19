@@ -33,15 +33,13 @@ flutter:
   fonts:
     - family: GreycliffCF
       fonts:
-        - asset: assets/fonts/GreycliffCF-Light.ttf
+        - asset: assets/fonts/greycliffcf/GreycliffCF-Light.ttf
           weight: 300
-        - asset: assets/fonts/GreycliffCF-Regular.ttf
+        - asset: assets/fonts/greycliffcf/GreycliffCF-Regular.ttf
           weight: 400
-        - asset: assets/fonts/GreycliffCF-Medium.ttf
+        - asset: assets/fonts/greycliffcf/GreycliffCF-Medium.ttf
           weight: 500
-        - asset: assets/fonts/GreycliffCF-DemiBold.ttf
-          weight: 600
-        - asset: assets/fonts/GreycliffCF-Bold.ttf
+        - asset: assets/fonts/greycliffcf/GreycliffCF-Bold.ttf
           weight: 700
     - family: WorkSans
       fonts:

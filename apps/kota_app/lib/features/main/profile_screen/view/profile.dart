@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kota_app/features/main/profile_screen/controller/profile_controller.dart';
 import 'package:kota_app/product/base/base_view.dart';
+import 'package:kota_app/product/utility/enums/currency_type.dart';
 import 'package:kota_app/product/utility/enums/module_padding_enums.dart';
+import 'package:kota_app/product/utility/extentions/num_extension.dart';
 import 'package:kota_app/product/widgets/app_bar/general_app_bar.dart';
 import 'package:values/values.dart';
 
@@ -42,7 +44,11 @@ class Profile extends StatelessWidget {
                 children: [
                   Obx(
                     () => _BalanceCard(
-                      balance: controller.balance.balance ?? 0,
+                      balance:
+                          CurrencyType.fromValue(controller.currencyType) !=
+                                  CurrencyType.tl
+                              ? controller.balance.currencyBalance ?? 0
+                              : controller.balance.balance ?? 0,
                       title: controller.balance.firma ?? '',
                       onTap: controller.onTapPastTransactions,
                     ),
@@ -53,7 +59,8 @@ class Profile extends StatelessWidget {
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
-                        final item = controller.getProfileOptions(context)[index];
+                        final item =
+                            controller.getProfileOptions(context)[index];
                         return _OptionTile(item: item);
                       },
                       separatorBuilder: (context, index) =>

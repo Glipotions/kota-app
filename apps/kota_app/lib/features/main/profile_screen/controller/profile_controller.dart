@@ -15,6 +15,9 @@ class ProfileController extends BaseControllerInterface {
   BalanceResponseModel get balance => _balance.value;
   set balance(BalanceResponseModel value) => _balance.value = value;
 
+  int get currencyType =>
+      SessionHandler.instance.currentUser?.currencyType ?? 1;
+
   @override
   Future<void> onReady() async {
     super.onReady();
@@ -57,21 +60,72 @@ class ProfileController extends BaseControllerInterface {
 
   void onTapLogout(BuildContext context) {
     final labels = AppLocalization.getLabels(context);
-    Get.dialog(
-      AlertDialog(
-        title: Text(labels.signOut),
-        content: Text(labels.signOutDescription),
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        backgroundColor: Theme.of(context).cardColor,
+        title: Column(
+          children: [
+            Icon(
+              Icons.logout_rounded,
+              size: 48,
+              color: Theme.of(context).colorScheme.error,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              labels.signOut,
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+            ),
+          ],
+        ),
+        content: Text(
+          labels.signOutDescription,
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+        ),
+        actionsAlignment: MainAxisAlignment.spaceEvenly,
         actions: [
           TextButton(
-            onPressed: () => Get.back(),
-            child: Text(labels.cancel),
+            onPressed: () => Navigator.pop(context),
+            style: TextButton.styleFrom(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+            child: Text(
+              labels.cancel,
+              style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+            ),
           ),
-          TextButton(
+          ElevatedButton(
             onPressed: () {
-              Get.back();
+              Navigator.pop(context);
               SessionHandler.instance.logOut();
             },
-            child: Text(labels.logout),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.error,
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+            child: Text(
+              labels.logout,
+              style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                    color: Theme.of(context).colorScheme.onError,
+                  ),
+            ),
           ),
         ],
       ),

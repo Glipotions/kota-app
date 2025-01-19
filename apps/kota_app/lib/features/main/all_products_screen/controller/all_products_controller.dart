@@ -184,6 +184,7 @@ class AllProductsController extends BaseControllerInterface {
   }
 
   Future<void> applyFilter(ProductFilter filter) async {
+    currentFilter = filter;
     await _getProducts(isRefresh: true);
   }
 

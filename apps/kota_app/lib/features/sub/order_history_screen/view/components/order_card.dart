@@ -252,7 +252,8 @@ class _OrderCard extends StatelessWidget {
                           value: 'pdf',
                           child: Row(
                             children: [
-                              const Icon(Icons.picture_as_pdf_outlined, size: 20),
+                              const Icon(Icons.picture_as_pdf_outlined,
+                                  size: 20),
                               const SizedBox(width: 8),
                               Text(labels.downloadPdf),
                             ],
@@ -337,7 +338,11 @@ class _OrderCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        (item.toplamTutar ?? 0).formatPrice(),
+                        (CurrencyType.fromValue(controller.currencyType!) ==
+                                    CurrencyType.tl
+                                ? item.toplamTutar ?? 0
+                                : item.dovizTutar ?? 0)
+                            .formatPrice(),
                         style: context.titleMedium.copyWith(
                           fontWeight: FontWeight.bold,
                           color: Theme.of(context).primaryColor,

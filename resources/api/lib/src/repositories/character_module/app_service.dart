@@ -164,13 +164,14 @@ class AppService extends BaseClient {
   ///Request that returns all characters
   Future<BaseHttpModel<ProductVariantResponseModel>> productDetail(
     String productCode,
+    int? currencyType,
   ) async {
     return baseRequest<ProductVariantResponseModel,
         ProductVariantResponseModel>(
       responseModel: ProductVariantResponseModel(),
       httpUrl: AppServicePath.productVariant.value,
       method: DioHttpMethod.get,
-      queryParams: {'code': productCode},
+      queryParams: {'code': productCode, 'currencyType': currencyType.toString()},
     );
   }
 

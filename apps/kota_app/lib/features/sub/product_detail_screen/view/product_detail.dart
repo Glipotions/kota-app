@@ -1,5 +1,6 @@
 // ignore_for_file: omit_local_variable_types, cascade_invocations
 
+import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kota_app/features/main/all_products_screen/view/components/add_to_cart_text.dart';
@@ -7,13 +8,12 @@ import 'package:kota_app/features/sub/product_detail_screen/controller/product_d
 import 'package:kota_app/product/managers/cart_controller.dart';
 import 'package:kota_app/product/utility/enums/module_padding_enums.dart';
 import 'package:kota_app/product/utility/enums/module_radius_enums.dart';
+import 'package:kota_app/product/utility/extentions/num_extension.dart';
 import 'package:kota_app/product/widgets/app_bar/general_app_bar.dart';
 import 'package:kota_app/product/widgets/button/quantity_selection_button.dart';
 import 'package:kota_app/product/widgets/card/bordered_image.dart';
 import 'package:kota_app/product/widgets/chip/custom_choice_chip.dart';
 import 'package:kota_app/product/widgets/other/stock_information.dart';
-import 'package:values/values.dart';
-import 'package:common/common.dart';
 
 class ProductDetail extends StatelessWidget {
   const ProductDetail({required this.controller, super.key});
@@ -419,7 +419,7 @@ class ProductDetail extends StatelessWidget {
                             const SizedBox(height: 8),
                             Obx(
                               () => Text(
-                                controller.selectedUnitPrice?.value
+                                controller.showUnitPrice?.value
                                         .formatPrice() ??
                                     '₺0,00',
                                 style: Theme.of(context)

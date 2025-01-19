@@ -17,57 +17,64 @@ class GeneralAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.leading,
     this.elevation,
     this.backgroundColor,
+    this.showCartIcon = true,
   });
   final String title;
   final Widget? additionalIcon;
   final Widget? leading;
   final double? elevation;
   final Color? backgroundColor;
-
+  final bool showCartIcon;
 
   @override
   Widget build(BuildContext context) {
     final cartController = Get.put(CartController());
     final bottomNavController = Get.find<BottomNavigationController>();
-    
+
     return AppBar(
       backgroundColor: backgroundColor,
       elevation: elevation,
       forceMaterialTransparency: true,
       title: Text(title),
-      leading: leading ?? IconButton(
-        icon: const Icon(Icons.arrow_back),
-        onPressed: () {
-          if (Navigator.of(context).canPop()) {
-            Navigator.of(context).pop();
-          }
-        },
-      ),
+      leading: leading ??
+          IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              if (Navigator.of(context).canPop()) {
+                Navigator.of(context).pop();
+              }
+            },
+          ),
       actions: [
         additionalIcon ?? const SizedBox(),
-        Obx(
-          () => badges.Badge(
-            showBadge: cartController.itemList.isNotEmpty,
-            position: badges.BadgePosition.topEnd(top: 0, end: 0),
-            badgeContent: Text(
-              '${cartController.itemList.length}',
-              style: const TextStyle(color: Colors.white, fontSize: 12),
-            ),
-            child: IconButton(
-              icon: Icon(
-                Icons.shopping_cart,
-                color: cartController.itemList.isNotEmpty ? context.primary : null,
+        if (showCartIcon == true)
+          Obx(
+            () => badges.Badge(
+              showBadge: cartController.itemList.isNotEmpty,
+              position: badges.BadgePosition.topEnd(top: 0, end: 0),
+              badgeContent: Text(
+                '${cartController.itemList.length}',
+                style: const TextStyle(color: Colors.white, fontSize: 12),
               ),
-              onPressed: () {
-                // Pop until we reach the bottom navigation route
-                Navigator.of(context).popUntil((route) => route.isFirst);
-                // Then navigate to cart
-                context.goNamed(BottomNavigationRouteEnum.cartScreen.name);
-                bottomNavController.selectedIndex = 1;
-              },
+              child: IconButton(
+                icon: Icon(
+                  Icons.shopping_cart,
+                  color: cartController.itemList.isNotEmpty
+                      ? context.primary
+                      : null,
+                ),
+                onPressed: () {
+                  // Pop until we reach the bottom navigation route
+                  Navigator.of(context).popUntil((route) => route.isFirst);
+                  // Then navigate to cart
+                  context.goNamed(BottomNavigationRouteEnum.cartScreen.name);
+                  bottomNavController.selectedIndex = 1;
+                },
+              ),
             ),
-          ),
-        ),
+          )
+        else
+          SizedBox(),
         SizedBox(
           width: ModulePadding.s.value,
         ),

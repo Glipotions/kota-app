@@ -268,4 +268,28 @@ abstract class AppLocalizationLabel {
   String get orderTotalPrice;
   String get unitPrice;
   String get amount;
+
+  // Login Messages
+  String get accountNotApproved;
+  String get loginError;
+
+  // Transaction PDF Report
+  String get warning;
+  String get noDataToReport;
+  String get date;
+  String get receiptNo;
+  String get receiptType;
+  String get debit;
+  String get credit;
+  String get foreignDebit;
+  String get foreignCredit;
+  String get foreignBalance;
+  String get current;
+  String get period;
+
+  // Cart PDF
+  String get cartProducts;
+  String get page;
+  String get totalQuantity;
+  String get code;
 }

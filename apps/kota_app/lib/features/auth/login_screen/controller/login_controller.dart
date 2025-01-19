@@ -27,6 +27,7 @@ class LoginController extends BaseControllerInterface {
   void onTapRegister() => context.goNamed(AuthRouteScreens.registerScreen.name);
 
   Future<void> onTapLogin() async {
+    final labels = AppLocalization.getLabels(context);
     if (fKey.currentState!.validate()) {
       final request = LoginRequestModel(
         email: cEmail.text.trim(),
@@ -46,13 +47,13 @@ class LoginController extends BaseControllerInterface {
               else
                 {
                   showErrorToastMessage(
-                    'Hesabınız onaylanmamıştır. Lütfen hesabınız onaylandıktan sonra tekrar deneyiniz.',
+                    labels.accountNotApproved,
                   ),
                 },
             },
             ignoreException: true,
             onIgnoreException: (err) => showErrorToastMessage(
-              err?.detail ?? 'Giriş yaparken bir hata oluştu.',
+              err?.detail ?? labels.loginError,
             ),
           );
       LoadingProgress.stop();

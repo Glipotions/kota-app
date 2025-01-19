@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kota_app/product/models/cart_product_model.dart';
 import 'package:kota_app/product/utility/enums/module_padding_enums.dart';
+import 'package:kota_app/product/utility/extentions/num_extension.dart';
 import 'package:kota_app/product/widgets/card/bordered_image.dart';
 import 'package:values/values.dart';
 

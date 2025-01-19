@@ -447,4 +447,58 @@ class ArLocalization extends AppLocalizationLabel {
 
   @override
   String get amount => 'المبلغ';
+
+  @override
+  String get accountNotApproved => 'لم تتم الموافقة على حسابك. يرجى المحاولة مرة أخرى بعد الموافقة على حسابك.';
+
+  @override
+  String get loginError => 'حدث خطأ أثناء تسجيل الدخول.';
+
+  @override
+  String get warning => 'تحذير';
+
+  @override
+  String get noDataToReport => 'لا توجد بيانات للتقرير.';
+
+  @override
+  String get date => 'التاريخ';
+
+  @override
+  String get receiptNo => 'رقم الإيصال';
+
+  @override
+  String get receiptType => 'نوع الإيصال';
+
+  @override
+  String get debit => 'مدين';
+
+  @override
+  String get credit => 'دائن';
+
+  @override
+  String get foreignDebit => 'مدين بالعملة الأجنبية';
+
+  @override
+  String get foreignCredit => 'دائن بالعملة الأجنبية';
+
+  @override
+  String get foreignBalance => 'الرصيد بالعملة الأجنبية';
+
+  @override
+  String get current => 'الحالي';
+
+  @override
+  String get period => 'الفترة';
+
+  @override
+  String get cartProducts => 'منتجات السلة';
+
+  @override
+  String get page => 'صفحة';
+
+  @override
+  String get totalQuantity => 'الكمية الإجمالية';
+
+  @override
+  String get code => 'الرمز';
 }

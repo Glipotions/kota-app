@@ -24,6 +24,8 @@ class ProductDetailController extends BaseControllerInterface {
   final String productCode;
   RxInt productCountInPackage = 1.obs;
   RxDouble? selectedUnitPrice = 0.0.obs;
+  RxDouble? selectedCurrencyUnitPrice = 0.0.obs;
+  RxDouble? showUnitPrice = 0.0.obs;
   RxBool isColorEnabled = true.obs;
   RxInt selectedSize = (-1).obs;
   RxInt selectedColor = (-1).obs;
@@ -55,7 +57,9 @@ class ProductDetailController extends BaseControllerInterface {
   }
 
   Future<void> _getProductDetail() async {
-    await client.appService.productDetail(code).handleRequest(
+    await client.appService
+        .productDetail(code, sessionHandler.currentUser?.currencyType ?? 1)
+        .handleRequest(
       onSuccess: (res) {
         if (res != null) {
           product = res;
@@ -106,6 +110,13 @@ class ProductDetailController extends BaseControllerInterface {
         )
         .firstOrNull;
     selectedUnitPrice?.value = selectedProductVariant?.unitPrice ?? 0.0;
+    selectedCurrencyUnitPrice?.value =
+        selectedProductVariant?.currencyUnitPrice ?? 0.0;
+
+    showUnitPrice?.value = selectedProductVariant?.currencyUnitPrice != 0.0 &&
+            selectedProductVariant?.currencyUnitPrice != null
+        ? selectedProductVariant!.currencyUnitPrice!
+        : selectedProductVariant?.unitPrice ?? 0.0;
 
     // Check if product exists in cart
     final cartController = Get.find<CartController>();
@@ -130,6 +141,7 @@ class ProductDetailController extends BaseControllerInterface {
       code: selectedProductVariant!.productCode!,
       name: selectedProductVariant?.productName,
       price: selectedUnitPrice?.value ?? 0,
+      currencyUnitPrice: selectedCurrencyUnitPrice?.value ?? 0,
       quantity: int.parse(cQty.text == '' ? '0' : cQty.text),
       pictureUrl: product.pictureUrl ?? baseLogoUrl,
       sizeName: selectedProductVariant!.sizeName,

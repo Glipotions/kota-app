@@ -10,6 +10,7 @@ class CartProductModel {
     this.colorName,
     this.productCodeGroupId,
     this.orderDetailId,
+    this.currencyUnitPrice,
   });
 
   int id;
@@ -17,6 +18,7 @@ class CartProductModel {
   String code;
   String? name;
   double price;
+  double? currencyUnitPrice;
   int quantity;
   String? pictureUrl;
   String? sizeName;
@@ -43,11 +45,13 @@ class CartProductModel {
       code: json['code'] as String,
       name: json['name'] as String?,
       price: (json['price'] as num).toDouble(),
+      currencyUnitPrice: (json['currencyUnitPrice'] as num).toDouble(),
       quantity: json['quantity'] as int,
       pictureUrl: json['pictureUrl'] as String?,
       sizeName: json['sizeName'] as String?,
       colorName: json['colorName'] as String?,
       productCodeGroupId: json['productCodeGroupId'] as int?,
+      orderDetailId: json['orderDetailId'] as int?,
     );
   }
 
@@ -56,6 +60,7 @@ class CartProductModel {
     String? code,
     String? name,
     double? price,
+    double? currencyUnitPrice,
     int? quantity,
     String? pictureUrl,
     String? sizeName,
@@ -68,6 +73,7 @@ class CartProductModel {
       code: code ?? this.code,
       name: name ?? this.name,
       price: price ?? this.price,
+      currencyUnitPrice: currencyUnitPrice ?? this.currencyUnitPrice,
       quantity: quantity ?? this.quantity,
       pictureUrl: pictureUrl ?? this.pictureUrl,
       sizeName: sizeName ?? this.sizeName,

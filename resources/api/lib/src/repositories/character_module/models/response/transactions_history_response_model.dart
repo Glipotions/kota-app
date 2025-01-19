@@ -53,6 +53,9 @@ class TransactionItem extends IBaseModel<TransactionItem> {
     this.borc,
     this.alacak,
     this.bakiye,
+    this.dovizBorc,
+    this.dovizAlacak,
+    this.dovizBakiye,
   });
 
   double? id;
@@ -64,6 +67,9 @@ class TransactionItem extends IBaseModel<TransactionItem> {
   double? borc;
   double? alacak;
   double? bakiye;
+  double? dovizBorc;
+  double? dovizAlacak;
+  double? dovizBakiye;
 
   @override
   TransactionItem fromJson(Map<String, dynamic> json) => TransactionItem(
@@ -76,6 +82,9 @@ class TransactionItem extends IBaseModel<TransactionItem> {
         borc: json['borc']?.toDouble(),
         alacak: json['alacak']?.toDouble(),
         bakiye: json['bakiye']?.toDouble(),
+        dovizBorc: json['dovizBorc']?.toDouble(),
+        dovizAlacak: json['dovizAlacak']?.toDouble(),
+        dovizBakiye: json['dovizBakiye']?.toDouble(),
       );
 
   @override

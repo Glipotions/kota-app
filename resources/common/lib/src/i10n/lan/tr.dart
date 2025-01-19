@@ -351,24 +351,15 @@ class TrLocalization extends AppLocalizationLabel {
   @override
   String get amount => 'Tutar';
 
-  // Bottom Navigation Bar
+  // Cart PDF Strings
   @override
-  String get home => 'Ana Sayfa';
+  String get cartProducts => 'Sepet Ürünleri';
 
   @override
-  String get orderConfirmationTitle => 'Sipariş Onayı';
+  String get page => 'Sayfa';
 
   @override
-  String orderConfirmationMessage(String companyName) => '$companyName adına siparişi tamamlamak istediğinize emin misiniz?';
-
-  @override
-  String get confirm => 'Onayla';
-
-  @override
-  String get productName => 'Ürün Adı';
-
-  @override
-  String get productCode => 'Kod';
+  String get totalQuantity => 'Toplam Miktar';
 
   @override
   String get size => 'Beden';
@@ -384,6 +375,28 @@ class TrLocalization extends AppLocalizationLabel {
 
   @override
   String get total => 'Toplam';
+
+  @override
+  String get productName => 'Ürün Adı';
+
+  @override
+  String get code => 'Kod';
+
+  // Bottom Navigation Bar
+  @override
+  String get home => 'Ana Sayfa';
+
+  @override
+  String get orderConfirmationTitle => 'Sipariş Onayı';
+
+  @override
+  String orderConfirmationMessage(String companyName) => '$companyName adına siparişi tamamlamak istediğinize emin misiniz?';
+
+  @override
+  String get confirm => 'Onayla';
+
+  @override
+  String get productCode => 'Kod';
 
   @override
   String get orderDetail => 'Sipariş Detayı';
@@ -429,4 +442,46 @@ class TrLocalization extends AppLocalizationLabel {
 
   @override
   String get subCategories => 'Alt Kategoriler';
+
+  @override
+  String get accountNotApproved => 'Hesabınız onaylanmamıştır. Lütfen hesabınız onaylandıktan sonra tekrar deneyiniz.';
+
+  @override
+  String get loginError => 'Giriş yaparken bir hata oluştu.';
+
+  @override
+  String get warning => 'Uyarı';
+
+  @override
+  String get noDataToReport => 'Raporlanacak veri bulunamadı.';
+
+  @override
+  String get date => 'Tarih';
+
+  @override
+  String get receiptNo => 'Fiş No';
+
+  @override
+  String get receiptType => 'Fiş Türü';
+
+  @override
+  String get debit => 'Borç';
+
+  @override
+  String get credit => 'Alacak';
+
+  @override
+  String get foreignDebit => 'Döviz Borç';
+
+  @override
+  String get foreignCredit => 'Döviz Alacak';
+
+  @override
+  String get foreignBalance => 'Döviz Bakiye';
+
+  @override
+  String get current => 'Cari';
+
+  @override
+  String get period => 'Dönem';
 }
