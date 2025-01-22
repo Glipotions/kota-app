@@ -58,7 +58,7 @@ class TransactionItem extends IBaseModel<TransactionItem> {
     this.dovizBakiye,
   });
 
-  double? id;
+  int? id;
   int? cariHesapId;
   DateTime? tarih;
   String? fisNo;
@@ -73,7 +73,7 @@ class TransactionItem extends IBaseModel<TransactionItem> {
 
   @override
   TransactionItem fromJson(Map<String, dynamic> json) => TransactionItem(
-        id: json['id']?.toDouble(),
+        id: json['id'],
         cariHesapId: json['cariHesapId'],
         tarih: json['tarih'] == null ? null : DateTime.parse(json['tarih']),
         fisNo: json['fisNo'],

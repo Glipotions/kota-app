@@ -31,6 +31,7 @@ class CartProductModel {
       'code': code,
       'name': name,
       'price': price,
+      'currencyUnitPrice': currencyUnitPrice,
       'quantity': quantity,
       'pictureUrl': pictureUrl,
       'sizeName': sizeName,

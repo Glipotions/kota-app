@@ -36,6 +36,7 @@ class OrderHistoryDetail extends StatelessWidget {
                     itemBuilder: (context, index) {
                       return ProductCard(
                         item: controller.cartProductItems[index],
+                        isCurrencyTL: controller.isCurrencyTL,
                         onTap: () {
                           // Handle onTap action here
                         },

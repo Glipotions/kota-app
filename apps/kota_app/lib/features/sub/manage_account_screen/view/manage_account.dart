@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kota_app/features/sub/manage_account_screen/controller/manage_account_controller.dart';
 import 'package:kota_app/product/base/base_view.dart';
+import 'package:kota_app/product/utility/enums/currency_type.dart';
 import 'package:kota_app/product/utility/enums/module_padding_enums.dart';
 import 'package:kota_app/product/widgets/app_bar/general_app_bar.dart';
 
@@ -168,38 +169,72 @@ class ManageAccount extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.language),
             title: Text(labels.language),
-            trailing: Obx(() => DropdownButton<String>(
-                  value: controller.currentLanguage,
-                  items: [
-                    DropdownMenuItem(
-                      value: 'tr',
-                      child: Text(TrLocalization().localizationTitle),
-                    ),
-                    DropdownMenuItem(
-                      value: 'en',
-                      child: Text(EnLocalization().localizationTitle),
-                    ),
-                    DropdownMenuItem(
-                      value: 'ru',
-                      child: Text(RuLocalization().localizationTitle),
-                    ),
-                    DropdownMenuItem(
-                      value: 'ar',
-                      child: Text(ArLocalization().localizationTitle),
-                    ),
-                  ],
-                  onChanged: (String? value) {
-                    if (value != null) {
-                      controller.changeLanguage(value);
-                    }
-                  },
-                )),
+            trailing: Obx(
+              () => DropdownButton<String>(
+                value: controller.currentLanguage,
+                items: [
+                  DropdownMenuItem(
+                    value: 'tr',
+                    child: Text(TrLocalization().localizationTitle),
+                  ),
+                  DropdownMenuItem(
+                    value: 'en',
+                    child: Text(EnLocalization().localizationTitle),
+                  ),
+                  DropdownMenuItem(
+                    value: 'ru',
+                    child: Text(RuLocalization().localizationTitle),
+                  ),
+                  DropdownMenuItem(
+                    value: 'ar',
+                    child: Text(ArLocalization().localizationTitle),
+                  ),
+                ],
+                onChanged: (String? value) {
+                  if (value != null) {
+                    controller.changeLanguage(value);
+                  }
+                },
+              ),
+            ),
           ),
           Divider(
             height: 1,
             indent: ModulePadding.m.value,
             endIndent: ModulePadding.m.value,
           ),
+          Obx(() {
+            if (!controller.canChangeCurrency) return const SizedBox.shrink();
+            return Column(
+              children: [
+                ListTile(
+                  leading: const Icon(Icons.currency_exchange),
+                  title: Text(labels.currency),
+                  trailing: DropdownButton<CurrencyType>(
+                    value: CurrencyType.fromValue(controller.currentCurrency!),
+                    items: CurrencyType.values.map((currency) {
+                      return DropdownMenuItem(
+                        value: currency,
+                        child: Text(
+                          '${labels.currency} (${currency.description})',
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: (CurrencyType? value) {
+                      if (value != null) {
+                        controller.changeCurrency(value);
+                      }
+                    },
+                  ),
+                ),
+                Divider(
+                  height: 1,
+                  indent: ModulePadding.m.value,
+                  endIndent: ModulePadding.m.value,
+                ),
+              ],
+            );
+          }),
           ListTile(
             title: Text(
               labels.darkMode,

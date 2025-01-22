@@ -33,6 +33,7 @@ class Cart extends StatefulWidget {
 class _CartState extends State<Cart> {
   final ScrollController _scrollController = ScrollController();
   bool _showScrollButton = false;
+  
 
   @override
   void initState() {
@@ -125,7 +126,11 @@ class _CartState extends State<Cart> {
     );
   }
 
-  Future<void> _generateAndOpenPdf(BuildContext context, List<CartProductModel> products) async {
+  Future<void> _generateAndOpenPdf(
+    BuildContext context,
+    List<CartProductModel> products,
+    CartController controller
+  ) async {
     final labels = AppLocalization.getLabels(context);
     if (products.isEmpty) {
       if (mounted) {
@@ -140,7 +145,8 @@ class _CartState extends State<Cart> {
     const baseAssetPath = 'assets/fonts/work_sans/';
 
     try {
-      final ttfRegular = await rootBundle.load('${baseAssetPath}WorkSans-Regular.ttf');
+      final ttfRegular =
+          await rootBundle.load('${baseAssetPath}WorkSans-Regular.ttf');
       final ttf = pw.Font.ttf(ttfRegular);
 
       // Group products by productCodeGroupId
@@ -153,13 +159,13 @@ class _CartState extends State<Cart> {
       }
 
       final columnWidths = {
-        0: const pw.FlexColumnWidth(4),    // Product Name
-        1: const pw.FlexColumnWidth(1.6),  // Code
-        2: const pw.FlexColumnWidth(1.2),  // Size
-        3: const pw.FlexColumnWidth(1.5),  // Color
-        4: const pw.FlexColumnWidth(1),    // Quantity
-        5: const pw.FlexColumnWidth(1.2),  // Price
-        6: const pw.FlexColumnWidth(1.5),  // Total
+        0: const pw.FlexColumnWidth(4), // Product Name
+        1: const pw.FlexColumnWidth(1.6), // Code
+        2: const pw.FlexColumnWidth(1.2), // Size
+        3: const pw.FlexColumnWidth(1.5), // Color
+        4: const pw.FlexColumnWidth(), // Quantity
+        5: const pw.FlexColumnWidth(1.2), // Price
+        6: const pw.FlexColumnWidth(1.5), // Total
       };
 
       final headers = [
@@ -177,59 +183,87 @@ class _CartState extends State<Cart> {
           color: PdfColors.blue900,
           borderRadius: pw.BorderRadius.vertical(top: pw.Radius.circular(4)),
         ),
-        children: headers.map((header) => pw.Padding(
-          padding: const pw.EdgeInsets.symmetric(vertical: 8, horizontal: 4),
-          child: pw.Text(
-            header,
-            style: pw.TextStyle(
-              font: ttf,
-              fontWeight: pw.FontWeight.bold,
-              color: PdfColors.white,
-            ),
-          ),
-        )).toList(),
+        children: headers
+            .map(
+              (header) => pw.Padding(
+                padding:
+                    const pw.EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+                child: pw.Text(
+                  header,
+                  style: pw.TextStyle(
+                    font: ttf,
+                    fontWeight: pw.FontWeight.bold,
+                    color: PdfColors.white,
+                  ),
+                ),
+              ),
+            )
+            .toList(),
       );
 
       final allRows = groupedProducts.entries.expand((entry) {
-        var isEvenGroup = groupedProducts.keys.toList().indexOf(entry.key) % 2 == 0;
-        return entry.value.map((product) => pw.TableRow(
-          decoration: pw.BoxDecoration(
-            color: isEvenGroup ? PdfColors.white : PdfColors.grey400,
-          ),
-          children: [
-            pw.Padding(
-              padding: const pw.EdgeInsets.all(2),
-              child: pw.Text(product.name ?? '', style: pw.TextStyle(font: ttf)),
+        final isEvenGroup =
+            groupedProducts.keys.toList().indexOf(entry.key) % 2 == 0;
+        return entry.value.map(
+          (product) => pw.TableRow(
+            decoration: pw.BoxDecoration(
+              color: isEvenGroup ? PdfColors.white : PdfColors.grey400,
             ),
-            pw.Padding(
-              padding: const pw.EdgeInsets.all(2),
-              child: pw.Text(product.code, style: pw.TextStyle(font: ttf)),
-            ),
-            pw.Padding(
-              padding: const pw.EdgeInsets.all(2),
-              child: pw.Text(product.sizeName ?? '-', style: pw.TextStyle(font: ttf)),
-            ),
-            pw.Padding(
-              padding: const pw.EdgeInsets.all(2),
-              child: pw.Text(product.colorName ?? '-', style: pw.TextStyle(font: ttf)),
-            ),
-            pw.Padding(
-              padding: const pw.EdgeInsets.all(2),
-              child: pw.Text(product.quantity.toString(), style: pw.TextStyle(font: ttf)),
-            ),
-            pw.Padding(
-              padding: const pw.EdgeInsets.all(2),
-              child: pw.Text(product.price.toStringAsFixed(2), style: pw.TextStyle(font: ttf)),
-            ),
-            pw.Padding(
-              padding: const pw.EdgeInsets.all(2),
-              child: pw.Text(
-                (product.price * product.quantity).toStringAsFixed(2),
-                style: pw.TextStyle(font: ttf),
+            children: [
+              pw.Padding(
+                padding: const pw.EdgeInsets.all(2),
+                child: pw.Text(
+                  product.name ?? '',
+                  style: pw.TextStyle(font: ttf),
+                ),
               ),
-            ),
-          ],
-        ));
+              pw.Padding(
+                padding: const pw.EdgeInsets.all(2),
+                child: pw.Text(product.code, style: pw.TextStyle(font: ttf)),
+              ),
+              pw.Padding(
+                padding: const pw.EdgeInsets.all(2),
+                child: pw.Text(
+                  product.sizeName ?? '-',
+                  style: pw.TextStyle(font: ttf),
+                ),
+              ),
+              pw.Padding(
+                padding: const pw.EdgeInsets.all(2),
+                child: pw.Text(
+                  product.colorName ?? '-',
+                  style: pw.TextStyle(font: ttf),
+                ),
+              ),
+              pw.Padding(
+                padding: const pw.EdgeInsets.all(2),
+                child: pw.Text(
+                  product.quantity.toString(),
+                  style: pw.TextStyle(font: ttf),
+                ),
+              ),
+              pw.Padding(
+                padding: const pw.EdgeInsets.all(2),
+                child: pw.Text(
+                  controller.isCurrencyTL
+                      ? product.price.toStringAsFixed(2)
+                      : product.currencyUnitPrice!.toStringAsFixed(2),
+                  style: pw.TextStyle(font: ttf),
+                ),
+              ),
+              pw.Padding(
+                padding: const pw.EdgeInsets.all(2),
+                child: pw.Text(
+                  controller.isCurrencyTL
+                      ? (product.price * product.quantity).toStringAsFixed(2)
+                      : (product.currencyUnitPrice! * product.quantity)
+                          .toStringAsFixed(2),
+                  style: pw.TextStyle(font: ttf),
+                ),
+              ),
+            ],
+          ),
+        );
       }).toList();
 
       pdf.addPage(
@@ -250,13 +284,22 @@ class _CartState extends State<Cart> {
           ),
           footer: (context) {
             if (context.pageNumber == context.pagesCount) {
-              final totalQuantity = products.fold<int>(0, (sum, product) => sum + product.quantity);
-              final totalPrice = products.fold<double>(0, (sum, product) => sum + (product.price * product.quantity));
+              final totalQuantity = products.fold<int>(
+                0,
+                (sum, product) => sum + product.quantity,
+              );
+              final totalPrice = products.fold<double>(
+                0,
+                (sum, product) => sum + (controller.isCurrencyTL
+                    ? product.price * product.quantity
+                    : product.currencyUnitPrice! * product.quantity),
+              );
 
               return pw.Container(
                 decoration: pw.BoxDecoration(
                   color: PdfColors.grey100,
-                  borderRadius: const pw.BorderRadius.all(pw.Radius.circular(4)),
+                  borderRadius:
+                      const pw.BorderRadius.all(pw.Radius.circular(4)),
                   border: pw.Border.all(color: PdfColors.grey400),
                 ),
                 padding: const pw.EdgeInsets.all(10),
@@ -362,7 +405,8 @@ class _CartState extends State<Cart> {
               if (controller.itemList.isNotEmpty)
                 IconButton(
                   icon: const Icon(Icons.picture_as_pdf),
-                  onPressed: () => _generateAndOpenPdf(context, controller.itemList),
+                  onPressed: () =>
+                      _generateAndOpenPdf(context, controller.itemList, controller),
                 ),
               Obx(
                 () => controller.itemList.isNotEmpty
@@ -515,7 +559,8 @@ class _CartState extends State<Cart> {
                                   physics: const NeverScrollableScrollPhysics(),
                                   shrinkWrap: true,
                                   padding: const EdgeInsets.only(
-                                    bottom: 180, // Add padding for the complete order section
+                                    bottom:
+                                        180, // Add padding for the complete order section
                                   ),
                                   itemBuilder: (context, index) {
                                     final item = controller.itemList[index];
@@ -539,7 +584,7 @@ class _CartState extends State<Cart> {
                                         item: item,
                                         onTapRemove: () =>
                                             controller.onTapRemoveProduct(item),
-                                        currencyType: controller.currencyType,
+                                        isCurrencyTL: controller.isCurrencyTL,
                                       ),
                                     );
                                   },

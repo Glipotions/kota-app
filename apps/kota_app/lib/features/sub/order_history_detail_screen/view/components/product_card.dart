@@ -6,15 +6,20 @@ import 'package:kota_app/product/widgets/card/bordered_image.dart';
 import 'package:values/values.dart';
 
 class ProductCard extends StatelessWidget {
-  const ProductCard({required this.item, this.onTapRemove, this.onTap});
+  const ProductCard(
+      {required this.item,
+      required this.isCurrencyTL,
+      this.onTapRemove,
+      this.onTap});
   final VoidCallback? onTap;
   final VoidCallback? onTapRemove;
   final CartProductModel item;
+  final bool isCurrencyTL;
 
   @override
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    
+
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -41,8 +46,8 @@ class ProductCard extends StatelessWidget {
             children: [
               // Product Image
               SizedBox(
-                width: 80, 
-                height: 80, 
+                width: 80,
+                height: 80,
                 child: ClipRRect(
                   borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(12),
@@ -50,7 +55,8 @@ class ProductCard extends StatelessWidget {
                   ),
                   child: BorderedImage(
                     aspectRatio: 1,
-                    imageUrl: item.pictureUrl ?? 'https://kota-app.b-cdn.net/logo.jpg',
+                    imageUrl: item.pictureUrl ??
+                        'https://kota-app.b-cdn.net/logo.jpg',
                     radius: const BorderRadius.only(
                       topLeft: Radius.circular(12),
                       bottomLeft: Radius.circular(12),
@@ -98,7 +104,9 @@ class ProductCard extends StatelessWidget {
                               vertical: 2,
                             ),
                             decoration: BoxDecoration(
-                              color: Theme.of(context).primaryColor.withOpacity(0.1),
+                              color: Theme.of(context)
+                                  .primaryColor
+                                  .withOpacity(0.1),
                               borderRadius: BorderRadius.circular(6),
                             ),
                             child: Text(
@@ -113,9 +121,13 @@ class ProductCard extends StatelessWidget {
                           // Unit Price
                           Expanded(
                             child: Text(
-                              item.price.formatPrice(),
+                              isCurrencyTL
+                                  ? item.price.formatPrice()
+                                  : item.currencyUnitPrice!.formatPrice(),
                               style: context.bodyMedium.copyWith(
-                                color: isDarkMode ? Colors.grey[300] : Colors.grey[600],
+                                color: isDarkMode
+                                    ? Colors.grey[300]
+                                    : Colors.grey[600],
                               ),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
@@ -124,7 +136,10 @@ class ProductCard extends StatelessWidget {
                           const SizedBox(width: 8),
                           // Total Price
                           Text(
-                            (item.price * item.quantity).formatPrice(),
+                            isCurrencyTL
+                                ? (item.price * item.quantity).formatPrice()
+                                : (item.currencyUnitPrice! * item.quantity)
+                                    .formatPrice(),
                             style: context.titleSmall.copyWith(
                               fontWeight: FontWeight.bold,
                               color: Theme.of(context).primaryColor,

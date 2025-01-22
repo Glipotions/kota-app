@@ -8,5 +8,6 @@ export 'product_category_model.dart';
 export 'product_group_list_response_model.dart';
 export 'product_variant_response_model.dart';
 export 'register_response_model.dart';
+export 'sales_invoice_detail_response_model.dart';
 export 'transactions_history_response_model.dart';
 export 'user_operation_claim_response_model.dart';

@@ -23,6 +23,9 @@ class ArLocalization extends AppLocalizationLabel {
   String get timeoutErrorMessage => 'انتهت مهلة الاتصال';
 
   @override
+  String get currency => 'العملة';
+
+  @override
   String get cancelBtnText => 'إلغاء';
 
   @override

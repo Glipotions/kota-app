@@ -26,7 +26,7 @@ class EnLocalization extends AppLocalizationLabel {
   final String tryAgainBtnText = 'Try Again';
 
   @override
-  String get timeoutErrorMessage => 'Connection timed out';
+  String get timeoutErrorMessage => 'The connection has timed out';
 
   @override
   String get unknownPageRouteMessageText => "You shouldn't be here :)";
@@ -483,4 +483,7 @@ class EnLocalization extends AppLocalizationLabel {
 
   @override
   String get code => 'Code';
+
+  @override
+  String get currency => 'Currency';
 }

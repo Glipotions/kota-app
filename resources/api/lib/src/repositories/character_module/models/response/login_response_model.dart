@@ -60,7 +60,9 @@ class User extends IBaseModel<User> {
         createdDate: json['createdDate'] == null
             ? null
             : DateTime.parse(json['createdDate']),
-        updatedDate: json['updatedDate'],
+        updatedDate: json['updatedDate'] == null
+            ? null
+            : DateTime.parse(json['updatedDate']),
         hasConnectedBranch: json['hasConnectedBranch'],
         connectedBranchCurrentInfoId: json['connectedBranchCurrentInfoId'],
         currencyType: json['currencyType'],

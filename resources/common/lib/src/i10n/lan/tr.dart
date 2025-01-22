@@ -484,4 +484,7 @@ class TrLocalization extends AppLocalizationLabel {
 
   @override
   String get period => 'Dönem';
+
+  @override
+  String get currency => 'Para Birimi';
 }

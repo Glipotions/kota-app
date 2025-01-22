@@ -7,6 +7,7 @@ import 'package:kota_app/features/main/profile_screen/view/profile.dart';
 import 'package:kota_app/product/base/controller/base_controller.dart';
 import 'package:kota_app/product/managers/session_handler.dart';
 import 'package:kota_app/product/navigation/modules/sub_route/sub_route_enums.dart';
+import 'package:kota_app/product/utility/enums/currency_type.dart';
 import 'package:values/values.dart';
 
 class ProfileController extends BaseControllerInterface {
@@ -15,26 +16,36 @@ class ProfileController extends BaseControllerInterface {
   BalanceResponseModel get balance => _balance.value;
   set balance(BalanceResponseModel value) => _balance.value = value;
 
-  int get currencyType =>
-      SessionHandler.instance.currentUser?.currencyType ?? 1;
+  // Currency related cached value
+  late final Rx<int> _currencyType = 1.obs;
+  late final Rx<bool> _isCurrencyTL = true.obs;
+
+  int get currencyType => _currencyType.value;
+  bool get isCurrencyTL => _isCurrencyTL.value;
+
+  void _updateCurrencyValues() {
+    _currencyType.value = sessionHandler.currentUser?.currencyType ?? 1;
+    _isCurrencyTL.value = CurrencyType.tl == CurrencyType.fromValue(_currencyType.value);
+  }
 
   @override
   Future<void> onReady() async {
     super.onReady();
     await onReadyGeneric(() async {
+      _updateCurrencyValues();
       await _getBalance();
     });
   }
 
   Future<void> _getBalance() async {
-    if (SessionHandler.instance.currentUser == null) {
+    if (sessionHandler.currentUser == null) {
       await context.pushNamed(SubRouteEnums.loginSubScreen.name);
     } else {
       await client.appService
           .balanceInformation(
-            id: SessionHandler.instance.currentUser!.currentAccountId!,
-            branchCurrentInfoId: SessionHandler
-                .instance.currentUser!.connectedBranchCurrentInfoId,
+            id: sessionHandler.currentUser!.currentAccountId!,
+            branchCurrentInfoId: sessionHandler
+                .currentUser!.connectedBranchCurrentInfoId,
           )
           .handleRequest(
             onSuccess: (res) => balance = res!,

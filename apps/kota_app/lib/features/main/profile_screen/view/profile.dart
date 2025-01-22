@@ -45,10 +45,9 @@ class Profile extends StatelessWidget {
                   Obx(
                     () => _BalanceCard(
                       balance:
-                          CurrencyType.fromValue(controller.currencyType) !=
-                                  CurrencyType.tl
-                              ? controller.balance.currencyBalance ?? 0
-                              : controller.balance.balance ?? 0,
+                          controller.isCurrencyTL
+                              ? controller.balance.balance ?? 0
+                              : controller.balance.currencyBalance ?? 0,
                       title: controller.balance.firma ?? '',
                       onTap: controller.onTapPastTransactions,
                     ),

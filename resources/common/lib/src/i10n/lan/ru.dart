@@ -501,4 +501,7 @@ class RuLocalization extends AppLocalizationLabel {
 
   @override
   String get code => 'Код';
+
+  @override
+  String get currency => 'Валюта';
 }

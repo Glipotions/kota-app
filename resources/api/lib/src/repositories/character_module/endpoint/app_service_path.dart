@@ -38,6 +38,8 @@ enum AppServicePath {
   currentAccounts('api/CariHesaps'),
   currentAccountsWithBalance('api/CariHesaps/WithBalance'),
 
+  saleInvoice('api/SatisFaturas'),
+
   ;
 
   ///String value of the enum.

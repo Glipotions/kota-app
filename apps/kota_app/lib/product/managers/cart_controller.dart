@@ -25,17 +25,28 @@ class CartController extends BaseControllerInterface {
   final TextEditingController descriptionController = TextEditingController();
   RxInt? editingOrderId = RxInt(0);
 
+  // Currency related cached values
+  late final Rx<int> _currencyType = 1.obs;
+  late final Rx<bool> _isCurrencyTL = true.obs;
+
   List<CartProductModel> get itemList => _itemList.value;
   set itemList(List<CartProductModel> value) => _itemList
     ..firstRebuild = true
     ..value = value;
 
-  int get currencyType => sessionHandler.currentUser?.currencyType ?? 1;
+  int get currencyType => _currencyType.value;
+  bool get isCurrencyTL => _isCurrencyTL.value;
+
+  void updateCurrencyValues() {
+    _currencyType.value = sessionHandler.currentUser?.currencyType ?? 1;
+    _isCurrencyTL.value = CurrencyType.tl == CurrencyType.fromValue(_currencyType.value);
+  }
 
   @override
   Future<void> onReady() async {
     super.onReady();
     await onReadyGeneric(() async {
+      updateCurrencyValues();
       await loadCartItems();
     });
   }
@@ -112,12 +123,9 @@ class CartController extends BaseControllerInterface {
       }
     }
 
-    return CurrencyType.fromValue(
-              currencyType,
-            ) !=
-            CurrencyType.tl
-        ? totalCurrencyAmount
-        : totalAmount;
+    return isCurrencyTL
+        ? totalAmount 
+        : totalCurrencyAmount;
   }
 
   Future<void> completeOrder(BuildContext context) async {

@@ -110,6 +110,13 @@ class SessionHandler extends ChangeNotifier {
   Future<void> logIn({LoginResponseModel? res}) async {
     if (res != null) {
       currentUser = res.user;
+      
+      // Check if there's a saved currency in cache
+      final savedCurrency = LocaleManager.instance.getIntValue(key: 'user_currency');
+      if (savedCurrency != null) {
+        currentUser?.currencyType = savedCurrency;
+      }
+      
       await Future.wait([
         setLoggedIn(value: true),
         setUserToken(res.accessToken!),

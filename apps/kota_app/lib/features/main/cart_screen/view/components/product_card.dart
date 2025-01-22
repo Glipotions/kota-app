@@ -2,11 +2,11 @@ part of '../cart.dart';
 
 class _ProductCard extends StatelessWidget {
   const _ProductCard(
-      {required this.item, this.onTapRemove, this.onTap, this.currencyType});
+      {required this.item, required this.isCurrencyTL, this.onTapRemove, this.onTap,});
   final VoidCallback? onTap;
   final VoidCallback? onTapRemove;
   final CartProductModel item;
-  final int? currencyType;
+  final bool isCurrencyTL;
 
   @override
   Widget build(BuildContext context) {
@@ -140,21 +140,15 @@ class _ProductCard extends StatelessWidget {
                           SizedBox(width: ModulePadding.xs.value),
                           Expanded(
                             child: Text(
-                              CurrencyType.tl ==
-                                      CurrencyType.fromValue(
-                                        currencyType ?? 1,
-                                      )
-                                  ? item.price.formatPrice()
-                                  : item.currencyUnitPrice!.formatPrice(),
+                              isCurrencyTL
+                                      ? item.price.formatPrice()
+                                      : item.currencyUnitPrice!.formatPrice(),
                               style: context.titleSmall,
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
                           Text(
-                            (CurrencyType.tl ==
-                                        CurrencyType.fromValue(
-                                          currencyType ?? 1,
-                                        )
+                            (isCurrencyTL
                                     ? (item.price * item.quantity)
                                     : (item.currencyUnitPrice! * item.quantity))
                                 .formatPrice(),

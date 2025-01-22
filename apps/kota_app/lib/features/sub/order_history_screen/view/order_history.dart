@@ -8,7 +8,6 @@ import 'package:kota_app/features/sub/order_history_screen/controller/order_hist
 import 'package:kota_app/product/base/base_view.dart';
 import 'package:kota_app/product/consts/claims.dart';
 import 'package:kota_app/product/managers/session_handler.dart';
-import 'package:kota_app/product/utility/enums/currency_type.dart';
 import 'package:kota_app/product/utility/enums/general.dart';
 import 'package:kota_app/product/utility/enums/module_padding_enums.dart';
 import 'package:kota_app/product/utility/extentions/index.dart';
@@ -31,7 +30,7 @@ class OrderHistory extends StatelessWidget {
         forceMaterialTransparency: true,
         title: Text(labels.orderHistory),
         actions: [
-          if (SessionHandler.instance.hasClaim(saleInvoiceAdminClaim))
+          if (controller.sessionHandler.hasClaim(saleInvoiceAdminClaim))
             IconButton(
               icon: const Icon(Icons.account_balance),
               onPressed: () async {

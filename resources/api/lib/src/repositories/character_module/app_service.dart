@@ -109,6 +109,17 @@ class AppService extends BaseClient {
       successStatus: HttpStatus.ok,
     );
   }
+  ///Request that returns all characters
+  Future<BaseHttpModel<SalesInvoiceDetailResponseModel>> saleInvoiceDetail({
+    required int id,
+  }) async {
+    return baseRequest<SalesInvoiceDetailResponseModel,
+        SalesInvoiceDetailResponseModel>(
+      responseModel: SalesInvoiceDetailResponseModel(),
+      httpUrl: AppServicePath.saleInvoice.withPath(id.toString()),
+      method: DioHttpMethod.get,
+    );
+  }
 
   ///Request that returns all characters
   Future<BaseHttpModel<ProductGroupListResponseModel>> productGroupList({

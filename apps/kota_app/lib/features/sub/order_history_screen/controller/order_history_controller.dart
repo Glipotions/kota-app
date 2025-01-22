@@ -9,6 +9,7 @@ import 'package:kota_app/product/managers/cart_controller.dart';
 import 'package:kota_app/product/models/cart_product_model.dart';
 import 'package:kota_app/product/navigation/modules/bottom_navigation_route/bottom_navigation_route_enums.dart';
 import 'package:kota_app/product/navigation/modules/sub_route/sub_route_enums.dart';
+import 'package:kota_app/product/utility/enums/currency_type.dart';
 import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
 import 'package:widgets/widget.dart';
@@ -33,7 +34,18 @@ class OrderHistoryController extends BaseControllerInterface {
   bool get isPaginationLoading => _isPaginationLoading.value;
   set isPaginationLoading(bool value) => _isPaginationLoading.value = value;
 
-  int? get currencyType => sessionHandler.currentUser?.currencyType ?? 1;
+  // Currency related cached value
+  late final Rx<int> _currencyType = 1.obs;
+  late final Rx<bool> _isCurrencyTL = true.obs;
+
+  int get currencyType => _currencyType.value;
+  bool get isCurrencyTL => _isCurrencyTL.value;
+
+  void _updateCurrencyValues() {
+    _currencyType.value = sessionHandler.currentUser?.currencyType ?? 1;
+    _isCurrencyTL.value =
+        CurrencyType.tl == CurrencyType.fromValue(_currencyType.value);
+  }
 
   @override
   void onInit() {
@@ -45,6 +57,7 @@ class OrderHistoryController extends BaseControllerInterface {
   Future<void> onReady() async {
     super.onReady();
     await onReadyGeneric(() async {
+      _updateCurrencyValues();
       await _getOrders();
     });
   }
@@ -113,7 +126,7 @@ class OrderHistoryController extends BaseControllerInterface {
     LoadingProgress.stop();
   }
 
-  Future<void> onTapOrderPdfCard(int id) async {
+  Future<void> onTapOrderPdfCard(int id, bool isCurrencyTL) async {
     await client.appService.orderHistoryDetail(id: id).handleRequest(
       onSuccess: (res) async {
         final cartProductItems = <CartProductModel>[];
@@ -123,9 +136,10 @@ class OrderHistoryController extends BaseControllerInterface {
             CartProductModel(
               id: item.id!,
               code: item.code!,
-              price: item.birimFiyat!,
+              price: isCurrencyTL ? item.birimFiyat! : item.dovizliBirimFiyat!,
               quantity: item.miktar!,
               name: item.name,
+              pictureUrl: item.pictureUrl,
             ),
           );
         }
@@ -135,7 +149,7 @@ class OrderHistoryController extends BaseControllerInterface {
           code: res.kod,
           date: res.tarih,
           items: cartProductItems,
-          totalPrice: res.toplamTutar,
+          totalPrice: isCurrencyTL ? res.toplamTutar : res.dovizTutar,
           description: res.aciklama,
         );
 

@@ -3,8 +3,10 @@ import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:kota_app/product/base/controller/base_controller.dart';
+import 'package:kota_app/product/navigation/modules/sub_route/sub_route_enums.dart';
 import 'package:kota_app/product/utility/enums/currency_type.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -33,8 +35,19 @@ class TransactionHistoryController extends BaseControllerInterface {
   double get currentBalance => _currentBalance.value;
   double get totalIncome => _totalIncome.value;
   double get totalExpense => _totalExpense.value;
-  int get currencyType => sessionHandler.currentUser?.currencyType ?? 1;
   bool get isDarkMode => _isDarkMode.value;
+
+  late final Rx<int> _currencyType = 1.obs;
+  late final Rx<bool> _isCurrencyTL = true.obs;
+
+  int get currencyType => _currencyType.value;
+  bool get isCurrencyTL => _isCurrencyTL.value;
+
+  void _updateCurrencyValues() {
+    _currencyType.value = sessionHandler.currentUser?.currencyType ?? 1;
+    _isCurrencyTL.value = CurrencyType.tl == CurrencyType.fromValue(_currencyType.value);
+  }
+
 
   set transactionItems(List<TransactionItem> value) {
     _transactionItems.value = value;
@@ -55,6 +68,7 @@ class TransactionHistoryController extends BaseControllerInterface {
   Future<void> onReady() async {
     super.onReady();
     await onReadyGeneric(() async {
+      _updateCurrencyValues();
       await _getTransactions();
     });
   }
@@ -91,7 +105,7 @@ class TransactionHistoryController extends BaseControllerInterface {
     double expense = 0;
 
     for (final item in _transactionItems.value) {
-      if (CurrencyType.fromValue(currencyType) == CurrencyType.tl) {
+      if (isCurrencyTL) {
         if (item.alacak != null && item.alacak! > 0) {
           income += item.alacak!;
         }
@@ -161,7 +175,13 @@ class TransactionHistoryController extends BaseControllerInterface {
         date1.month == date2.month &&
         date1.day == date2.day;
   }
-
+  void onTapSalesDetail(int id) => context.pushNamed(
+        SubRouteEnums.saleInvoiceDetail.name,
+        pathParameters: {
+          'id': id.toString(),
+        },
+      );
+      
   void showFilterDialog() {
     if (!Get.isDialogOpen!) {
       Get.dialog(

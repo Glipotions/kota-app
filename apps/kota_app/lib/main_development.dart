@@ -13,7 +13,7 @@ void main() {
       appName: 'Dev App',
       environment: AppEnvironment.development,
       // apiBaseUrl: '192.168.31.59:5278',
-      // apiBaseUrl: '192.168.1.117:5278',
+      // apiBaseUrl: '192.168.1.137:5278',
       apiBaseUrl: '78.186.131.20:8200',
       socketUrl: 'Socket Url',
     ),

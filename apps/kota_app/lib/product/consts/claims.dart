@@ -1,6 +1,8 @@
 const String adminClaim = 'Admin';
 const String moneyCaseReadClaim = 'Kasas.Read';
 
+const String changeCurrencyAdminClaim = 'ChangeCurrency.Admin';
+
 const String saleInvoiceAdminClaim = 'SatisFaturas.Admin';
 const String saleInvoiceReadClaim = 'SatisFaturas.Read';
 const String saleInvoiceCreateClaim = 'SatisFaturas.Create';

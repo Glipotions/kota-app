@@ -4,6 +4,7 @@ import 'package:kota_app/features/sub/manage_account_screen/manage_account_scree
 import 'package:kota_app/features/sub/order_history_detail_screen/order_history_detail_screen.dart';
 import 'package:kota_app/features/sub/order_history_screen/order_history_screen.dart';
 import 'package:kota_app/features/sub/product_detail_screen/product_detail_screen.dart';
+import 'package:kota_app/features/sub/sales_invoice_detail_screen/sales_invoice_detail_screen.dart';
 import 'package:kota_app/features/sub/transaction_history_screen/transaction_history_screen.dart';
 import 'package:kota_app/product/navigation/modules/sub_route/sub_route_enums.dart';
 
@@ -22,6 +23,13 @@ class SubRoute {
       name: SubRouteEnums.orderHistoryDetail.name,
       path: '${SubRouteEnums.orderHistoryDetail.path}/:id',
       builder: (context, state) => OrderHistoryDetailScreen(
+        id: state.pathParameters['id']!,
+      ),
+    ),
+    GoRoute(
+      name: SubRouteEnums.saleInvoiceDetail.name,
+      path: '${SubRouteEnums.saleInvoiceDetail.path}/:id',
+      builder: (context, state) => SalesInvoiceDetailScreen(
         id: state.pathParameters['id']!,
       ),
     ),

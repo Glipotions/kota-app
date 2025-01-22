@@ -50,6 +50,9 @@ abstract class AppLocalizationLabel {
   ///The connection has timed out
   String get timeoutErrorMessage;
 
+  ///Currency
+  String get currency;
+
   ///Cancel
   String get cancelBtnText;
 

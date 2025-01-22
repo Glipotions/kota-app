@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kota_app/features/sub/transaction_history_screen/controller/transaction_history_controller.dart';
 import 'package:kota_app/product/base/base_view.dart';
-import 'package:kota_app/product/utility/enums/currency_type.dart';
 import 'package:kota_app/product/utility/enums/module_padding_enums.dart';
 import 'package:kota_app/product/utility/extentions/num_extension.dart';
 import 'package:kota_app/product/widgets/app_bar/general_app_bar.dart';
@@ -145,14 +144,30 @@ class TransactionHistory extends StatelessWidget {
                                   ),
                                   _TransactionCard(
                                     item: controller.transactionItems[index],
-                                    currencyType: controller.currencyType,
+                                    isCurrencyTL: controller.isCurrencyTL,
+                                    onTap: () => controller
+                                                .transactionItems[index]
+                                                .fisTuru ==
+                                            'Satış Faturası'
+                                        ? controller.onTapSalesDetail(
+                                            controller
+                                                .transactionItems[index].id!,
+                                          )
+                                        : null,
                                   ),
                                 ],
                               );
                             }
                             return _TransactionCard(
                               item: controller.transactionItems[index],
-                              currencyType: controller.currencyType,
+                              isCurrencyTL: controller.isCurrencyTL,
+                              onTap: () => controller
+                                          .transactionItems[index].fisTuru ==
+                                      'Satış Faturası'
+                                  ? controller.onTapSalesDetail(
+                                      controller.transactionItems[index].id!,
+                                    )
+                                  : null,
                             );
                           },
                           separatorBuilder: (context, index) =>

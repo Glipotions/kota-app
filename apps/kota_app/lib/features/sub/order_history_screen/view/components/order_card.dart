@@ -211,7 +211,10 @@ class _OrderCard extends StatelessWidget {
                             ),
                           );
                         case 'pdf':
-                          controller.onTapOrderPdfCard(item.id!);
+                          controller.onTapOrderPdfCard(
+                            item.id!,
+                            controller.isCurrencyTL,
+                          );
                       }
                     },
                     itemBuilder: (BuildContext context) {
@@ -338,8 +341,7 @@ class _OrderCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        (CurrencyType.fromValue(controller.currencyType!) ==
-                                    CurrencyType.tl
+                        (controller.isCurrencyTL
                                 ? item.toplamTutar ?? 0
                                 : item.dovizTutar ?? 0)
                             .formatPrice(),

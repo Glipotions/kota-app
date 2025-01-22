@@ -1,14 +1,17 @@
 part of '../transaction_history.dart';
 
 class _TransactionCard extends StatelessWidget {
-  const _TransactionCard({required this.item, this.currencyType});
+  const _TransactionCard({required this.item, required this.isCurrencyTL, this.onTap});
 
   final TransactionItem item;
-  final int? currencyType;
+  final bool isCurrencyTL;
+  final VoidCallback? onTap;
+
+
   @override
   Widget build(BuildContext context) {
     final isDebit = item.borc != 0;
-    final amount = CurrencyType.fromValue(currencyType!) == CurrencyType.tl
+    final amount = isCurrencyTL
         ? isDebit
             ? item.borc ?? 0
             : item.alacak ?? 0
@@ -31,9 +34,7 @@ class _TransactionCard extends StatelessWidget {
         ),
         child: InkWell(
           borderRadius: BorderRadius.circular(12),
-          onTap: () {
-            // TODO: Implement transaction detail view
-          },
+          onTap: onTap,
           child: Padding(
             padding: EdgeInsets.all(ModulePadding.m.value),
             child: Column(
@@ -120,7 +121,7 @@ class _TransactionCard extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        CurrencyType.fromValue(currencyType!) == CurrencyType.tl
+                        isCurrencyTL
                             ? item.bakiye!.formatPrice()
                             : item.dovizBakiye!.formatPrice(),
                         style: context.titleSmall.copyWith(
