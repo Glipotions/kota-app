@@ -7,7 +7,7 @@ extension NumExtension on num {
     var symbol = '₺';
     switch (SessionHandler.instance.currentUser?.currencyType) {
       case 2:
-        symbol = '\$';
+        symbol = r'$';
       case 3:
         symbol = '€';
       case 4:

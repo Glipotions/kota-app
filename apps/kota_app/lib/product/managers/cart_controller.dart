@@ -249,6 +249,9 @@ class CartController extends BaseControllerInterface {
   }
 
   Future<void> _completeOrder(String cariHesapId, BuildContext context) async {
+    // Dismiss keyboard before proceeding
+    FocusScope.of(context).unfocus();
+    
     LoadingProgress.start();
     try {
       final request = CreateOrderRequestModel(

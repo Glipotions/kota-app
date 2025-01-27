@@ -8,7 +8,6 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:kota_app/product/managers/cart_controller.dart';
 import 'package:kota_app/product/models/cart_product_model.dart';
-import 'package:kota_app/product/utility/enums/currency_type.dart';
 import 'package:kota_app/product/utility/enums/module_padding_enums.dart';
 import 'package:kota_app/product/utility/enums/module_radius_enums.dart';
 import 'package:kota_app/product/utility/extentions/num_extension.dart';
@@ -246,8 +245,8 @@ class _CartState extends State<Cart> {
                 padding: const pw.EdgeInsets.all(2),
                 child: pw.Text(
                   controller.isCurrencyTL
-                      ? product.price.toStringAsFixed(2)
-                      : product.currencyUnitPrice!.toStringAsFixed(2),
+                      ? product.price.formatPrice()
+                      : product.currencyUnitPrice!.formatPrice(),
                   style: pw.TextStyle(font: ttf),
                 ),
               ),
@@ -255,9 +254,9 @@ class _CartState extends State<Cart> {
                 padding: const pw.EdgeInsets.all(2),
                 child: pw.Text(
                   controller.isCurrencyTL
-                      ? (product.price * product.quantity).toStringAsFixed(2)
+                      ? (product.price * product.quantity).formatPrice()
                       : (product.currencyUnitPrice! * product.quantity)
-                          .toStringAsFixed(2),
+                          .formatPrice(),
                   style: pw.TextStyle(font: ttf),
                 ),
               ),
@@ -343,7 +342,7 @@ class _CartState extends State<Cart> {
                               ),
                             ),
                             pw.Text(
-                              totalPrice.toStringAsFixed(2),
+                              totalPrice.formatPrice(),
                               style: pw.TextStyle(
                                 font: ttf,
                                 fontWeight: pw.FontWeight.bold,

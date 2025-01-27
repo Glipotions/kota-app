@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:kota_app/product/models/cart_product_model.dart';
+import 'package:kota_app/product/utility/extentions/index.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
@@ -187,7 +188,7 @@ class OrderPdfController extends GetxController {
                     pw.Padding(
                       padding: const pw.EdgeInsets.only(top: 8),
                       child: pw.Text(
-                        invoice.totalPrice!.toStringAsFixed(2),
+                        invoice.totalPrice!.formatPrice(),
                         style: pw.TextStyle(
                           fontWeight: pw.FontWeight.bold,
                           fontSize: 14,
@@ -246,8 +247,8 @@ class OrderPdfController extends GetxController {
           item.code,
           item.name ?? '',
           item.quantity.toString(),
-          item.price.toStringAsFixed(2),
-          (item.price * item.quantity).toStringAsFixed(2),
+          item.price.formatPrice(),
+          (item.price * item.quantity).formatPrice(),
         ]
             .map(
               (text) => pw.Container(
