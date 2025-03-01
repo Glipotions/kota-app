@@ -7,7 +7,6 @@ import 'package:kota_app/features/sub/current_account_screen/view/current_accoun
 import 'package:kota_app/features/sub/order_history_screen/controller/order_history_controller.dart';
 import 'package:kota_app/product/base/base_view.dart';
 import 'package:kota_app/product/consts/claims.dart';
-import 'package:kota_app/product/managers/session_handler.dart';
 import 'package:kota_app/product/utility/enums/general.dart';
 import 'package:kota_app/product/utility/enums/module_padding_enums.dart';
 import 'package:kota_app/product/utility/extentions/index.dart';

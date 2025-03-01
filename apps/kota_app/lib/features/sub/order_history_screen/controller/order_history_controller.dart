@@ -41,6 +41,8 @@ class OrderHistoryController extends BaseControllerInterface {
   int get currencyType => _currencyType.value;
   bool get isCurrencyTL => _isCurrencyTL.value;
 
+  int? _currentAccountId=null;
+
   void _updateCurrencyValues() {
     _currencyType.value = sessionHandler.currentUser?.currencyType ?? 1;
     _isCurrencyTL.value =
@@ -96,7 +98,7 @@ class OrderHistoryController extends BaseControllerInterface {
         !scrollController.position.outOfRange &&
         (transactionsResponse.hasNext!)) {
       isPaginationLoading = true;
-      await _getOrders();
+      await _getOrders(_currentAccountId);
       isPaginationLoading = false;
     }
   }
@@ -196,6 +198,7 @@ class OrderHistoryController extends BaseControllerInterface {
     // sessionHandler.currentUser?.currentAccountId = account.id;
     orderItems.clear();
     transactionsResponse = OrdersHistoryResponseModel();
+    _currentAccountId = account.id;
     await _getOrders(account.id);
   }
 }
