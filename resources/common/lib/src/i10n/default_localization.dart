@@ -295,4 +295,50 @@ abstract class AppLocalizationLabel {
   String get page;
   String get totalQuantity;
   String get code;
+  
+  // Forgot Password
+  /// Verification code has been sent to your email
+  String get verificationCodeSent;
+  
+  /// Something went wrong. Please try again.
+  String get somethingWentWrong;
+  
+  /// Code has been verified successfully
+  String get codeVerified;
+  
+  /// Invalid verification code
+  String get invalidCode;
+  
+  /// Passwords do not match
+  String get passwordsDoNotMatch;
+  
+  /// Password has been reset successfully
+  String get passwordResetSuccess;
+  
+  /// Verification code has been resent to your email
+  String get verificationCodeResent;
+  
+  /// Email is required
+  String get emailRequired;
+  
+  /// Forgot Password
+  String get forgotPassword;
+  
+  /// Reset Password
+  String get resetPassword;
+  
+  /// Verify Code
+  String get verifyCode;
+  
+  /// Enter the verification code sent to your email
+  String get enterVerificationCode;
+  
+  /// Enter your new password
+  String get enterNewPassword;
+  
+  /// Confirm your new password
+  String get confirmNewPassword;
+  
+  /// Resend Code
+  String get resendCode;
 }

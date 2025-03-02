@@ -504,4 +504,50 @@ class RuLocalization extends AppLocalizationLabel {
 
   @override
   String get currency => 'Валюта';
+
+  // Forgot Password
+  @override
+  String get verificationCodeSent => 'Код подтверждения отправлен на вашу электронную почту';
+  
+  @override
+  String get somethingWentWrong => 'Что-то пошло не так. Пожалуйста, попробуйте еще раз.';
+  
+  @override
+  String get codeVerified => 'Код успешно подтвержден';
+  
+  @override
+  String get invalidCode => 'Неверный код подтверждения';
+  
+  @override
+  String get passwordsDoNotMatch => 'Пароли не совпадают';
+  
+  @override
+  String get passwordResetSuccess => 'Пароль успешно сброшен';
+  
+  @override
+  String get verificationCodeResent => 'Код подтверждения повторно отправлен на вашу электронную почту';
+  
+  @override
+  String get emailRequired => 'Требуется электронная почта';
+  
+  @override
+  String get forgotPassword => 'Забыли пароль';
+  
+  @override
+  String get resetPassword => 'Сбросить пароль';
+  
+  @override
+  String get verifyCode => 'Подтвердить код';
+  
+  @override
+  String get enterVerificationCode => 'Введите код подтверждения, отправленный на вашу электронную почту';
+  
+  @override
+  String get enterNewPassword => 'Введите новый пароль';
+  
+  @override
+  String get confirmNewPassword => 'Подтвердите новый пароль';
+  
+  @override
+  String get resendCode => 'Отправить код повторно';
 }

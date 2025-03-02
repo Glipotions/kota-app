@@ -497,11 +497,57 @@ class ArLocalization extends AppLocalizationLabel {
   String get cartProducts => 'منتجات السلة';
 
   @override
-  String get page => 'صفحة';
+  String get page => 'الصفحة';
 
   @override
   String get totalQuantity => 'الكمية الإجمالية';
 
   @override
   String get code => 'الرمز';
+
+  // Forgot Password
+  @override
+  String get verificationCodeSent => 'تم إرسال رمز التحقق إلى بريدك الإلكتروني';
+  
+  @override
+  String get somethingWentWrong => 'حدث خطأ ما. يرجى المحاولة مرة أخرى.';
+  
+  @override
+  String get codeVerified => 'تم التحقق من الرمز بنجاح';
+  
+  @override
+  String get invalidCode => 'رمز التحقق غير صالح';
+  
+  @override
+  String get passwordsDoNotMatch => 'كلمات المرور غير متطابقة';
+  
+  @override
+  String get passwordResetSuccess => 'تم إعادة تعيين كلمة المرور بنجاح';
+  
+  @override
+  String get verificationCodeResent => 'تم إعادة إرسال رمز التحقق إلى بريدك الإلكتروني';
+  
+  @override
+  String get emailRequired => 'البريد الإلكتروني مطلوب';
+  
+  @override
+  String get forgotPassword => 'نسيت كلمة المرور';
+  
+  @override
+  String get resetPassword => 'إعادة تعيين كلمة المرور';
+  
+  @override
+  String get verifyCode => 'التحقق من الرمز';
+  
+  @override
+  String get enterVerificationCode => 'أدخل رمز التحقق المرسل إلى بريدك الإلكتروني';
+  
+  @override
+  String get enterNewPassword => 'أدخل كلمة المرور الجديدة';
+  
+  @override
+  String get confirmNewPassword => 'تأكيد كلمة المرور الجديدة';
+  
+  @override
+  String get resendCode => 'إعادة إرسال الرمز';
 }

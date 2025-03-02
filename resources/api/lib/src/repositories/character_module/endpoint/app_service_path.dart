@@ -10,6 +10,11 @@ enum AppServicePath {
   /// no need claim
   register('api/Auth/Register'),
 
+  /// forgot password endpoints
+  sendForgotPasswordCode('api/Auth/ForgotPassword'),
+  verifyForgotPasswordCode('api/Auth/VerifyForgotPasswordCode'),
+  resetPassword('api/Auth/ResetPassword'),
+
   /// claim: 
   transactionHistory('/api/CariHesaps/Hareket'),
 

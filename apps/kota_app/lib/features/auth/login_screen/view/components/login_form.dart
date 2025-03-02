@@ -97,7 +97,7 @@ class _LoginForm extends StatelessWidget {
                   ),
                   TextButton(
                     onPressed: () {
-                      // TODO: Implement forgot password
+                      context.goNamed(AuthRouteScreens.forgotPasswordScreen.name);
                     },
                     child: Text(
                       'Şifremi Unuttum',

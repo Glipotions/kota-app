@@ -1,4 +1,5 @@
 export 'balance_response_model.dart';
+export 'base_response_model.dart';
 export 'create_order_response_model.dart';
 export 'get_current_account_response_model.dart';
 export 'login_response_model.dart';

@@ -9,6 +9,10 @@ enum AuthRouteScreens {
   registerScreen(
     '/register',
     'registerScreen',
+  ),
+  forgotPasswordScreen(
+    '/forgot-password',
+    'forgotPasswordScreen',
   );
 
   /// Gets the path value for [AuthRouteScreens] enum.

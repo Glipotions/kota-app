@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
-import 'package:go_router/go_router.dart';
-import 'package:kota_app/features/auth/login_screen/controller/login_controller.dart';
+import 'package:get/get.dart';
+import 'package:kota_app/features/auth/forgot_password_screen/controller/forgot_password_controller.dart';
 import 'package:kota_app/product/base/base_view.dart';
-import 'package:kota_app/product/navigation/modules/auth_route/auth_route_enums.dart';
-import 'package:kota_app/product/widgets/input/module_text_field.dart';
 import 'package:values/values.dart';
 
-part 'components/login_form.dart';
+part 'components/email_form.dart';
+part 'components/verification_form.dart';
+part 'components/reset_password_form.dart';
 
-///Widget for Login Screen View
-class Login extends StatelessWidget {
-  ///Widget for Login Screen View
-  const Login({required this.controller, super.key});
+/// Widget for Forgot Password Screen View
+class ForgotPassword extends StatelessWidget {
+  /// Widget for Forgot Password Screen View
+  const ForgotPassword({required this.controller, super.key});
 
-  final LoginController controller;
+  /// Controller for this view
+  final ForgotPasswordController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -23,10 +23,17 @@ class Login extends StatelessWidget {
 
     return GestureDetector(
       onTap: controller.unFocus,
+      
       child: Scaffold(
         key: controller.scaffoldKey,
-        appBar: AppBar(title: const Text('Giriş'),),
-        body: BaseView<LoginController>(
+        appBar: AppBar(
+          title: const Text('Şifremi Unuttum'),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: controller.onTapBackToLogin,
+          ),
+        ),
+        body: BaseView<ForgotPasswordController>(
           controller: controller,
           child: Container(
             decoration: BoxDecoration(
@@ -45,7 +52,7 @@ class Login extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Container(
-                      height: screenSize.height * 0.3,
+                      height: screenSize.height * 0.2,
                       decoration: BoxDecoration(
                         color: isDarkMode ? Colors.grey[850] : Colors.white,
                         boxShadow: [
@@ -75,6 +82,27 @@ class Login extends StatelessWidget {
                               ),
                             ),
                           ),
+                          // Center text overlay
+                          Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Şifre Yenileme',
+                                  style: context.headlineMedium.copyWith(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    shadows: [
+                                      Shadow(
+                                        blurRadius: 10,
+                                        color: Colors.black.withOpacity(0.5),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -82,7 +110,18 @@ class Login extends StatelessWidget {
                       duration: const Duration(milliseconds: 300),
                       curve: Curves.easeInOut,
                       padding: const EdgeInsets.symmetric(horizontal: 24),
-                      child: _LoginForm(controller: controller),
+                      child: Obx(() {
+                        switch (controller.currentStep.value) {
+                          case 0:
+                            return _EmailForm(controller: controller);
+                          case 1:
+                            return _VerificationForm(controller: controller);
+                          case 2:
+                            return _ResetPasswordForm(controller: controller);
+                          default:
+                            return _EmailForm(controller: controller);
+                        }
+                      }),
                     ),
                   ],
                 ),

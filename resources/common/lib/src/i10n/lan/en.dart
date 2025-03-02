@@ -486,4 +486,50 @@ class EnLocalization extends AppLocalizationLabel {
 
   @override
   String get currency => 'Currency';
+
+  // Forgot Password
+  @override
+  String get verificationCodeSent => 'Verification code has been sent to your email';
+  
+  @override
+  String get somethingWentWrong => 'Something went wrong. Please try again.';
+  
+  @override
+  String get codeVerified => 'Code has been verified successfully';
+  
+  @override
+  String get invalidCode => 'Invalid verification code';
+  
+  @override
+  String get passwordsDoNotMatch => 'Passwords do not match';
+  
+  @override
+  String get passwordResetSuccess => 'Password has been reset successfully';
+  
+  @override
+  String get verificationCodeResent => 'Verification code has been resent to your email';
+  
+  @override
+  String get emailRequired => 'Email is required';
+  
+  @override
+  String get forgotPassword => 'Forgot Password';
+  
+  @override
+  String get resetPassword => 'Reset Password';
+  
+  @override
+  String get verifyCode => 'Verify Code';
+  
+  @override
+  String get enterVerificationCode => 'Enter the verification code sent to your email';
+  
+  @override
+  String get enterNewPassword => 'Enter your new password';
+  
+  @override
+  String get confirmNewPassword => 'Confirm your new password';
+  
+  @override
+  String get resendCode => 'Resend Code';
 }

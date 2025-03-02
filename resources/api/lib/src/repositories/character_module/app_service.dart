@@ -37,6 +37,42 @@ class AppService extends BaseClient {
     );
   }
 
+  /// Send forgot password verification code to user's email
+  Future<BaseHttpModel<BaseResponseModel>> sendForgotPasswordCode({
+    required ForgotPasswordRequestModel request,
+  }) async {
+    return baseRequest<BaseResponseModel, BaseResponseModel>(
+      responseModel: BaseResponseModel(),
+      httpUrl: AppServicePath.sendForgotPasswordCode.value,
+      method: DioHttpMethod.post,
+      bodyParam: request,
+    );
+  }
+
+  /// Verify the forgot password code entered by the user
+  Future<BaseHttpModel<BaseResponseModel>> verifyForgotPasswordCode({
+    required VerifyForgotPasswordRequestModel request,
+  }) async {
+    return baseRequest<BaseResponseModel, BaseResponseModel>(
+      responseModel: BaseResponseModel(),
+      httpUrl: AppServicePath.verifyForgotPasswordCode.value,
+      method: DioHttpMethod.post,
+      bodyParam: request,
+    );
+  }
+
+  /// Reset user password with the new password
+  Future<BaseHttpModel<BaseResponseModel>> resetPassword({
+    required ResetPasswordRequestModel request,
+  }) async {
+    return baseRequest<BaseResponseModel, BaseResponseModel>(
+      responseModel: BaseResponseModel(),
+      httpUrl: AppServicePath.resetPassword.value,
+      method: DioHttpMethod.post,
+      bodyParam: request,
+    );
+  }
+
   ///Request that returns all characters
   Future<BaseHttpModel<TransactionsHistoryResponseModel>> transactionHistory({
     required TransactionsHistoryRequestModel request,
@@ -237,4 +273,6 @@ class AppService extends BaseClient {
       // queryParams: request.toJson(),
     );
   }
+
+  
 }

@@ -382,6 +382,52 @@ class TrLocalization extends AppLocalizationLabel {
   @override
   String get code => 'Kod';
 
+  // Forgot Password
+  @override
+  String get verificationCodeSent => 'Doğrulama kodu e-posta adresinize gönderildi';
+  
+  @override
+  String get somethingWentWrong => 'Bir şeyler yanlış gitti. Lütfen tekrar deneyin.';
+  
+  @override
+  String get codeVerified => 'Kod başarıyla doğrulandı';
+  
+  @override
+  String get invalidCode => 'Geçersiz doğrulama kodu';
+  
+  @override
+  String get passwordsDoNotMatch => 'Şifreler eşleşmiyor';
+  
+  @override
+  String get passwordResetSuccess => 'Şifre başarıyla sıfırlandı';
+  
+  @override
+  String get verificationCodeResent => 'Doğrulama kodu e-posta adresinize tekrar gönderildi';
+  
+  @override
+  String get emailRequired => 'E-posta adresi gereklidir';
+  
+  @override
+  String get forgotPassword => 'Şifremi Unuttum';
+  
+  @override
+  String get resetPassword => 'Şifreyi Sıfırla';
+  
+  @override
+  String get verifyCode => 'Kodu Doğrula';
+  
+  @override
+  String get enterVerificationCode => 'E-posta adresinize gönderilen doğrulama kodunu girin';
+  
+  @override
+  String get enterNewPassword => 'Yeni şifrenizi girin';
+  
+  @override
+  String get confirmNewPassword => 'Yeni şifrenizi onaylayın';
+  
+  @override
+  String get resendCode => 'Kodu Tekrar Gönder';
+
   // Bottom Navigation Bar
   @override
   String get home => 'Ana Sayfa';
