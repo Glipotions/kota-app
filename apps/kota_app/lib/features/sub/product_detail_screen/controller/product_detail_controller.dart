@@ -98,8 +98,8 @@ class ProductDetailController extends BaseControllerInterface {
     selectedSize.value = index;
     selectedSizeName = product.sizes?[index];
     selectProduct(selectedColorName, selectedSizeName);
-
-    // cartProduct = cartProduct.copyWith(id: 0);
+    update();
+    cartProduct = cartProduct.copyWith(id: 0);
   }
 
   void selectProduct(String? colorName, String? sizeName) {
@@ -162,6 +162,29 @@ class ProductDetailController extends BaseControllerInterface {
     return colorVariant?.pictureUrl?.isNotEmpty == true
         ? colorVariant!.pictureUrl!
         : product.pictureUrl ?? '';
+  }
+
+  String getSelectedProductImageUrl() {
+    // If no color or size is selected, return default product image
+    if (selectedColorName == null && selectedSizeName == null) {
+      return product.pictureUrl ?? '';
+    }
+
+    // Try to get variant with both selected color and size
+    if (selectedColorName != null && selectedSizeName != null) {
+      final variant = product.productVariants?.firstWhereOrNull(
+        (variant) => 
+            variant.colorName == selectedColorName && 
+            variant.sizeName == selectedSizeName,
+      );
+
+      if (variant?.pictureUrl?.isNotEmpty == true) {
+        return variant!.pictureUrl!;
+      }
+    }
+
+    // Fall back to color-based image if specific variant not found
+    return getSelectedColorImageUrl();
   }
 
   RxBool sizeEnableCheck(int index) {
