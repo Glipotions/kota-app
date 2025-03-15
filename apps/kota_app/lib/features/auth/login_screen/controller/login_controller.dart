@@ -42,7 +42,7 @@ class LoginController extends BaseControllerInterface {
                   await Future.wait([
                     saveUserCredentials(),
                   ]),
-                  sessionHandler.logIn(res: res!),
+                  sessionHandler.logIn(res: res!, isLogin: true),
                 }
               else
                 {
@@ -79,7 +79,7 @@ class LoginController extends BaseControllerInterface {
   }
 
   Future<void> saveUserCredentials() async {
-   await LocaleManager.instance
+    await LocaleManager.instance
         .setBoolValue(key: CacheKey.isRemember.name, value: rememberMe.value);
 
     if (rememberMe.value) {

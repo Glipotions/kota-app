@@ -79,7 +79,7 @@ class SessionHandler extends ChangeNotifier {
   Future<void> getCurrentUser() async {
     await ProductClient.instance.appService.currentUser().handleRequest(
           onSuccess: (res) async {
-            await logIn(res: res);
+            await logIn(res: res, isLogin: false);
           },
           onIgnoreException: (err) async {
             await logOut();
@@ -107,16 +107,22 @@ class SessionHandler extends ChangeNotifier {
     userAuthStatus = UserAuthStatus.unAuthorized;
   }
 
-  Future<void> logIn({LoginResponseModel? res}) async {
+  Future<void> logIn({LoginResponseModel? res, bool isLogin = true}) async {
     if (res != null) {
       currentUser = res.user;
-      
+
       // Check if there's a saved currency in cache
-      final savedCurrency = LocaleManager.instance.getIntValue(key: 'user_currency');
-      if (savedCurrency != null) {
+      final savedCurrency =
+          LocaleManager.instance.getIntValue(key: 'user_currency');
+      if (savedCurrency != null && !isLogin) {
         currentUser?.currencyType = savedCurrency;
+      } else if (isLogin && currentUser != null && currentUser!.currencyType != null) {
+        await LocaleManager.instance.setIntValue(
+          key: 'user_currency',
+          value: currentUser!.currencyType!,
+        );
       }
-      
+
       await Future.wait([
         setLoggedIn(value: true),
         setUserToken(res.accessToken!),
