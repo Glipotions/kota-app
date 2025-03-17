@@ -13,6 +13,14 @@ class SalesInvoiceDetail extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Satış Faturası Detay'),
+        actions: [
+          if (!controller.isLoading && controller.salesInvoiceDetail != null)
+            IconButton(
+              icon: const Icon(Icons.receipt_long),
+              tooltip: 'Fatura PDF Oluştur',
+              onPressed: () => controller.generateAndShowInvoice(context),
+            ),
+        ],
       ),
       body: controller.isLoading
           ? const Center(child: CircularProgressIndicator())

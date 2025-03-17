@@ -341,4 +341,44 @@ abstract class AppLocalizationLabel {
   
   /// Resend Code
   String get resendCode;
+
+  // Invoice PDF
+  /// Sales Invoice
+  String get salesInvoice;
+  
+  /// Invoice Details
+  String get invoiceDetails;
+  
+  /// Date
+  String get invoiceDate;
+  
+  /// Code (for invoice)
+  String get invoiceProductCode;
+  
+  /// Product Name (for invoice)
+  String get invoiceProductName;
+  
+  /// Quantity (for invoice)
+  String get invoiceQuantity;
+  
+  /// Unit Price (for invoice)
+  String get unitPriceInvoice;
+  
+  /// Total (for invoice)
+  String get totalInvoice;
+  
+  /// Subtotal
+  String get subtotal;
+  
+  /// VAT Rate
+  String get vatRate;
+  
+  /// VAT Total
+  String get vatTotal;
+  
+  /// Grand Total
+  String get grandTotal;
+  
+  /// This invoice was generated electronically
+  String get electronicInvoiceNote;
 }

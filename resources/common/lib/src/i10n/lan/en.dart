@@ -487,6 +487,46 @@ class EnLocalization extends AppLocalizationLabel {
   @override
   String get currency => 'Currency';
 
+  // Invoice PDF
+  @override
+  String get salesInvoice => 'Sales Invoice';
+
+  @override
+  String get invoiceDetails => 'INVOICE DETAILS';
+
+  @override
+  String get invoiceDate => 'Date';
+
+  @override
+  String get invoiceProductCode => 'Code';
+
+  @override
+  String get invoiceProductName => 'Product Name';
+
+  @override
+  String get invoiceQuantity => 'Quantity';
+
+  @override
+  String get unitPriceInvoice => 'Unit Price';
+
+  @override
+  String get totalInvoice => 'Total';
+
+  @override
+  String get subtotal => 'Subtotal';
+
+  @override
+  String get vatRate => 'VAT Rate';
+
+  @override
+  String get vatTotal => 'VAT Total';
+
+  @override
+  String get grandTotal => 'GRAND TOTAL';
+
+  @override
+  String get electronicInvoiceNote => 'This invoice was generated electronically.';
+
   // Forgot Password
   @override
   String get verificationCodeSent => 'Verification code has been sent to your email';

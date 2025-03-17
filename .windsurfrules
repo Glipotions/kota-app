@@ -1,0 +1,26 @@
+# .windsurfrules for Flutter Project
+
+## SOLID Principles
+- Each class/widget must have a single responsibility (SRP).
+- Extend functionality via inheritance or composition, not modification (OCP).
+- Subtypes must be substitutable for their base types (LSP).
+- Define small, specific interfaces (ISP).
+- Depend on abstractions, not concrete classes; use DI (DIP).
+
+## Performance Rules
+- Use `const` widgets to minimize rebuilds.
+- Limit state updates to affected UI sections.
+- Cache network responses and implement lazy loading.
+- Dispose resources in `dispose()` to avoid leaks.
+- Use `builder` constructors for large lists/grids.
+- Avoid expensive operations in `build`.
+
+## Coding Standards
+- Organize code into layers: ui, data, domain, services.
+- Enforce null safety with safe operators.
+- Handle async operations efficiently with error handling.
+- Document complex logic with DartDoc.
+
+## Asset Management
+- Compress images and use resolution variants.
+- Preload critical assets for faster runtime access.

@@ -99,7 +99,6 @@ class ProductDetailController extends BaseControllerInterface {
     selectedSizeName = product.sizes?[index];
     selectProduct(selectedColorName, selectedSizeName);
     update();
-    cartProduct = cartProduct.copyWith(id: 0);
   }
 
   void selectProduct(String? colorName, String? sizeName) {

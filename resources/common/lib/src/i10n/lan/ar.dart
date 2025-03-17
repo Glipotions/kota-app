@@ -505,6 +505,46 @@ class ArLocalization extends AppLocalizationLabel {
   @override
   String get code => 'الرمز';
 
+  // Invoice PDF
+  @override
+  String get salesInvoice => 'فاتورة المبيعات';
+
+  @override
+  String get invoiceDetails => 'تفاصيل الفاتورة';
+
+  @override
+  String get invoiceDate => 'التاريخ';
+
+  @override
+  String get invoiceProductCode => 'الرمز';
+
+  @override
+  String get invoiceProductName => 'اسم المنتج';
+
+  @override
+  String get invoiceQuantity => 'الكمية';
+
+  @override
+  String get unitPriceInvoice => 'سعر الوحدة';
+
+  @override
+  String get totalInvoice => 'المجموع';
+
+  @override
+  String get subtotal => 'المجموع الفرعي';
+
+  @override
+  String get vatRate => 'نسبة ضريبة القيمة المضافة';
+
+  @override
+  String get vatTotal => 'إجمالي ضريبة القيمة المضافة';
+
+  @override
+  String get grandTotal => 'المجموع الكلي';
+
+  @override
+  String get electronicInvoiceNote => 'تم إنشاء هذه الفاتورة إلكترونيًا.';
+
   // Forgot Password
   @override
   String get verificationCodeSent => 'تم إرسال رمز التحقق إلى بريدك الإلكتروني';

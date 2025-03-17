@@ -533,4 +533,44 @@ class TrLocalization extends AppLocalizationLabel {
 
   @override
   String get currency => 'Para Birimi';
+
+  // Invoice PDF
+  @override
+  String get salesInvoice => 'Satış Faturası';
+
+  @override
+  String get invoiceDetails => 'FATURA BİLGİLERİ';
+
+  @override
+  String get invoiceDate => 'Tarih';
+
+  @override
+  String get invoiceProductCode => 'Kod';
+
+  @override
+  String get invoiceProductName => 'Ürün Adı';
+
+  @override
+  String get invoiceQuantity => 'Miktar';
+
+  @override
+  String get unitPriceInvoice => 'Birim Fiyat';
+
+  @override
+  String get totalInvoice => 'Toplam';
+
+  @override
+  String get subtotal => 'Ara Toplam';
+
+  @override
+  String get vatRate => 'KDV Oranı';
+
+  @override
+  String get vatTotal => 'KDV Toplam';
+
+  @override
+  String get grandTotal => 'GENEL TOPLAM';
+
+  @override
+  String get electronicInvoiceNote => 'Bu fatura elektronik olarak oluşturulmuştur.';
 }

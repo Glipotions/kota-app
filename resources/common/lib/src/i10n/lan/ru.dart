@@ -505,6 +505,46 @@ class RuLocalization extends AppLocalizationLabel {
   @override
   String get currency => 'Валюта';
 
+  // Invoice PDF
+  @override
+  String get salesInvoice => 'Счет-фактура';
+
+  @override
+  String get invoiceDetails => 'ДЕТАЛИ СЧЕТА';
+
+  @override
+  String get invoiceDate => 'Дата';
+
+  @override
+  String get invoiceProductCode => 'Код';
+
+  @override
+  String get invoiceProductName => 'Наименование товара';
+
+  @override
+  String get invoiceQuantity => 'Количество';
+
+  @override
+  String get unitPriceInvoice => 'Цена за единицу';
+
+  @override
+  String get totalInvoice => 'Всего';
+
+  @override
+  String get subtotal => 'Промежуточный итог';
+
+  @override
+  String get vatRate => 'Ставка НДС';
+
+  @override
+  String get vatTotal => 'Итого НДС';
+
+  @override
+  String get grandTotal => 'ОБЩАЯ СУММА';
+
+  @override
+  String get electronicInvoiceNote => 'Этот счет был создан в электронном виде.';
+
   // Forgot Password
   @override
   String get verificationCodeSent => 'Код подтверждения отправлен на вашу электронную почту';
