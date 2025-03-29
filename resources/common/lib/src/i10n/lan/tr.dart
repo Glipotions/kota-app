@@ -573,4 +573,20 @@ class TrLocalization extends AppLocalizationLabel {
 
   @override
   String get electronicInvoiceNote => 'Bu fatura elektronik olarak oluşturulmuştur.';
+
+  @override
+  String get discount => 'İndirim';
+
+  // Invoice Detail Screen
+  @override
+  String get invoiceDetail => 'Fatura Detay';
+
+  @override
+  String get productInformation => 'Ürün Bilgileri';
+
+  @override
+  String get invoiceDetailNotFound => 'Fatura detayı bulunamadı';
+
+  @override
+  String get generateInvoicePdf => 'Fatura PDF Oluştur';
 }

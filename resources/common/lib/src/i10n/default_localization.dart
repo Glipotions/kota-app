@@ -192,6 +192,9 @@ abstract class AppLocalizationLabel {
   String get completed;
   String get preparing;
 
+  // Invoice
+  String get discount;
+
   // Transaction History Screen
   String get transactionHistory;
   String get currentBalance;
@@ -381,4 +384,16 @@ abstract class AppLocalizationLabel {
   
   /// This invoice was generated electronically
   String get electronicInvoiceNote;
+
+  /// Invoice Detail
+  String get invoiceDetail;
+
+  /// Product Information
+  String get productInformation;
+
+  /// Invoice detail not found
+  String get invoiceDetailNotFound;
+
+  /// Generate Invoice PDF
+  String get generateInvoicePdf;
 }

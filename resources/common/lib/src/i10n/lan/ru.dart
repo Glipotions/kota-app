@@ -545,6 +545,9 @@ class RuLocalization extends AppLocalizationLabel {
   @override
   String get electronicInvoiceNote => 'Этот счет был создан в электронном виде.';
 
+  @override
+  String get discount => 'Скидка';
+
   // Forgot Password
   @override
   String get verificationCodeSent => 'Код подтверждения отправлен на вашу электронную почту';
@@ -590,4 +593,17 @@ class RuLocalization extends AppLocalizationLabel {
   
   @override
   String get resendCode => 'Отправить код повторно';
+
+  // Invoice Detail Screen
+  @override
+  String get invoiceDetail => 'Детали счета';
+
+  @override
+  String get productInformation => 'Информация о товаре';
+
+  @override
+  String get invoiceDetailNotFound => 'Детали счета не найдены';
+
+  @override
+  String get generateInvoicePdf => 'Создать PDF счета';
 }

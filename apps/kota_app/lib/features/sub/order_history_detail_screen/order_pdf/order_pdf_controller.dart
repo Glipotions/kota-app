@@ -272,10 +272,30 @@ class OrderPdfController extends GetxController {
         theme: await pdfThemeData(),
         pageFormat: PdfPageFormat.a4,
         margin: const pw.EdgeInsets.all(margin),
+        maxPages: 100, // Set a higher maximum page limit
+        footer: (pw.Context context) {
+          // Add page numbering in the footer
+          return pw.Container(
+            alignment: pw.Alignment.centerRight,
+            margin: const pw.EdgeInsets.only(top: 10),
+            child: pw.Text(
+              '${context.pageNumber}/${context.pagesCount}',
+              style: pw.TextStyle(
+                fontSize: 10,
+                fontWeight: pw.FontWeight.bold,
+                color: PdfColors.grey700,
+              ),
+            ),
+          );
+        },
         build: (pw.Context context) {
-          return [
+          // If there are too many items, we might need to chunk them
+          final items = invoice.items ?? [];
+          
+          final List<pw.Widget> content = [
             header(invoice),
             pw.SizedBox(height: 10),
+            // Create a single table for all items
             pw.Table(
               border: pw.TableBorder.all(),
               columnWidths: {
@@ -286,13 +306,18 @@ class OrderPdfController extends GetxController {
                 4: const pw.FlexColumnWidth(),
               },
               children: [
+                // Add the header row once
                 buildTableHeader(),
-                for (int i = 0; i < invoice.items!.length; i++)
-                  buildTableRow(invoice.items![i], i % 2 == 1),
+                // Add all item rows
+                for (int i = 0; i < items.length; i++)
+                  buildTableRow(items[i], i % 2 == 1),
               ],
             ),
+            pw.SizedBox(height: 20),
             footer(invoice),
           ];
+          
+          return content;
         },
       ),
     );

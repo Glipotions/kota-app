@@ -17,7 +17,7 @@ class PDFService {
     BuildContext context,
   ) async {
     final pdf = pw.Document();
-    
+
     // Get localization
     final localization = AppLocalization.getLabels(context);
 
@@ -40,10 +40,10 @@ class PDFService {
             pw.SizedBox(height: 20),
             _buildTitle(boldFont, localization),
             pw.SizedBox(height: 20),
-            _buildInvoiceItems(
-                invoice.faturaBilgileri ?? [], regularFont, boldFont, localization),
+            _buildInvoiceItems(invoice.faturaBilgileri ?? [], regularFont,
+                boldFont, localization),
             pw.SizedBox(height: 20),
-            _buildTotal(invoice.faturaBilgileri ?? [], boldFont, regularFont, localization),
+            _buildTotal(invoice, boldFont, regularFont, localization),
             pw.SizedBox(height: 40),
             _buildFooter(regularFont, localization),
           ];
@@ -94,7 +94,8 @@ class PDFService {
     return '₺${formatter.format(value)}';
   }
 
-  static pw.Widget _buildHeader(pw.Font fontBold, String date, AppLocalizationLabel localization) {
+  static pw.Widget _buildHeader(
+      pw.Font fontBold, String date, AppLocalizationLabel localization) {
     return pw.Row(
       mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
       children: [
@@ -141,7 +142,8 @@ class PDFService {
     );
   }
 
-  static pw.Widget _buildTitle(pw.Font fontBold, AppLocalizationLabel localization) {
+  static pw.Widget _buildTitle(
+      pw.Font fontBold, AppLocalizationLabel localization) {
     return pw.Container(
       width: double.infinity,
       padding: const pw.EdgeInsets.all(10),
@@ -252,28 +254,20 @@ class PDFService {
   }
 
   static pw.Widget _buildTotal(
-    List<SalesInvoiceDetailItemModel> items,
+    SalesInvoiceDetailResponseModel invoice,
     pw.Font fontBold,
     pw.Font font,
     AppLocalizationLabel localization,
   ) {
-    final totalAmount = items.fold<double>(
-      0,
-      (previousValue, item) => previousValue + (item.tutar ?? 0),
-    );
+    final totalAmount = invoice.toplamTutar ?? 0;
 
-    final totalKDV = items.fold<double>(
-      0,
-      (previousValue, item) => previousValue + (item.kdvTutari ?? 0),
-    );
+    final totalKDV = invoice.kdvTutari ?? 0;
 
     final totalBeforeKDV = totalAmount - totalKDV;
 
+    final discountTotal = invoice.iskontoTutari ?? 0;
+
     // Calculate average KDV rate (weighted)
-    double weightedKdvRate = 0;
-    if (totalBeforeKDV > 0) {
-      weightedKdvRate = (totalKDV / totalBeforeKDV) * 100;
-    }
 
     return pw.Container(
       alignment: pw.Alignment.centerRight,
@@ -298,11 +292,13 @@ class PDFService {
             mainAxisSize: pw.MainAxisSize.min,
             children: [
               pw.Text(
-                '${localization.vatRate}: ',
+                '${localization.discount} (%${invoice.iskontoOrani}): ',
                 style: pw.TextStyle(font: fontBold),
               ),
               pw.Text(
-                  '${weightedKdvRate.toStringAsFixed(2).replaceAll('.', ',')}%'),
+                _formatCurrency(discountTotal),
+                style: pw.TextStyle(font: font),
+              ),
             ],
           ),
           pw.SizedBox(height: 5),
@@ -310,7 +306,7 @@ class PDFService {
             mainAxisSize: pw.MainAxisSize.min,
             children: [
               pw.Text(
-                '${localization.vatTotal}: ',
+                '${localization.vatTotal} (%${invoice.kdvSekli != 1 ? 0 : invoice.faturaKdvOrani}): ',
                 style: pw.TextStyle(font: fontBold),
               ),
               pw.Text(
@@ -353,7 +349,8 @@ class PDFService {
     );
   }
 
-  static pw.Widget _buildFooter(pw.Font font, AppLocalizationLabel localization) {
+  static pw.Widget _buildFooter(
+      pw.Font font, AppLocalizationLabel localization) {
     return pw.Column(
       crossAxisAlignment: pw.CrossAxisAlignment.center,
       children: [

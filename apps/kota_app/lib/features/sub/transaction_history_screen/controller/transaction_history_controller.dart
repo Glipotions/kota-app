@@ -325,7 +325,9 @@ class TransactionHistoryController extends BaseControllerInterface {
             pw.Table(
               border: pw.TableBorder.all(),
               columnWidths: columnWidths,
-              children: transactions.map((tx) {
+              children: ([...transactions]..sort((TransactionItem a, TransactionItem b) => 
+                (a.tarih ?? DateTime(1900)).compareTo(b.tarih ?? DateTime(1900))))
+                .map((TransactionItem tx) {
                 final isHighlighted =
                     (isDoviz ? tx.dovizAlacak : tx.alacak) != null &&
                         (isDoviz ? tx.dovizAlacak : tx.alacak)! > 0;

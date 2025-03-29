@@ -220,7 +220,11 @@ class EnLocalization extends AppLocalizationLabel {
   String get support => 'Support';
 
   @override
-  String get supportDescription => 'Contact support for assistance.';
+  String get supportDescription => 'You can contact support.';
+
+  // Invoice
+  @override
+  String get discount => 'Discount';
 
   @override
   String get userAccountInfo => 'Account Info';
@@ -572,4 +576,17 @@ class EnLocalization extends AppLocalizationLabel {
   
   @override
   String get resendCode => 'Resend Code';
+
+  // Invoice Detail Screen
+  @override
+  String get invoiceDetail => 'Invoice Detail';
+
+  @override
+  String get productInformation => 'Product Information';
+
+  @override
+  String get invoiceDetailNotFound => 'Invoice detail not found';
+
+  @override
+  String get generateInvoicePdf => 'Generate Invoice PDF';
 }

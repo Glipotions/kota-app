@@ -543,7 +543,10 @@ class ArLocalization extends AppLocalizationLabel {
   String get grandTotal => 'المجموع الكلي';
 
   @override
-  String get electronicInvoiceNote => 'تم إنشاء هذه الفاتورة إلكترونيًا.';
+  String get electronicInvoiceNote => 'تم إنشاء هذه الفاتورة إلكترونياً.';
+
+  @override
+  String get discount => 'خصم';
 
   // Forgot Password
   @override
@@ -590,4 +593,17 @@ class ArLocalization extends AppLocalizationLabel {
   
   @override
   String get resendCode => 'إعادة إرسال الرمز';
+
+  // Invoice Detail Screen
+  @override
+  String get invoiceDetail => 'تفاصيل الفاتورة';
+
+  @override
+  String get productInformation => 'معلومات المنتج';
+
+  @override
+  String get invoiceDetailNotFound => 'لم يتم العثور على تفاصيل الفاتورة';
+
+  @override
+  String get generateInvoicePdf => 'إنشاء ملف PDF للفاتورة';
 }
