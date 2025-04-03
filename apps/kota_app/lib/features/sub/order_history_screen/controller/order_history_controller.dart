@@ -176,6 +176,7 @@ class OrderHistoryController extends BaseControllerInterface {
             id: item.urunId!,
             code: item.code!,
             price: item.birimFiyat!,
+            currencyUnitPrice: item.dovizliBirimFiyat,
             quantity: item.miktar!,
             name: item.name,
             pictureUrl: item.pictureUrl,

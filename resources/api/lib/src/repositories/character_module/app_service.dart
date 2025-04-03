@@ -148,12 +148,16 @@ class AppService extends BaseClient {
   ///Request that returns all characters
   Future<BaseHttpModel<SalesInvoiceDetailResponseModel>> saleInvoiceDetail({
     required int id,
+    int? branchCurrentInfoId,
   }) async {
     return baseRequest<SalesInvoiceDetailResponseModel,
         SalesInvoiceDetailResponseModel>(
       responseModel: SalesInvoiceDetailResponseModel(),
       httpUrl: AppServicePath.saleInvoice.withPath(id.toString()),
       method: DioHttpMethod.get,
+      queryParams: {
+        'connectedBranchCurrentInfoId': branchCurrentInfoId?.toString(),
+      },
     );
   }
 

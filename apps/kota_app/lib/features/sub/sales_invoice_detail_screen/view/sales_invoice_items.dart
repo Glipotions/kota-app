@@ -1,10 +1,16 @@
 import 'package:api/api.dart';
 import 'package:flutter/material.dart';
+import 'package:kota_app/product/utility/extentions/index.dart';
 
 class SalesInvoiceItems extends StatefulWidget {
-  const SalesInvoiceItems({required this.items, super.key});
+  const SalesInvoiceItems({
+    required this.items,
+    required this.currencyType,
+    super.key,
+  });
 
   final List<SalesInvoiceDetailItemModel> items;
+  final int? currencyType;
 
   @override
   State<SalesInvoiceItems> createState() => _SalesInvoiceItemsState();
@@ -133,7 +139,8 @@ class _SalesInvoiceItemsState extends State<SalesInvoiceItems> {
     );
   }
 
-  Widget _buildProductCard(SalesInvoiceDetailItemModel item, BuildContext context) {
+  Widget _buildProductCard(
+      SalesInvoiceDetailItemModel item, BuildContext context) {
     return Card(
       elevation: 2,
       margin: const EdgeInsets.only(bottom: 12),
@@ -190,11 +197,20 @@ class _SalesInvoiceItemsState extends State<SalesInvoiceItems> {
               ),
               const Divider(height: 16),
               _buildDetailRow('Miktar:', item.miktar?.toString() ?? '-'),
-              _buildDetailRow('Birim Fiyat:', 
-                '₺${item.birimFiyat?.toStringAsFixed(2) ?? '-'}'),
-              _buildDetailRow('KDV Oranı:', '${item.kdvOrani?.toString() ?? '-'}%'),
-              _buildDetailRow('KDV Tutarı:', 
-                '₺${item.kdvTutari?.toStringAsFixed(2) ?? '-'}'),
+              _buildDetailRow(
+                'Birim Fiyat:',
+                  item.dovizliBirimFiyat == 0 || item.dovizliBirimFiyat == null
+                      ? item.birimFiyat!.formatPrice()
+                      : item.dovizliBirimFiyat!.formatPrice(),
+              ),
+              _buildDetailRow(
+                'KDV Oranı:',
+                '${item.kdvOrani?.toString() ?? '-'}%',
+              ),
+              _buildDetailRow(
+                'KDV Tutarı:',
+                item.kdvTutari?.formatPrice() ?? '-',
+              ),
               const Divider(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -208,7 +224,7 @@ class _SalesInvoiceItemsState extends State<SalesInvoiceItems> {
                     ),
                   ),
                   Text(
-                    '₺${item.tutar?.toStringAsFixed(2) ?? '-'}',
+                    item.tutar?.formatPrice() ?? '-',
                     style: TextStyle(
                       fontSize: 18,
                       color: Theme.of(context).primaryColor,

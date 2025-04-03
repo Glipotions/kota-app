@@ -44,6 +44,7 @@ class SalesInvoiceDetail extends StatelessWidget {
                       const SizedBox(height: 16),
                       SalesInvoiceItems(
                         items: controller.salesInvoiceDetail?.faturaBilgileri ?? [],
+                        currencyType: controller.salesInvoiceDetail?.dovizTuru,
                       ),
                     ],
                   ),

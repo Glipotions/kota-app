@@ -4,9 +4,10 @@ import 'package:kota_app/product/base/controller/base_controller.dart';
 import 'package:kota_app/product/services/pdf_service.dart';
 
 class SalesInvoiceDetailController extends BaseControllerInterface {
-  SalesInvoiceDetailController({required this.id});
+  SalesInvoiceDetailController({required this.id, this.connectedBranchCurrentInfoId});
 
   final int id;
+  final int? connectedBranchCurrentInfoId;
   bool isLoading = true;
   SalesInvoiceDetailResponseModel? salesInvoiceDetail;
 
@@ -18,7 +19,7 @@ class SalesInvoiceDetailController extends BaseControllerInterface {
 
   Future<void> fetchSalesInvoiceDetail() async {
     try {
-      final response = await client.appService.saleInvoiceDetail(id: id);
+      final response = await client.appService.saleInvoiceDetail(id: id, branchCurrentInfoId: connectedBranchCurrentInfoId);
       if (response.data != null) {
         salesInvoiceDetail = response.data;
       }

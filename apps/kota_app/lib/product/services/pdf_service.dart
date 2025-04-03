@@ -1,10 +1,9 @@
-import 'dart:typed_data';
-
 import 'package:api/api.dart';
 import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:kota_app/product/utility/extentions/index.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
@@ -41,7 +40,7 @@ class PDFService {
             _buildTitle(boldFont, localization),
             pw.SizedBox(height: 20),
             _buildInvoiceItems(invoice.faturaBilgileri ?? [], regularFont,
-                boldFont, localization),
+                boldFont, localization, invoice.dovizTuru),
             pw.SizedBox(height: 20),
             _buildTotal(invoice, boldFont, regularFont, localization),
             pw.SizedBox(height: 40),
@@ -71,27 +70,6 @@ class PDFService {
       name: title,
       format: PdfPageFormat.a4,
     );
-  }
-
-  /// Format quantity to remove decimal if it's a whole number
-  static String _formatQuantity(double? value) {
-    if (value == null) return '-';
-
-    // Check if the value is a whole number
-    if (value == value.toInt()) {
-      return value.toInt().toString();
-    }
-
-    return value.toString();
-  }
-
-  /// Format currency with Turkish formatting (dot for thousands, comma for decimals)
-  static String _formatCurrency(double? value) {
-    if (value == null) return '-';
-
-    // Create a formatter for Turkish currency format
-    final formatter = NumberFormat('#,##0.00', 'tr_TR');
-    return '₺${formatter.format(value)}';
   }
 
   static pw.Widget _buildHeader(
@@ -168,6 +146,7 @@ class PDFService {
     pw.Font font,
     pw.Font fontBold,
     AppLocalizationLabel localization,
+    int? currencyType,
   ) {
     final headers = [
       localization.invoiceProductCode,
@@ -225,7 +204,7 @@ class PDFService {
               pw.Padding(
                 padding: const pw.EdgeInsets.all(8),
                 child: pw.Text(
-                  _formatQuantity(item.miktar),
+                  item.miktar.toString(),
                   style: pw.TextStyle(font: font),
                   textAlign: pw.TextAlign.center,
                 ),
@@ -233,7 +212,9 @@ class PDFService {
               pw.Padding(
                 padding: const pw.EdgeInsets.all(8),
                 child: pw.Text(
-                  _formatCurrency(item.birimFiyat),
+                  item.dovizliBirimFiyat == 0 || item.dovizliBirimFiyat == null
+                      ? item.birimFiyat!.formatPrice()
+                      : item.dovizliBirimFiyat!.formatPrice(),
                   style: pw.TextStyle(font: font),
                   textAlign: pw.TextAlign.right,
                 ),
@@ -241,7 +222,7 @@ class PDFService {
               pw.Padding(
                 padding: const pw.EdgeInsets.all(8),
                 child: pw.Text(
-                  _formatCurrency(item.tutar),
+                  item.tutar!.formatPrice(),
                   style: pw.TextStyle(font: fontBold),
                   textAlign: pw.TextAlign.right,
                 ),
@@ -259,15 +240,12 @@ class PDFService {
     pw.Font font,
     AppLocalizationLabel localization,
   ) {
-    final totalAmount = invoice.toplamTutar ?? 0;
-
+    final totalAmount = invoice.isDovizFatura == true
+        ? invoice.dovizTutar ?? 0
+        : invoice.toplamTutar ?? 0;
     final totalKDV = invoice.kdvTutari ?? 0;
-
     final totalBeforeKDV = totalAmount - totalKDV;
-
     final discountTotal = invoice.iskontoTutari ?? 0;
-
-    // Calculate average KDV rate (weighted)
 
     return pw.Container(
       alignment: pw.Alignment.centerRight,
@@ -282,7 +260,7 @@ class PDFService {
                 style: pw.TextStyle(font: fontBold),
               ),
               pw.Text(
-                _formatCurrency(totalBeforeKDV),
+                totalBeforeKDV.formatPrice(),
                 style: pw.TextStyle(font: font),
               ),
             ],
@@ -296,7 +274,7 @@ class PDFService {
                 style: pw.TextStyle(font: fontBold),
               ),
               pw.Text(
-                _formatCurrency(discountTotal),
+                discountTotal.formatPrice(),
                 style: pw.TextStyle(font: font),
               ),
             ],
@@ -310,7 +288,7 @@ class PDFService {
                 style: pw.TextStyle(font: fontBold),
               ),
               pw.Text(
-                _formatCurrency(totalKDV),
+                totalKDV.formatPrice(),
                 style: pw.TextStyle(font: font),
               ),
             ],
@@ -334,7 +312,7 @@ class PDFService {
                   ),
                 ),
                 pw.Text(
-                  _formatCurrency(totalAmount),
+                  totalAmount.formatPrice(),
                   style: pw.TextStyle(
                     font: fontBold,
                     fontSize: 14,

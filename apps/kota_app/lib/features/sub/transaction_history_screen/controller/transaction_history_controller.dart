@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:kota_app/product/base/controller/base_controller.dart';
 import 'package:kota_app/product/navigation/modules/sub_route/sub_route_enums.dart';
 import 'package:kota_app/product/utility/enums/currency_type.dart';
+import 'package:kota_app/product/utility/extentions/index.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
@@ -45,9 +46,9 @@ class TransactionHistoryController extends BaseControllerInterface {
 
   void _updateCurrencyValues() {
     _currencyType.value = sessionHandler.currentUser?.currencyType ?? 1;
-    _isCurrencyTL.value = CurrencyType.tl == CurrencyType.fromValue(_currencyType.value);
+    _isCurrencyTL.value =
+        CurrencyType.tl == CurrencyType.fromValue(_currencyType.value);
   }
-
 
   set transactionItems(List<TransactionItem> value) {
     _transactionItems.value = value;
@@ -175,13 +176,19 @@ class TransactionHistoryController extends BaseControllerInterface {
         date1.month == date2.month &&
         date1.day == date2.day;
   }
+
   void onTapSalesDetail(int id) => context.pushNamed(
         SubRouteEnums.saleInvoiceDetail.name,
         pathParameters: {
           'id': id.toString(),
+          'connectedBranchCurrentInfoId':
+              sessionHandler.currentUser!.connectedBranchCurrentInfoId != null
+                  ? sessionHandler.currentUser!.connectedBranchCurrentInfoId
+                      .toString()
+                  : '',
         },
       );
-      
+
   void showFilterDialog() {
     if (!Get.isDialogOpen!) {
       Get.dialog(
@@ -205,10 +212,17 @@ class TransactionHistoryController extends BaseControllerInterface {
     Get.changeThemeMode(_isDarkMode.value ? ThemeMode.dark : ThemeMode.light);
   }
 
-  Future<void> generatePdfReport(BuildContext context, String currentAccountName,
-      List<TransactionItem> transactions, bool isDoviz) async {
+  Future<void> generatePdfReport(
+    BuildContext context,
+    String currentAccountName,
+    List<TransactionItem> transactions,
+  ) async {
     final labels = AppLocalization.getLabels(context);
-    
+
+    // Use the current currency type from user preferences
+    final userCurrencyType = _currencyType.value;
+    final useLocalCurrency = isCurrencyTL;
+
     if (transactions.isEmpty) {
       if (scaffoldKey.currentContext != null) {
         ScaffoldMessenger.of(scaffoldKey.currentContext!).showSnackBar(
@@ -222,34 +236,34 @@ class TransactionHistoryController extends BaseControllerInterface {
     }
 
     final pdf = pw.Document();
-    const baseAssetPath = 'assets/fonts/greycliffcf/';
+    const baseAssetPath = 'assets/fonts/work_sans/';
 
     try {
       // Fontları yükleme
       final fontDataRegular =
-          await rootBundle.load('${baseAssetPath}GreycliffCF-Regular.ttf');
+          await rootBundle.load('${baseAssetPath}WorkSans-Regular.ttf');
       final fontDataBold =
-          await rootBundle.load('${baseAssetPath}GreycliffCF-Bold.ttf');
+          await rootBundle.load('${baseAssetPath}WorkSans-Bold.ttf');
 
       final ttfRegular = pw.Font.ttf(fontDataRegular.buffer.asByteData());
       final ttfBold = pw.Font.ttf(fontDataBold.buffer.asByteData());
 
-      final numberFormat = NumberFormat('#,##0.00', 'tr_TR');
       final date = DateTime.now();
+      const rowFontSize = 8.0;
 
       // Column Widths
       final columnWidths = <int, pw.TableColumnWidth>{
-        0: const pw.FlexColumnWidth(1.25),
-        1: const pw.FlexColumnWidth(1.5),
+        0: const pw.FlexColumnWidth(1.20),
+        1: const pw.FlexColumnWidth(1.40),
         2: const pw.FlexColumnWidth(2.5),
-        3: const pw.FlexColumnWidth(3.35),
-        4: const pw.FlexColumnWidth(1.25),
-        5: const pw.FlexColumnWidth(1.25),
-        6: const pw.FlexColumnWidth(1.30),
+        3: const pw.FlexColumnWidth(3.20),
+        4: const pw.FlexColumnWidth(1.30),
+        5: const pw.FlexColumnWidth(1.30),
+        6: const pw.FlexColumnWidth(1.40),
       };
 
       // Tablo için başlık satırları
-      final headers = isDoviz
+      final headers = !useLocalCurrency
           ? [
               labels.date,
               labels.receiptNo,
@@ -257,7 +271,7 @@ class TransactionHistoryController extends BaseControllerInterface {
               labels.description,
               labels.foreignDebit,
               labels.foreignCredit,
-              labels.foreignBalance
+              labels.foreignBalance,
             ]
           : [
               labels.date,
@@ -266,14 +280,14 @@ class TransactionHistoryController extends BaseControllerInterface {
               labels.description,
               labels.debit,
               labels.credit,
-              labels.balance
+              labels.balance,
             ];
 
       // Sayfa ekleme
       pdf.addPage(
         pw.MultiPage(
           pageFormat: PdfPageFormat.a4,
-          margin: const pw.EdgeInsets.all(20),
+          margin: const pw.EdgeInsets.all(18),
           maxPages: 30,
           build: (pw.Context context) => [
             pw.Header(
@@ -286,14 +300,24 @@ class TransactionHistoryController extends BaseControllerInterface {
                       pw.Column(
                         crossAxisAlignment: pw.CrossAxisAlignment.start,
                         children: [
-                          pw.Text('${labels.current} : $currentAccountName',
-                              style: pw.TextStyle(font: ttfBold, fontSize: 12)),
-                          pw.Text('${labels.period} : ${date.year}',
-                              style: pw.TextStyle(font: ttfBold, fontSize: 12)),
+                          pw.Text(
+                            '${labels.current} : $currentAccountName',
+                            style: pw.TextStyle(font: ttfBold, fontSize: 12),
+                          ),
+                          pw.Text(
+                            '${labels.period} : ${date.year}',
+                            style: pw.TextStyle(font: ttfBold, fontSize: 12),
+                          ),
+                          pw.Text(
+                            '${labels.currency} : ${CurrencyType.fromValue(userCurrencyType)?.description ?? "TL"}',
+                            style: pw.TextStyle(font: ttfBold, fontSize: 12),
+                          ),
                         ],
                       ),
-                      pw.Text('${labels.date} = ${date.day}.${date.month}.${date.year}',
-                          style: pw.TextStyle(font: ttfBold, fontSize: 12)),
+                      pw.Text(
+                        '${labels.date} = ${date.day}.${date.month}.${date.year}',
+                        style: pw.TextStyle(font: ttfBold, fontSize: 12),
+                      ),
                     ],
                   ),
                 ],
@@ -309,14 +333,16 @@ class TransactionHistoryController extends BaseControllerInterface {
                 pw.TableRow(
                   decoration: const pw.BoxDecoration(color: PdfColors.grey300),
                   children: headers
-                      .map((header) => pw.Padding(
-                            padding: const pw.EdgeInsets.all(5),
-                            child: pw.Text(
-                              header,
-                              style: pw.TextStyle(font: ttfBold, fontSize: 10),
-                              textAlign: pw.TextAlign.center,
-                            ),
-                          ))
+                      .map(
+                        (header) => pw.Padding(
+                          padding: const pw.EdgeInsets.all(5),
+                          child: pw.Text(
+                            header,
+                            style: pw.TextStyle(font: ttfBold, fontSize: 10),
+                            textAlign: pw.TextAlign.center,
+                          ),
+                        ),
+                      )
                       .toList(),
                 ),
               ],
@@ -325,12 +351,22 @@ class TransactionHistoryController extends BaseControllerInterface {
             pw.Table(
               border: pw.TableBorder.all(),
               columnWidths: columnWidths,
-              children: ([...transactions]..sort((TransactionItem a, TransactionItem b) => 
-                (a.tarih ?? DateTime(1900)).compareTo(b.tarih ?? DateTime(1900))))
-                .map((TransactionItem tx) {
+              children: ([...transactions]..sort(
+                      (TransactionItem a, TransactionItem b) =>
+                          (a.tarih ?? DateTime(1900))
+                              .compareTo(b.tarih ?? DateTime(1900)),
+                    ))
+                  .map((TransactionItem tx) {
                 final isHighlighted =
-                    (isDoviz ? tx.dovizAlacak : tx.alacak) != null &&
-                        (isDoviz ? tx.dovizAlacak : tx.alacak)! > 0;
+                    (useLocalCurrency ? tx.alacak : tx.dovizAlacak) != null &&
+                        (useLocalCurrency ? tx.alacak : tx.dovizAlacak)! > 0;
+
+                // Get the appropriate values based on currency selection
+                final debitValue = useLocalCurrency ? tx.borc : tx.dovizBorc;
+                final creditValue =
+                    useLocalCurrency ? tx.alacak : tx.dovizAlacak;
+                final balanceValue =
+                    useLocalCurrency ? tx.bakiye : tx.dovizBakiye;
 
                 return pw.TableRow(
                   decoration: isHighlighted
@@ -343,63 +379,64 @@ class TransactionHistoryController extends BaseControllerInterface {
                         tx.tarih != null
                             ? '${tx.tarih!.day}/${tx.tarih!.month}/${tx.tarih!.year}'
                             : '',
-                        style: pw.TextStyle(font: ttfRegular, fontSize: 9),
+                        style: pw.TextStyle(
+                            font: ttfRegular, fontSize: rowFontSize),
                       ),
                     ),
                     pw.Padding(
                       padding: const pw.EdgeInsets.all(5),
-                      child: pw.Text(tx.fisNo ?? '',
-                          style: pw.TextStyle(font: ttfRegular, fontSize: 9)),
-                    ),
-                    pw.Padding(
-                      padding: const pw.EdgeInsets.all(5),
-                      child: pw.Text(tx.fisTuru ?? '',
-                          style: pw.TextStyle(font: ttfRegular, fontSize: 9)),
-                    ),
-                    pw.Padding(
-                      padding: const pw.EdgeInsets.all(5),
-                      child: pw.Text(tx.aciklama ?? '',
-                          style: pw.TextStyle(font: ttfRegular, fontSize: 9)),
+                      child: pw.Text(
+                        tx.fisNo ?? '',
+                        style: pw.TextStyle(
+                            font: ttfRegular, fontSize: rowFontSize),
+                      ),
                     ),
                     pw.Padding(
                       padding: const pw.EdgeInsets.all(5),
                       child: pw.Text(
-                        isDoviz
-                            ? (tx.dovizBorc != null
-                                ? numberFormat.format(tx.dovizBorc)
-                                : '0,00')
-                            : (tx.borc != null
-                                ? numberFormat.format(tx.borc)
-                                : '0,00'),
-                        style: pw.TextStyle(font: ttfRegular, fontSize: 9),
+                        tx.fisTuru ?? '',
+                        style: pw.TextStyle(
+                            font: ttfRegular, fontSize: rowFontSize),
+                      ),
+                    ),
+                    pw.Padding(
+                      padding: const pw.EdgeInsets.all(5),
+                      child: pw.Text(
+                        tx.aciklama ?? '',
+                        style: pw.TextStyle(
+                            font: ttfRegular, fontSize: rowFontSize),
+                      ),
+                    ),
+                    pw.Padding(
+                      padding: const pw.EdgeInsets.all(5),
+                      child: pw.Text(
+                        debitValue != null && debitValue > 0
+                            ? debitValue.formatPrice()
+                            : 0.formatPrice(),
+                        style: pw.TextStyle(
+                            font: ttfRegular, fontSize: rowFontSize),
                         textAlign: pw.TextAlign.right,
                       ),
                     ),
                     pw.Padding(
                       padding: const pw.EdgeInsets.all(5),
                       child: pw.Text(
-                        isDoviz
-                            ? (tx.dovizAlacak != null
-                                ? numberFormat.format(tx.dovizAlacak)
-                                : '0,00')
-                            : (tx.alacak != null
-                                ? numberFormat.format(tx.alacak)
-                                : '0,00'),
-                        style: pw.TextStyle(font: ttfRegular, fontSize: 9),
+                        creditValue != null && creditValue > 0
+                            ? creditValue.formatPrice()
+                            : 0.formatPrice(),
+                        style: pw.TextStyle(
+                            font: ttfRegular, fontSize: rowFontSize),
                         textAlign: pw.TextAlign.right,
                       ),
                     ),
                     pw.Padding(
                       padding: const pw.EdgeInsets.all(5),
                       child: pw.Text(
-                        isDoviz
-                            ? (tx.dovizBakiye != null
-                                ? numberFormat.format(tx.dovizBakiye)
-                                : '0,00')
-                            : (tx.bakiye != null
-                                ? numberFormat.format(tx.bakiye)
-                                : '0,00'),
-                        style: pw.TextStyle(font: ttfRegular, fontSize: 9),
+                        balanceValue != null
+                            ? balanceValue.formatPrice()
+                            : 0.formatPrice(),
+                        style: pw.TextStyle(
+                            font: ttfRegular, fontSize: rowFontSize),
                         textAlign: pw.TextAlign.right,
                       ),
                     ),
@@ -417,8 +454,11 @@ class TransactionHistoryController extends BaseControllerInterface {
       );
     } catch (e) {
       // Hata durumunda kullanıcıya bildir
-      Get.snackbar('Hata', 'PDF oluşturma hatası: $e',
-          snackPosition: SnackPosition.BOTTOM);
+      Get.snackbar(
+        'Hata',
+        'PDF oluşturma hatası: $e',
+        snackPosition: SnackPosition.BOTTOM,
+      );
     }
   }
 }

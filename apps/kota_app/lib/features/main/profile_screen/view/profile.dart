@@ -47,7 +47,8 @@ class Profile extends StatelessWidget {
                       balance:
                           controller.isCurrencyTL
                               ? controller.balance.balance ?? 0
-                              : controller.balance.currencyBalance ?? 0,
+                              : controller.balance.currencyBalance
+                               ?? 0,
                       title: controller.balance.firma ?? '',
                       onTap: controller.onTapPastTransactions,
                     ),

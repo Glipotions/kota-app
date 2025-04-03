@@ -31,7 +31,6 @@ class TransactionHistory extends StatelessWidget {
             context,
             '',
             controller.transactionItems,
-            false,
           ),
         ),
       ),

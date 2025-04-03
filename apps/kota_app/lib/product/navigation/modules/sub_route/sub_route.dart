@@ -28,9 +28,20 @@ class SubRoute {
     ),
     GoRoute(
       name: SubRouteEnums.saleInvoiceDetail.name,
+      path:
+          '${SubRouteEnums.saleInvoiceDetail.path}/:id/:connectedBranchCurrentInfoId',
+      builder: (context, state) => SalesInvoiceDetailScreen(
+        id: state.pathParameters['id']!,
+        connectedBranchCurrentInfoId:
+            state.pathParameters['connectedBranchCurrentInfoId'],
+      ),
+    ),
+    // Alternative route for SalesInvoiceDetailScreen with only ID parameter
+    GoRoute(
       path: '${SubRouteEnums.saleInvoiceDetail.path}/:id',
       builder: (context, state) => SalesInvoiceDetailScreen(
         id: state.pathParameters['id']!,
+        connectedBranchCurrentInfoId: null,
       ),
     ),
     GoRoute(
