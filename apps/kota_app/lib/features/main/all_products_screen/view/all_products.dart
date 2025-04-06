@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:api/api.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
 import 'package:get/get.dart';
 import 'package:common/common.dart';
 import 'package:kota_app/features/main/all_products_screen/controller/all_products_controller.dart';
@@ -227,14 +227,20 @@ class CustomSearchDelegate extends SearchDelegate<ProductGroupItem?> {
 
 Future<void> _scanBarcode(AllProductsController controller) async {
   try {
-    final barcode = await FlutterBarcodeScanner.scanBarcode(
-      '#ff6666',
-      'İptal',
-      true,
-      ScanMode.BARCODE,
+    final result = await SimpleBarcodeScanner.scanBarcode(
+      Get.context!,
+      isShowFlashIcon: true,
+      barcodeAppBar: const BarcodeAppBar(
+        appBarTitle: 'Barkod Tara',
+        centerTitle: true,
+        enableBackButton: true,
+        backButtonIcon: Icon(Icons.arrow_back),
+      ),
+      scanFormat: ScanFormat.ONLY_BARCODE,
     );
-    if (barcode != '-1') {
-      await controller.getByBarcode(barcode);
+    
+    if (result != null && result != '-1' && result.isNotEmpty) {
+      await controller.getByBarcode(result);
     }
   } catch (e) {
     // Handle error

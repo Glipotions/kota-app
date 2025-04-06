@@ -1,0 +1,2 @@
+/Users/glipotions/myworkspace/mobil-project/kota-app/apps/kota_app/android/app/.cxx/RelWithDebInfo/3e4o5uq1/x86/CMakeFiles/rebuild_cache.dir
+/Users/glipotions/myworkspace/mobil-project/kota-app/apps/kota_app/android/app/.cxx/RelWithDebInfo/3e4o5uq1/x86/CMakeFiles/edit_cache.dir

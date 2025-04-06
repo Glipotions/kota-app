@@ -32,18 +32,18 @@ if (flutterVersionName == null) {
 
 android {
     namespace "com.glipotions.kota_app"
-    compileSdkVersion flutter.compileSdkVersion
-    ndkVersion "27.0.12077973"
+    compileSdk = flutter.compileSdkVersion
+    ndkVersion = "27.0.12077973"
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
-        // For API level below 24
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+
         coreLibraryDesugaringEnabled true
     }
 
     kotlinOptions {
-        jvmTarget = '11'
+        jvmTarget = '1.8'
     }
 
     sourceSets {
@@ -52,10 +52,10 @@ android {
 
     defaultConfig {
         applicationId "com.glipotions.kota_app"
-        minSdkVersion flutter.minSdkVersion
-        targetSdkVersion flutter.targetSdkVersion
-        versionCode flutterVersionCode.toInteger()
-        versionName flutterVersionName
+        minSdk = flutter.minSdkVersion
+        targetSdk = flutter.targetSdkVersion
+        versionCode = flutterVersionCode.toInteger()
+        versionName = flutterVersionName
         // Multidex desteği ekleyelim
         multiDexEnabled true
     }
@@ -90,6 +90,10 @@ android {
             dimension "environment"
         }
     }
+    
+    lintOptions {
+        checkReleaseBuilds false
+    }
 }
 
 flutter {
@@ -97,8 +101,12 @@ flutter {
 }
 
 dependencies {
-    // Java 8+ API desteği için desugaring kütüphanesi
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.3'
-    // Play Core kütüphanesi - REMOVED to avoid duplication with app-update
-    implementation 'com.google.android.play:app-update:2.1.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'androidx.annotation:annotation:1.5.0'
+    implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
+    implementation 'androidx.window:window:1.0.0'
+    implementation 'androidx.window:window-java:1.0.0'
+    implementation 'io.flutter:flutter_embedding_release:1.0.0-d44b5a94c976fbb65815374f61ab5392a220b084'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
 }

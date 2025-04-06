@@ -62,7 +62,7 @@ class ApplicationInitialize {
 
     await AppInfo.init();
 
-    LocalNotificationHandler();
+    await LocalNotificationHandler.instance.initialize();
 
     FlutterError.onError = (details) {
       Logger().e(details.exceptionAsString());
