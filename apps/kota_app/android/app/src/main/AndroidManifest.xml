@@ -19,7 +19,7 @@
         </intent>
     </queries>
     <application
-        android:label="Kota App"
+        android:label="Kota İç Giyim"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

@@ -28,41 +28,40 @@ class ApplicationInitialize {
 
   Future<void> _initialize() async {
     WidgetsFlutterBinding.ensureInitialized();
-    await LocaleManager.cacheInit();
+    
+    try {
+      await LocaleManager.cacheInit();
+      await ProductClient.clientInit(_config);
 
-    await ProductClient.clientInit(_config);
+      await AppStateController.init(
+        colorPalettes: [
+          LightColors(),
+          DarkColors(),
+        ],
+        themeKey: CacheKey.colorCode.name,
+        lanKey: CacheKey.lanCode.name,
+      );
 
-    await AppStateController.init(
-      colorPalettes: [
-        LightColors(),
-        DarkColors(),
-      ],
-      themeKey: CacheKey.colorCode.name,
-      lanKey: CacheKey.lanCode.name,
-    );
+      SystemChrome.setSystemUIOverlayStyle(
+        const SystemUiOverlayStyle(
+          systemNavigationBarColor: Colors.transparent,
+          systemNavigationBarDividerColor: Colors.transparent,
+          statusBarBrightness: Brightness.dark,
+        ),
+      );
 
-    SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(
-        systemNavigationBarColor: Colors.transparent,
-        systemNavigationBarDividerColor: Colors.transparent,
-        statusBarBrightness: Brightness.dark,
-      ),
-    );
+      await SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.landscapeLeft,
+        DeviceOrientation.landscapeRight,
+      ]);
 
-    await SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.landscapeLeft,
-      DeviceOrientation.landscapeRight,
-    ]);
-
-    //  FirebaseMessagingService.messagingInit(
-    //   showNotification: (title, body) => LocalNotificationHandler.instance
-    //       .showNotification(title: title, body: body),
-    // );
-
-    await AppInfo.init();
-
-    await LocalNotificationHandler.instance.initialize();
+      await AppInfo.init();
+      await LocalNotificationHandler.instance.initialize();
+    } catch (e) {
+      Logger().e('Initialization error: $e');
+      // Continue with app launch even if some initialization fails
+    }
 
     FlutterError.onError = (details) {
       Logger().e(details.exceptionAsString());

@@ -6,7 +6,7 @@ packages:
 
 publish_to: 'none' 
 
-version: 1.0.0+2
+version: 1.0.0+4
 
 environment:
   sdk: '>=3.1.5 <4.0.0'
@@ -42,12 +42,15 @@ dependencies:
 
 dev_dependencies:
   device_preview: ^1.1.0
+  flutter_launcher_icons: ^0.13.1
   flutter_test:
     sdk: flutter
   very_good_analysis: ^5.1.0
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/icons/
   fonts:
     - family: WorkSans
       fonts:
