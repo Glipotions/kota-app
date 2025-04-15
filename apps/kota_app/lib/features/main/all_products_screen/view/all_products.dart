@@ -39,7 +39,7 @@ class AllProducts extends StatelessWidget {
         ),
         leading: IconButton(
           icon: const Icon(Icons.document_scanner),
-          onPressed: () => _scanBarcode(controller),
+          onPressed: () => _scanBarcode(controller, context),
         ),
       ),
       body: BaseView<AllProductsController>(
@@ -225,10 +225,10 @@ class CustomSearchDelegate extends SearchDelegate<ProductGroupItem?> {
   }
 }
 
-Future<void> _scanBarcode(AllProductsController controller) async {
+Future<void> _scanBarcode(AllProductsController controller, BuildContext context) async {
   try {
     final result = await SimpleBarcodeScanner.scanBarcode(
-      Get.context!,
+      context,
       isShowFlashIcon: true,
       barcodeAppBar: const BarcodeAppBar(
         appBarTitle: 'Barkod Tara',
@@ -243,6 +243,7 @@ Future<void> _scanBarcode(AllProductsController controller) async {
       await controller.getByBarcode(result);
     }
   } catch (e) {
+    print(e);
     // Handle error
   }
 }
