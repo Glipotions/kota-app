@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kota_app/features/main/profile_screen/view/profile.dart';
+import 'package:kota_app/features/navigation/bottom_navigation_bar/controller/bottom_navigation_controller.dart';
 import 'package:kota_app/product/base/controller/base_controller.dart';
 import 'package:kota_app/product/managers/session_handler.dart';
+import 'package:kota_app/product/navigation/modules/bottom_navigation_route/bottom_navigation_route_enums.dart';
 import 'package:kota_app/product/navigation/modules/sub_route/sub_route_enums.dart';
 import 'package:kota_app/product/utility/enums/currency_type.dart';
 import 'package:values/values.dart';
@@ -123,6 +125,13 @@ class ProfileController extends BaseControllerInterface {
             onPressed: () {
               Navigator.pop(context);
               SessionHandler.instance.logOut();
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (Get.isRegistered<BottomNavigationController>()) {
+                  final navController = Get.find<BottomNavigationController>();
+                  navController.selectedIndex = 0;
+                }
+                context.goNamed(BottomNavigationRouteEnum.allProductsScreen.name);
+              });
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Theme.of(context).colorScheme.error,

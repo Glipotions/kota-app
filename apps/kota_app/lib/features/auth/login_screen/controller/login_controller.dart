@@ -3,11 +3,14 @@
 import 'package:api/api.dart';
 import 'package:common/common.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kota_app/product/base/controller/base_controller.dart';
 import 'package:kota_app/product/navigation/modules/auth_route/auth_route_enums.dart';
+import 'package:kota_app/product/navigation/modules/bottom_navigation_route/bottom_navigation_route_enums.dart';
 import 'package:kota_app/product/utility/enums/cache_enums.dart';
+import 'package:kota_app/features/navigation/bottom_navigation_bar/controller/bottom_navigation_controller.dart';
 import 'package:widgets/widget.dart';
 
 ///Controller for Example Screen
@@ -24,7 +27,17 @@ class LoginController extends BaseControllerInterface {
     });
   }
 
-  void onTapRegister() => context.goNamed(AuthRouteScreens.registerScreen.name);
+  // Şifremi unuttum ekranına geçiş
+  void onTapForgotPassword() {
+    // Use GoRouter to navigate to the named route
+    context.goNamed(AuthRouteScreens.forgotPasswordScreen.name);
+  }
+
+  // Kayıt ol ekranına geçiş
+  void onTapRegister() {
+    // Use GoRouter to navigate to the named route
+    context.goNamed(AuthRouteScreens.registerScreen.name);
+  }
 
   Future<void> onTapLogin() async {
     final labels = AppLocalization.getLabels(context);
@@ -43,6 +56,16 @@ class LoginController extends BaseControllerInterface {
                     saveUserCredentials(),
                   ]),
                   sessionHandler.logIn(res: res!, isLogin: true),
+                  // Doğrudan profil ekranına yönlendir
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    // BottomNavigationController'ı bul ve index'i güncelle
+                    if (Get.isRegistered<BottomNavigationController>()) {
+                      final navController = Get.find<BottomNavigationController>();
+                      navController.selectedIndex = 0;
+                    }
+                    // Profil ekranına yönlendir
+                    context.goNamed(BottomNavigationRouteEnum.allProductsScreen.name);
+                  }),
                 }
               else
                 {

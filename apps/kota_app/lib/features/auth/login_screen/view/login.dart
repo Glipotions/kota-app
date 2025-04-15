@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
-import 'package:go_router/go_router.dart';
 import 'package:kota_app/features/auth/login_screen/controller/login_controller.dart';
 import 'package:kota_app/product/base/base_view.dart';
-import 'package:kota_app/product/navigation/modules/auth_route/auth_route_enums.dart';
 import 'package:kota_app/product/widgets/input/module_text_field.dart';
 import 'package:values/values.dart';
 
@@ -21,11 +19,14 @@ class Login extends StatelessWidget {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final screenSize = MediaQuery.of(context).size;
 
+    // ProfileScreen içinde gösterildiğinde appbar'ı gizle
+    final bool showAppBar = !(ModalRoute.of(context)?.settings.name?.contains('profile') ?? false);
+
     return GestureDetector(
       onTap: controller.unFocus,
       child: Scaffold(
         key: controller.scaffoldKey,
-        appBar: AppBar(title: const Text('Giriş'),),
+        appBar: showAppBar ? AppBar(title: const Text('Giriş'),) : null,
         body: BaseView<LoginController>(
           controller: controller,
           child: Container(

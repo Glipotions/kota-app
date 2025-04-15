@@ -42,7 +42,7 @@ class RoutingManager extends AbstractRoutingManager {
     refreshListenable: SessionHandler.instance,
     routes: [
       InitialRoute.route,
-      AuthRoute.route,
+      ...AuthRoute.routes,
       BottomNavigationRoute.route,
       ...SubRoute.route,
     ],
@@ -85,12 +85,14 @@ class RoutingManager extends AbstractRoutingManager {
                 .indexWhere((element) => element.path == currentName) ==
             -1 ||
         currentName == InitialRouteScreens.splashScreen.path;
-    // final isInitRoute = SessionHandler.instance.isInitRoute;
 
     final isProfileScreen =
         currentName == BottomNavigationRouteEnum.profileScreen.path;
 
-    return isUnauthorized && isNotAuthScreen && !isProfileScreen;
+    // Profil ekranı ise, asla yönlendirme olmasın!
+    // if (isProfileScreen) return false;
+
+    return isUnauthorized && isNotAuthScreen;
   }
 
   bool isUnauthorizedAndNotAuthScreen(String currentName) {

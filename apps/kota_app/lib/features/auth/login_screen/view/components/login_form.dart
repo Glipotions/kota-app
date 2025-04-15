@@ -96,9 +96,7 @@ class _LoginForm extends StatelessWidget {
                     ],
                   ),
                   TextButton(
-                    onPressed: () {
-                      context.goNamed(AuthRouteScreens.forgotPasswordScreen.name);
-                    },
+                    onPressed: controller.onTapForgotPassword,
                     child: Text(
                       'Şifremi Unuttum',
                       style: TextStyle(
