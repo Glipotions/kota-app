@@ -32,11 +32,15 @@ class Cart extends StatefulWidget {
 class _CartState extends State<Cart> {
   final ScrollController _scrollController = ScrollController();
   bool _showScrollButton = false;
-  
+
 
   @override
   void initState() {
     super.initState();
+    // Update currency values every time the Cart screen is opened
+    final cartController = Get.find<CartController>();
+    cartController.updateCurrencyValues();
+
     _scrollController.addListener(() {
       final maxScroll = _scrollController.position.maxScrollExtent;
       final currentScroll = _scrollController.offset;

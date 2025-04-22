@@ -32,7 +32,7 @@ class ManageAccountController extends BaseControllerInterface {
   RxBool get isDarkMode => ThemeManager.instance.isDarkMode.obs;
 
   void setDarkMode(bool value) {
-    ThemeManager.instance.toggleTheme(value);
+    ThemeManager.instance.toggleTheme(isDark: value);
   }
 
   void changeLanguage(String languageCode) {
@@ -42,7 +42,7 @@ class ManageAccountController extends BaseControllerInterface {
     _currentLanguage.value = languageCode;
   }
 
-  bool get canChangeCurrency => 
+  bool get canChangeCurrency =>
       sessionHandler.hasClaim(changeCurrencyAdminClaim) || kDebugMode;
 
   @override
@@ -77,13 +77,13 @@ class ManageAccountController extends BaseControllerInterface {
     try {
       _currentCurrency.value = newCurrency.value;
       sessionHandler.currentUser?.currencyType = newCurrency.value;
-      
+
       // Save currency to local storage
       await LocaleManager.instance.setIntValue(
         key: 'user_currency',
         value: newCurrency.value,
       );
-      
+
       // Notify cart controller to update currency values
       if (Get.isRegistered<CartController>()) {
         Get.find<CartController>().updateCurrencyValues();

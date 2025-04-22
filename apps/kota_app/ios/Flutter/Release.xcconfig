@@ -3,3 +3,9 @@
 #include? "Pods/Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"
 #include? "Pods/Target Support Files/Pods-Runner/Pods-Runner.profile-development.xcconfig"
 #include "Generated.xcconfig"
+
+// Include company-specific configuration
+// Uncomment the one you want to use
+#include "KotaTekstil.xcconfig"
+//#include "Company1.xcconfig"
+//#include "Company2.xcconfig"

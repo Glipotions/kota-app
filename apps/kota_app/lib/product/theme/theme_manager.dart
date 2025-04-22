@@ -8,7 +8,7 @@ class ThemeManager extends GetxController {
   static ThemeManager get instance => Get.find<ThemeManager>();
   final _isDarkMode = false.obs;
   bool get isDarkMode => _isDarkMode.value;
-  
+
   late SharedPreferences _prefs;
   static const String _themeKey = 'isDarkMode';
 
@@ -31,7 +31,7 @@ class ThemeManager extends GetxController {
     _updateTheme();
   }
 
-  void toggleTheme(bool isDark) async {
+  Future<void> toggleTheme({required bool isDark}) async {
     _isDarkMode.value = isDark;
     await _prefs.setBool(_themeKey, isDark);
     _updateTheme();

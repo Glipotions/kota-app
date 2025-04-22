@@ -78,8 +78,11 @@ android {
         }
     }
 
-    flavorDimensions "environment"
+    // Define flavor dimensions
+    flavorDimensions "environment", "company"
+
     productFlavors {
+        // Environment dimension
         development {
             dimension "environment"
             applicationIdSuffix ".development"
@@ -89,8 +92,57 @@ android {
         product {
             dimension "environment"
         }
+
+        // Company dimension
+        kotaTekstil {
+            dimension "company"
+            // Default company, no suffix needed
+        }
+
+        company1 {
+            dimension "company"
+            applicationIdSuffix ".company1"
+            resValue "string", "app_name", "Company 1"
+        }
+
+        company2 {
+            dimension "company"
+            applicationIdSuffix ".company2"
+            resValue "string", "app_name", "Company 2"
+        }
+
+        // Combined flavors for easier command-line builds
+        developmentKotaTekstil {
+            dimension "environment"
+            matchingFallbacks = ["development", "kotaTekstil"]
+        }
+
+        productKotaTekstil {
+            dimension "environment"
+            matchingFallbacks = ["product", "kotaTekstil"]
+        }
+
+        developmentCompany1 {
+            dimension "environment"
+            matchingFallbacks = ["development", "company1"]
+        }
+
+        productCompany1 {
+            dimension "environment"
+            matchingFallbacks = ["product", "company1"]
+        }
+
+        developmentCompany2 {
+            dimension "environment"
+            matchingFallbacks = ["development", "company2"]
+        }
+
+        productCompany2 {
+            dimension "environment"
+            matchingFallbacks = ["product", "company2"]
+        }
     }
-    
+
     lintOptions {
         checkReleaseBuilds false
     }

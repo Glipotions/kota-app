@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:kota_app/product/controllers/localization_controller.dart';
 import 'package:kota_app/product/init/application_initialize.dart';
 import 'package:kota_app/product/navigation/routing_manager.dart';
+import 'package:kota_app/product/theme/company_theme_manager.dart';
 import 'package:kota_app/product/theme/theme_manager.dart';
 import 'package:universal_io/io.dart';
 import 'package:values/values.dart';
@@ -14,13 +15,23 @@ import 'package:widgets/widget.dart';
 Future<void> run(EnvironmentConfigModel config) async {
   await ApplicationInitialize().make(config);
   HttpOverrides.global = MyHttpOverrides();
-  
+
   // Initialize controllers
   Get.put(LocalizationController(), permanent: true);
-  final themeManager = Get.put(ThemeManager(), permanent: true);
-  await themeManager.init();
-  
-  runApp(App(title: config.appName));
+
+  // Initialize theme manager
+  if (config.companyConfig != null) {
+    final companyThemeManager = Get.put(
+      CompanyThemeManager(companyConfig: config.companyConfig),
+      permanent: true,
+    );
+    await companyThemeManager.init();
+  } else {
+    final themeManager = Get.put(ThemeManager(), permanent: true);
+    await themeManager.init();
+  }
+
+  runApp(App(title: config.appName, companyConfig: config.companyConfig));
 }
 
 ///Starting Widget of app
@@ -28,11 +39,15 @@ class App extends StatelessWidget {
   ///Starting Widget of app
   const App({
     required this.title,
+    this.companyConfig,
     super.key,
   });
 
   ///Current title of the app that comes from [EnvironmentConfigModel]
   final String title;
+
+  ///Company configuration
+  final CompanyConfigModel? companyConfig;
 
   @override
   Widget build(BuildContext context) {
@@ -69,9 +84,15 @@ class App extends StatelessWidget {
                 ),
                 title: title,
                 debugShowCheckedModeBanner: false,
-                theme: ThemeManager.instance.lightTheme,
-                darkTheme: ThemeManager.instance.darkTheme,
-                themeMode: ThemeManager.instance.isDarkMode ? ThemeMode.dark : ThemeMode.light,
+                theme: companyConfig != null
+                    ? CompanyThemeManager.instance.lightTheme
+                    : ThemeManager.instance.lightTheme,
+                darkTheme: companyConfig != null
+                    ? CompanyThemeManager.instance.darkTheme
+                    : ThemeManager.instance.darkTheme,
+                themeMode: companyConfig != null
+                    ? CompanyThemeManager.instance.isDarkMode ? ThemeMode.dark : ThemeMode.light
+                    : ThemeManager.instance.isDarkMode ? ThemeMode.dark : ThemeMode.light,
               );
             },
           );

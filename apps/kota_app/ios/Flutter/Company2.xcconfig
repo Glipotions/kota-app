@@ -1,0 +1,3 @@
+// Configuration for Company 2
+APP_DISPLAY_NAME=Company 2
+PRODUCT_BUNDLE_IDENTIFIER=com.glipotions.company2.app

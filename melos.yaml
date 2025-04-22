@@ -16,10 +16,10 @@ scripts:
   # [Bootstrap] -----------------------------------------------------------------------------------------------------------
   cab:
     run: melos clean;
-         melos bs 
+         melos bs
     description: Clean and Bootstrap all packages.
 
-  
+
   # [Format] -----------------------------------------------------------------------------------------------------------
   format:
     run: melos run format:dart --no-select && melos run format:flutter --no-select
@@ -28,7 +28,7 @@ scripts:
   format:dart:
     run: melos exec --concurrency=1 -- "dart format --output=none --set-exit-if-changed ."
     description: Run Dart format in all dart packages.
-    
+
 
   format:flutter:
     run: melos exec --concurrency=1 -- "dart format --output=none --set-exit-if-changed ."
@@ -45,7 +45,24 @@ scripts:
       melos run build:kota_app_build_apk_prod && \
       melos run build:kota_app_build_apb_dev && \
       melos run build:kota_app_build_apb_prod
-    description: Build apk and appbundle for all apps and for all flavors..  
+    description: Build apk and appbundle for all apps and for all flavors.
+
+  # Company-specific builds
+  build:company1:all:
+    run: |
+      melos run build:company1_build_apk_dev && \
+      melos run build:company1_build_apk_prod && \
+      melos run build:company1_build_apb_dev && \
+      melos run build:company1_build_apb_prod
+    description: Build apk and appbundle for Company 1 app.
+
+  build:company2:all:
+    run: |
+      melos run build:company2_build_apk_dev && \
+      melos run build:company2_build_apk_prod && \
+      melos run build:company2_build_apb_dev && \
+      melos run build:company2_build_apb_prod
+    description: Build apk and appbundle for Company 2 app.
 
   build:kota_app_build_apk_dev:
     run: melos exec -- flutter build apk --release --flavor development lib/main_development.dart --no-tree-shake-icons
@@ -64,6 +81,48 @@ scripts:
 
   build:kota_app_build_apb_prod:
     run: melos exec -- flutter build appbundle --release --flavor product lib/main_production.dart --no-tree-shake-icons
+    packageFilters:
+      scope: '*kota_app*'
+
+  # Company 1 build commands
+  build:company1_build_apk_dev:
+    run: melos exec -- flutter build apk --release --flavor developmentCompany1 lib/companies/company1/main_development.dart --no-tree-shake-icons
+    packageFilters:
+      scope: 'kota_app'
+
+  build:company1_build_apk_prod:
+    run: melos exec -- flutter build apk --release --flavor productCompany1 lib/companies/company1/main_production.dart --no-tree-shake-icons
+    packageFilters:
+      scope: '*kota_app*'
+
+  build:company1_build_apb_dev:
+    run: melos exec -- flutter build appbundle --release --flavor developmentCompany1 lib/companies/company1/main_development.dart --no-tree-shake-icons
+    packageFilters:
+      scope: 'kota_app'
+
+  build:company1_build_apb_prod:
+    run: melos exec -- flutter build appbundle --release --flavor productCompany1 lib/companies/company1/main_production.dart --no-tree-shake-icons
+    packageFilters:
+      scope: '*kota_app*'
+
+  # Company 2 build commands
+  build:company2_build_apk_dev:
+    run: melos exec -- flutter build apk --release --flavor developmentCompany2 lib/companies/company2/main_development.dart --no-tree-shake-icons
+    packageFilters:
+      scope: 'kota_app'
+
+  build:company2_build_apk_prod:
+    run: melos exec -- flutter build apk --release --flavor productCompany2 lib/companies/company2/main_production.dart --no-tree-shake-icons
+    packageFilters:
+      scope: '*kota_app*'
+
+  build:company2_build_apb_dev:
+    run: melos exec -- flutter build appbundle --release --flavor developmentCompany2 lib/companies/company2/main_development.dart --no-tree-shake-icons
+    packageFilters:
+      scope: 'kota_app'
+
+  build:company2_build_apb_prod:
+    run: melos exec -- flutter build appbundle --release --flavor productCompany2 lib/companies/company2/main_production.dart --no-tree-shake-icons
     packageFilters:
       scope: '*kota_app*'
 

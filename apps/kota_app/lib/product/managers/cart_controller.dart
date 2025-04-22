@@ -89,6 +89,7 @@ class CartController extends BaseControllerInterface {
   }
 
   void onTapAddProduct(CartProductModel item) {
+    // updateCurrencyValues();
     if (item.quantity == 0) {
       onTapRemoveProduct(item);
     }

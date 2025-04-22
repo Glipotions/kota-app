@@ -41,7 +41,7 @@ class ProductDetailController extends BaseControllerInterface {
       name: '',
       price: 0,
       quantity: 0,
-      pictureUrl: baseLogoUrl,
+      pictureUrl: getLogoUrl(),
     ),
   );
   CartProductModel get cartProduct => _cartProduct.value;
@@ -142,7 +142,7 @@ class ProductDetailController extends BaseControllerInterface {
       price: selectedUnitPrice?.value ?? 0,
       currencyUnitPrice: selectedCurrencyUnitPrice?.value ?? 0,
       quantity: int.parse(cQty.text == '' ? '0' : cQty.text),
-      pictureUrl: product.pictureUrl ?? baseLogoUrl,
+      pictureUrl: product.pictureUrl ?? getLogoUrl(),
       sizeName: selectedProductVariant!.sizeName,
       colorName: selectedProductVariant!.colorName,
       productCodeGroupId: selectedProductVariant!.productCodeGroupId,
@@ -172,8 +172,8 @@ class ProductDetailController extends BaseControllerInterface {
     // Try to get variant with both selected color and size
     if (selectedColorName != null && selectedSizeName != null) {
       final variant = product.productVariants?.firstWhereOrNull(
-        (variant) => 
-            variant.colorName == selectedColorName && 
+        (variant) =>
+            variant.colorName == selectedColorName &&
             variant.sizeName == selectedSizeName,
       );
 
