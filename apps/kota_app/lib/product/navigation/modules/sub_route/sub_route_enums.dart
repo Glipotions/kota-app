@@ -29,6 +29,10 @@ enum SubRouteEnums {
     '/sale-invoice-detail',
     'saleInvoiceDetailScreen',
   ),
+  activeOrders(
+    '/active-orders',
+    'activeOrdersScreen',
+  ),
   ;
 
   /// Gets the path value for [SubRouteEnums] enum.

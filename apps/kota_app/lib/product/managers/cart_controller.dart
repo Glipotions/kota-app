@@ -29,6 +29,13 @@ class CartController extends BaseControllerInterface {
   late final Rx<int> _currencyType = 1.obs;
   late final Rx<bool> _isCurrencyTL = true.obs;
 
+  // Discount rate for the entire cart (0-100%)
+  final RxDouble cartDiscountRate = RxDouble(0);
+  final TextEditingController discountController = TextEditingController(text: '0');
+
+  // Check if user has admin rights
+  bool get hasAdminRights => SessionHandler.instance.hasClaim(saleInvoiceAdminClaim);
+
   List<CartProductModel> get itemList => _itemList.value;
   set itemList(List<CartProductModel> value) => _itemList
     ..firstRebuild = true
@@ -86,6 +93,8 @@ class CartController extends BaseControllerInterface {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_cartKey);
     descriptionController.text = '';
+    discountController.text = '0';
+    cartDiscountRate.value = 0;
   }
 
   void onTapAddProduct(CartProductModel item) {
@@ -112,7 +121,7 @@ class CartController extends BaseControllerInterface {
   CartProductModel? inChartItemById(int id) =>
       itemList.firstWhereOrNull((element) => element.id == id);
 
-  double totalAmount() {
+  double totalAmount({bool withDiscount = true}) {
     double totalAmount = 0;
     double totalCurrencyAmount = 0;
 
@@ -124,9 +133,42 @@ class CartController extends BaseControllerInterface {
       }
     }
 
-    return isCurrencyTL
-        ? totalAmount 
-        : totalCurrencyAmount;
+    final baseAmount = isCurrencyTL ? totalAmount : totalCurrencyAmount;
+
+    // Apply discount if requested
+    if (withDiscount && cartDiscountRate.value > 0) {
+      final discountAmount = baseAmount * (cartDiscountRate.value / 100);
+      return baseAmount - discountAmount;
+    }
+
+    return baseAmount;
+  }
+
+  // Calculate the discount amount
+  double discountAmount() {
+    final baseAmount = totalAmount(withDiscount: false);
+    return baseAmount * (cartDiscountRate.value / 100);
+  }
+
+  // Update discount rate from the text field
+  void updateDiscountRate(String value) {
+    try {
+      final newRate = double.parse(value);
+      if (newRate >= 0 && newRate <= 100) {
+        cartDiscountRate.value = newRate;
+
+        // Apply the discount rate to all items in the cart
+        for (final item in itemList) {
+          item.discountRate = newRate;
+        }
+
+        // Update the cart items to trigger UI refresh
+        itemList = List<CartProductModel>.from(itemList);
+        _saveCartItems();
+      }
+    } catch (e) {
+      debugPrint('Error parsing discount rate: $e');
+    }
   }
 
   Future<void> completeOrder(BuildContext context) async {
@@ -252,23 +294,31 @@ class CartController extends BaseControllerInterface {
   Future<void> _completeOrder(String cariHesapId, BuildContext context) async {
     // Dismiss keyboard before proceeding
     FocusScope.of(context).unfocus();
-    
+
     LoadingProgress.start();
     try {
+      // Note: The discount rate is stored locally but not sent to the API yet
+      // The API model needs to be updated to include discount rate fields
       final request = CreateOrderRequestModel(
         id: editingOrderId?.value,
         cariHesapId: cariHesapId,
         connectedBranchCurrentInfoId:
             SessionHandler.instance.currentUser!.connectedBranchCurrentInfoId,
-        description: descriptionController.text.trim(),
+        description: descriptionController.text.trim() +
+            (cartDiscountRate.value > 0
+                ? ' (İskonto: %${cartDiscountRate.value.toStringAsFixed(2)})'
+                : ''),
         orderDetails: itemList
             .map(
               (e) => OrderDetail(
                 id: e.orderDetailId ?? 0,
                 amount: e.quantity.toString(),
                 productId: e.id.toString(),
-                unitPrice: e.price.toString(),
-                currencyUnitPrice: e.currencyUnitPrice.toString(),
+                // If discount is applied, send the discounted price
+                unitPrice: (e.price * (1 - e.discountRate / 100)).toString(),
+                currencyUnitPrice: e.currencyUnitPrice != null
+                    ? (e.currencyUnitPrice! * (1 - e.discountRate / 100)).toString()
+                    : null,
               ),
             )
             .toList(),
@@ -316,6 +366,7 @@ class CartController extends BaseControllerInterface {
   @override
   void onClose() {
     descriptionController.dispose();
+    discountController.dispose();
     super.onClose();
   }
 }

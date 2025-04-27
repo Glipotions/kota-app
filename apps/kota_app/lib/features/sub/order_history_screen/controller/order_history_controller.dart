@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kota_app/features/navigation/bottom_navigation_bar/controller/bottom_navigation_controller.dart';
+import 'package:kota_app/features/sub/active_orders_screen/active_orders_pdf_controller.dart';
 import 'package:kota_app/features/sub/order_history_detail_screen/order_pdf/order_pdf_controller.dart';
 import 'package:kota_app/product/base/controller/base_controller.dart';
 import 'package:kota_app/product/managers/cart_controller.dart';
@@ -22,7 +23,12 @@ class OrderHistoryController extends BaseControllerInterface {
 
   final Rx<List<OrderItem>> _orderItems = Rx([]);
   final Rx<bool> _isPaginationLoading = Rx(false);
+  final Rx<List<AlinanSiparisBilgileriL>> _activeOrders = Rx([]);
+  final Rx<bool> _isActiveOrdersLoading = Rx(false);
+
   final OrderPdfController invoicePdfController = Get.put(OrderPdfController());
+  final ActiveOrdersPdfController activeOrdersPdfController =
+      Get.put(ActiveOrdersPdfController());
   final BottomNavigationController bottomNavController =
       Get.find<BottomNavigationController>();
 
@@ -31,8 +37,16 @@ class OrderHistoryController extends BaseControllerInterface {
     ..firstRebuild = true
     ..value = value;
 
+  List<AlinanSiparisBilgileriL> get activeOrders => _activeOrders.value;
+  set activeOrders(List<AlinanSiparisBilgileriL> value) => _activeOrders
+    ..firstRebuild = true
+    ..value = value;
+
   bool get isPaginationLoading => _isPaginationLoading.value;
   set isPaginationLoading(bool value) => _isPaginationLoading.value = value;
+
+  bool get isActiveOrdersLoading => _isActiveOrdersLoading.value;
+  set isActiveOrdersLoading(bool value) => _isActiveOrdersLoading.value = value;
 
   // Currency related cached value
   late final Rx<int> _currencyType = 1.obs;
@@ -41,7 +55,7 @@ class OrderHistoryController extends BaseControllerInterface {
   int get currencyType => _currencyType.value;
   bool get isCurrencyTL => _isCurrencyTL.value;
 
-  int? _currentAccountId=null;
+  int? _currentAccountId;
 
   void _updateCurrencyValues() {
     _currencyType.value = sessionHandler.currentUser?.currencyType ?? 1;
@@ -201,5 +215,74 @@ class OrderHistoryController extends BaseControllerInterface {
     transactionsResponse = OrdersHistoryResponseModel();
     _currentAccountId = account.id;
     await _getOrders(account.id);
+  }
+
+  /// Fetches active orders for the current account
+  Future<void> getActiveOrders() async {
+    isActiveOrdersLoading = true;
+    final currentAccountId =
+        _currentAccountId ?? sessionHandler.currentUser!.currentAccountId!;
+
+    await client.appService.getActiveOrders(id: currentAccountId).handleRequest(
+          onSuccess: (res) {
+            if (res?.items != null) {
+              activeOrders = res!.items!;
+            } else {
+              activeOrders = [];
+            }
+          },
+          ignoreException: true,
+          onIgnoreException: (error) {
+            showErrorToastMessage(
+                'Aktif siparişler alınırken bir hata oluştu.');
+            activeOrders = [];
+          },
+          defaultResponse: ActiveOrdersResponseModel(items: []),
+        );
+
+    isActiveOrdersLoading = false;
+  }
+
+  /// Shows active orders in a dialog
+  Future<void> showActiveOrders(BuildContext context) async {
+    // LoadingProgress and getActiveOrders are removed as the
+    // new screen's controller handles its own loading and data fetching.
+    // LoadingProgress.start();
+    // await getActiveOrders();
+    // LoadingProgress.stop();
+
+    // Navigate to the new ActiveOrdersScreen using GetX navigation
+    // Make sure to define the '/active-orders' route in your GetX pages/routes configuration.
+    await context.pushNamed(SubRouteEnums.activeOrders.name);
+
+    /* Old dialog code removed:
+    if (context.mounted) {
+      await showDialog<void>(
+        context: context,
+        builder: (context) => ActiveOrdersDialog(
+          activeOrders: activeOrders,
+          isCurrencyTL: isCurrencyTL,
+        ),
+      );
+    }
+    */
+  }
+
+  /// Generates PDF for active orders
+  Future<void> generateActiveOrdersPdf(BuildContext context) async {
+    if (activeOrders.isEmpty) {
+      showErrorToastMessage('Aktif sipariş bulunamadı.');
+      return;
+    }
+
+    final pdf = await activeOrdersPdfController.generateActiveOrdersPdf(
+      activeOrders,
+      context,
+      isCurrencyTL,
+    );
+
+    await Printing.layoutPdf(
+      onLayout: (PdfPageFormat format) async => pdf.save(),
+    );
   }
 }

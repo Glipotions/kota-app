@@ -266,7 +266,7 @@ class TrLocalization extends AppLocalizationLabel {
 
   // Transaction History Screen
   @override
-  String get transactionHistory => 'Hesap Hareketleri';
+  String get transactionHistory => 'İşlem Geçmişi';
 
   @override
   String get currentBalance => 'Güncel Bakiye';
@@ -278,29 +278,29 @@ class TrLocalization extends AppLocalizationLabel {
   String get expense => 'Gider';
 
   @override
-  String get searchTransactions => 'Hesap hareketleri ara...';
+  String get searchTransactions => 'İşlemlerde Ara';
 
   @override
-  String get noTransactions => 'Hesap hareketleri bulunamadı.';
+  String get noTransactions => 'İşlem bulunamadı.';
 
   // Product Detail Screen
   @override
-  String get productDetail => 'Ürün Detay';
+  String get productDetail => 'Ürün Detayı';
 
   @override
   String get productsInCart => 'Sepetteki Ürünler';
 
   @override
-  String get piece => 'adet';
+  String get piece => 'Adet';
 
   @override
-  String get removeProduct => 'Ürünü Sil';
+  String get removeProduct => 'Ürünü Kaldır';
 
   @override
-  String get removeProductConfirm => 'Bu ürünü sepetten silmek istediğinize emin misiniz?';
+  String get removeProductConfirm => 'Bu ürünü kaldırmak istediğinizden emin misiniz?';
 
   @override
-  String get remove => 'Sil';
+  String get remove => 'Kaldır';
 
   @override
   String get colorSelection => 'Renk Seçimi';
@@ -309,7 +309,7 @@ class TrLocalization extends AppLocalizationLabel {
   String get sizeSelection => 'Beden Seçimi';
 
   @override
-  String get noProductInCart => 'Bu üründen sepetinizde bulunmamaktadır.';
+  String get noProductInCart => 'Bu ürün için sepette ürün bulunmamaktadır.';
 
   @override
   String get addToCart => 'Sepete Ekle';
@@ -385,58 +385,58 @@ class TrLocalization extends AppLocalizationLabel {
   // Forgot Password
   @override
   String get verificationCodeSent => 'Doğrulama kodu e-posta adresinize gönderildi';
-  
+
   @override
   String get somethingWentWrong => 'Bir şeyler yanlış gitti. Lütfen tekrar deneyin.';
-  
+
   @override
   String get codeVerified => 'Kod başarıyla doğrulandı';
-  
+
   @override
   String get invalidCode => 'Geçersiz doğrulama kodu';
-  
+
   @override
   String get passwordsDoNotMatch => 'Şifreler eşleşmiyor';
-  
+
   @override
   String get passwordResetSuccess => 'Şifre başarıyla sıfırlandı';
-  
+
   @override
   String get verificationCodeResent => 'Doğrulama kodu e-posta adresinize tekrar gönderildi';
-  
+
   @override
   String get emailRequired => 'E-posta adresi gereklidir';
-  
+
   @override
   String get forgotPassword => 'Şifremi Unuttum';
-  
+
   @override
   String get resetPassword => 'Şifreyi Sıfırla';
-  
+
   @override
   String get verifyCode => 'Kodu Doğrula';
-  
+
   @override
   String get enterVerificationCode => 'E-posta adresinize gönderilen doğrulama kodunu girin';
-  
+
   @override
   String get enterNewPassword => 'Yeni şifrenizi girin';
-  
+
   @override
   String get confirmNewPassword => 'Yeni şifrenizi onaylayın';
-  
+
   @override
   String get resendCode => 'Kodu Tekrar Gönder';
 
   // Bottom Navigation Bar
   @override
-  String get home => 'Ana Sayfa';
+  String get home => 'Anasayfa';
 
   @override
   String get orderConfirmationTitle => 'Sipariş Onayı';
 
   @override
-  String orderConfirmationMessage(String companyName) => '$companyName adına siparişi tamamlamak istediğinize emin misiniz?';
+  String orderConfirmationMessage(String companyName) => '$companyName için siparişiniz alındı ve işleme konulacaktır.';
 
   @override
   String get confirm => 'Onayla';
@@ -589,4 +589,53 @@ class TrLocalization extends AppLocalizationLabel {
 
   @override
   String get generateInvoicePdf => 'Fatura PDF Oluştur';
+
+  // Active Orders
+  @override
+  String get activeOrders => 'Aktif Siparişler';
+
+  @override
+  String get selectAccount => 'Hesap Seç';
+
+  @override
+  String get exportToPdf => 'PDF Olarak Dışa Aktar';
+
+  @override
+  String get noActiveOrders => 'Aktif sipariş bulunamadı';
+
+  @override
+  String get remainingQuantity => 'Kalan Miktar';
+
+  @override
+  String get retry => 'Tekrar Dene';
+
+  @override
+  String get statusActive => 'Aktif';
+
+  @override
+  String get statusPassive => 'Pasif';
+
+  @override
+  String get productCodeLabel => 'Ürün Kodu';
+
+  @override
+  String get notAvailable => 'Mevcut Değil';
+
+  @override
+  String get dateLabel => 'Tarih';
+
+  @override
+  String get statusLabel => 'Durum';
+
+  @override
+  String get refresh => 'Yenile';
+
+  @override
+  String get viewPdf => 'PDF Görüntüle';
+
+  @override
+  String get errorLoadingOrders => 'Siparişler yüklenirken hata oluştu. Lütfen tekrar deneyin.';
+
+  @override
+  String get noActiveOrdersFound => 'Aktif sipariş bulunamadı.';
 }

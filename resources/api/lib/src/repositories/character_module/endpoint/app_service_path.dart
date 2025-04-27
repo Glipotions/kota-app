@@ -15,7 +15,7 @@ enum AppServicePath {
   verifyForgotPasswordCode('api/Auth/VerifyForgotPasswordCode'),
   resetPassword('api/Auth/ResetPassword'),
 
-  /// claim: 
+  /// claim:
   transactionHistory('/api/CariHesaps/Hareket'),
 
   /// no need claim
@@ -31,7 +31,7 @@ enum AppServicePath {
   currentUser('/api/Auth/User'),
 
   productGroupList('/api/ProductCodeGroups'),
-  
+
   productCategoryList('/api/ProductCategories'),
 
   productGroupItem('/api/ProductCodeGroups/getByBarcode'),
@@ -44,6 +44,9 @@ enum AppServicePath {
   currentAccountsWithBalance('api/CariHesaps/WithBalance'),
 
   saleInvoice('api/SatisFaturas'),
+
+  /// Active orders by current account id
+  activeOrders('api/AlinanSiparisBilgileris/getallbycurrentaccountid'),
 
   ;
 

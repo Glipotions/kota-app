@@ -6,12 +6,14 @@ import 'package:kota_app/features/main/all_products_screen/model/product_categor
 import 'package:kota_app/features/main/all_products_screen/model/product_filter.dart';
 import 'package:kota_app/product/base/controller/base_controller.dart';
 import 'package:kota_app/product/navigation/modules/sub_route/sub_route_enums.dart';
+import 'package:logger/logger.dart';
 
 class AllProductsController extends BaseControllerInterface {
   ProductGroupListResponseModel productsResponse =
       ProductGroupListResponseModel();
 
   final ScrollController scrollController = ScrollController();
+  final Logger logger = Logger();
 
   final Rx<List<ProductGroupItem>> _products = Rx([]);
   final Rx<List<ProductGroupItem>> _filteredProducts = Rx([]);
@@ -21,6 +23,7 @@ class AllProductsController extends BaseControllerInterface {
   final Rx<ProductFilter> _currentFilter = Rx(ProductFilter());
   final Rx<bool> _hasMoreItems = Rx(true);
   final Rx<bool> _hasActiveFilters = Rx(false);
+  final Rx<bool> _isProcessingBarcode = Rx(false);
 
   static List<ProductCategory>? _cachedCategories;
 
@@ -34,6 +37,9 @@ class AllProductsController extends BaseControllerInterface {
   set hasMoreItems(bool value) => _hasMoreItems.value = value;
 
   bool get hasActiveFilters => _hasActiveFilters.value;
+
+  bool get isProcessingBarcode => _isProcessingBarcode.value;
+  set isProcessingBarcode(bool value) => _isProcessingBarcode.value = value;
 
   ProductFilter get currentFilter => _currentFilter.value;
   set currentFilter(ProductFilter value) {
@@ -193,7 +199,7 @@ class AllProductsController extends BaseControllerInterface {
     _getProducts(isRefresh: true);
   }
 
-  void setSearchMode(bool isInSearch) {
+  void setSearchMode({required bool isInSearch}) {
     isInSearchMode = isInSearch;
     if (!isInSearch) {
       productsResponse = ProductGroupListResponseModel();
@@ -211,22 +217,35 @@ class AllProductsController extends BaseControllerInterface {
         pathParameters: {'id': code, 'productCode': productCode!},
       );
 
-  Future<void> getByBarcode(String barcode) async {
-    ProductGroupItem? productGroupItem;
-    await client.appService.productByBarcode(barcode).handleRequest(
-      onSuccess: (res) {
-        productGroupItem = res;
-      },
-    );
+  void setProcessingBarcode({required bool isProcessing}) {
+    _isProcessingBarcode.value = isProcessing;
+  }
 
-    if (productGroupItem != null) {
-      await context.pushNamed(
-        SubRouteEnums.productDetail.name,
-        pathParameters: {
-          'id': productGroupItem!.code!,
-          'productCode': productGroupItem!.name!,
+  Future<void> getByBarcode(String barcode) async {
+    setProcessingBarcode(isProcessing: true);
+    ProductGroupItem? productGroupItem;
+    try {
+      await client.appService.productByBarcode(barcode).handleRequest(
+        onSuccess: (res) {
+          productGroupItem = res;
         },
       );
+
+      if (productGroupItem != null) {
+        await context.pushNamed(
+          SubRouteEnums.productDetail.name,
+          pathParameters: {
+            'id': productGroupItem!.code!,
+            'productCode': productGroupItem!.name!,
+          },
+        );
+      }
+    } catch (e) {
+      // Handle any errors that might occur during API call or navigation
+      logger.e('Error in barcode scanning: $e');
+    } finally {
+      // Always reset the processing state when done
+      setProcessingBarcode(isProcessing: false);
     }
   }
 }

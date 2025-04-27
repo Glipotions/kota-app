@@ -1,5 +1,10 @@
 import 'package:go_router/go_router.dart';
+import 'package:get/get.dart';
 import 'package:kota_app/features/auth/login_screen/login_screen.dart';
+import 'package:kota_app/features/sub/active_orders_screen/active_orders_screen.dart';
+import 'package:kota_app/features/sub/active_orders_screen/bindings/active_orders_binding.dart';
+import 'package:kota_app/features/sub/active_orders_screen/controller/active_orders_controller.dart';
+import 'package:kota_app/features/sub/active_orders_screen/view/active_orders.dart';
 import 'package:kota_app/features/sub/manage_account_screen/manage_account_screen.dart';
 import 'package:kota_app/features/sub/order_history_detail_screen/order_history_detail_screen.dart';
 import 'package:kota_app/features/sub/order_history_screen/order_history_screen.dart';
@@ -72,6 +77,16 @@ class SubRoute {
         id: state.pathParameters['id']!,
         productCode: state.pathParameters['productCode']!,
       ),
+    ),
+    GoRoute(
+      name: SubRouteEnums.activeOrders.name,
+      path: SubRouteEnums.activeOrders.path,
+      // Consider adding a corresponding entry in SubRouteEnums if needed
+      builder: (context, state) {
+        // Ensure binding is loaded before the screen
+        ActiveOrdersBinding().dependencies();
+        return const ActiveOrdersScreen();
+      },
     ),
   ];
 }

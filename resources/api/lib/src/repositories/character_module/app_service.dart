@@ -278,5 +278,15 @@ class AppService extends BaseClient {
     );
   }
 
-  
+  /// Request that returns active orders by current account id
+  Future<BaseHttpModel<ActiveOrdersResponseModel>> getActiveOrders({
+    required int id,
+  }) async {
+    return baseRequest<ActiveOrdersResponseModel, ActiveOrdersResponseModel>(
+      responseModel: ActiveOrdersResponseModel(),
+      httpUrl: AppServicePath.activeOrders.withPath(id.toString()),
+      method: DioHttpMethod.get,
+    );
+  }
+
 }

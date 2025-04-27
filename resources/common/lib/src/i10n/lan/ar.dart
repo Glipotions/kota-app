@@ -293,7 +293,7 @@ class ArLocalization extends AppLocalizationLabel {
   String get completed => 'مكتمل';
 
   @override
-  String get preparing => 'قيد التحضير';
+  String get preparing => 'جاري التحضير';
 
   @override
   String get transactionHistory => 'سجل المعاملات';
@@ -347,7 +347,7 @@ class ArLocalization extends AppLocalizationLabel {
   String get orderConfirmationTitle => 'تأكيد الطلب';
 
   @override
-  String orderConfirmationMessage(String companyName) => 'هل أنت متأكد أنك تريد إتمام الطلب لصالح $companyName؟';
+  String orderConfirmationMessage(String companyName) => 'تم استلام طلبك لـ $companyName وسيتم معالجته.';
 
   @override
   String get confirm => 'تأكيد';
@@ -551,46 +551,46 @@ class ArLocalization extends AppLocalizationLabel {
   // Forgot Password
   @override
   String get verificationCodeSent => 'تم إرسال رمز التحقق إلى بريدك الإلكتروني';
-  
+
   @override
   String get somethingWentWrong => 'حدث خطأ ما. يرجى المحاولة مرة أخرى.';
-  
+
   @override
   String get codeVerified => 'تم التحقق من الرمز بنجاح';
-  
+
   @override
   String get invalidCode => 'رمز التحقق غير صالح';
-  
+
   @override
   String get passwordsDoNotMatch => 'كلمات المرور غير متطابقة';
-  
+
   @override
   String get passwordResetSuccess => 'تم إعادة تعيين كلمة المرور بنجاح';
-  
+
   @override
   String get verificationCodeResent => 'تم إعادة إرسال رمز التحقق إلى بريدك الإلكتروني';
-  
+
   @override
   String get emailRequired => 'البريد الإلكتروني مطلوب';
-  
+
   @override
   String get forgotPassword => 'نسيت كلمة المرور';
-  
+
   @override
   String get resetPassword => 'إعادة تعيين كلمة المرور';
-  
+
   @override
   String get verifyCode => 'التحقق من الرمز';
-  
+
   @override
   String get enterVerificationCode => 'أدخل رمز التحقق المرسل إلى بريدك الإلكتروني';
-  
+
   @override
   String get enterNewPassword => 'أدخل كلمة المرور الجديدة';
-  
+
   @override
   String get confirmNewPassword => 'تأكيد كلمة المرور الجديدة';
-  
+
   @override
   String get resendCode => 'إعادة إرسال الرمز';
 
@@ -606,4 +606,53 @@ class ArLocalization extends AppLocalizationLabel {
 
   @override
   String get generateInvoicePdf => 'إنشاء ملف PDF للفاتورة';
+
+  // Active Orders
+  @override
+  String get activeOrders => 'الطلبات النشطة';
+
+  @override
+  String get selectAccount => 'اختر الحساب';
+
+  @override
+  String get exportToPdf => 'تصدير إلى PDF';
+
+  @override
+  String get noActiveOrders => 'لا توجد طلبات نشطة';
+
+  @override
+  String get remainingQuantity => 'الكمية المتبقية';
+
+  @override
+  String get retry => 'إعادة المحاولة';
+
+  @override
+  String get statusActive => 'نشط';
+
+  @override
+  String get statusPassive => 'غير نشط';
+
+  @override
+  String get productCodeLabel => 'رمز المنتج';
+
+  @override
+  String get notAvailable => 'غير متوفر';
+
+  @override
+  String get dateLabel => 'التاريخ';
+
+  @override
+  String get statusLabel => 'الحالة';
+
+  @override
+  String get refresh => 'تحديث';
+
+  @override
+  String get viewPdf => 'عرض PDF';
+
+  @override
+  String get errorLoadingOrders => 'حدث خطأ أثناء تحميل الطلبات. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get noActiveOrdersFound => 'لم يتم العثور على طلبات نشطة.';
 }

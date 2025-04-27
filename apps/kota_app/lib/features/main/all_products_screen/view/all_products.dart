@@ -30,16 +30,20 @@ class AllProducts extends StatelessWidget {
         additionalIcon: IconButton(
           icon: const Icon(Icons.search),
           onPressed: () {
-            controller.setSearchMode(true);
+            controller.setSearchMode(isInSearch: true);
             showSearch(
               context: context,
               delegate: CustomSearchDelegate(controller),
-            ).then((_) => controller.setSearchMode(false));
+            ).then((_) => controller.setSearchMode(isInSearch: false));
           },
         ),
-        leading: IconButton(
-          icon: const Icon(Icons.document_scanner),
-          onPressed: () => _scanBarcode(controller, context),
+        leading: Obx(
+          () => IconButton(
+            icon: const Icon(Icons.document_scanner),
+            onPressed: controller.isProcessingBarcode
+                ? null
+                : () => _scanBarcode(controller, context),
+          ),
         ),
       ),
       body: BaseView<AllProductsController>(
@@ -238,12 +242,12 @@ Future<void> _scanBarcode(AllProductsController controller, BuildContext context
       ),
       scanFormat: ScanFormat.ONLY_BARCODE,
     );
-    
+
     if (result != null && result != '-1' && result.isNotEmpty) {
       await controller.getByBarcode(result);
     }
   } catch (e) {
-    print(e);
     // Handle error
+    controller.setProcessingBarcode(isProcessing: false);
   }
 }

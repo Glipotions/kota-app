@@ -9,7 +9,7 @@ class AllProductsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder(
-      tag: UniqueKey().toString(),
+      tag: 'all_products_controller',
       init: AllProductsController(),
       builder: (controller) => AllProducts(controller: controller),
     );

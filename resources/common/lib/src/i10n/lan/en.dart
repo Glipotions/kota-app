@@ -83,13 +83,13 @@ class EnLocalization extends AppLocalizationLabel {
 
   @override
   String get invalidNameText => 'Please enter valid Name';
-  
+
   @override
   String get logout => 'Logout';
-  
+
   @override
   String get succesfullyLoggedIn => 'Successfully logged in.';
-  
+
   @override
   String get succesfullyLoggedOut => 'Succesfully logged out.';
 
@@ -275,65 +275,189 @@ class EnLocalization extends AppLocalizationLabel {
   @override
   String get preparing => 'Preparing';
 
+  // Active Orders Screen specific keys
+  @override
+  String get retry => 'Retry';
+  @override
+  String get statusActive => 'Active';
+  @override
+  String get statusPassive => 'Passive';
+  @override
+  String get productCodeLabel => 'Product Code';
+  @override
+  String get notAvailable => 'N/A';
+  @override
+  String get dateLabel => 'Date';
+  @override
+  String get statusLabel => 'Status';
+  @override
+  String get activeOrders => 'Active Orders';
+  @override
+  String get refresh => 'Refresh';
+  @override
+  String get viewPdf => 'View PDF';
+  @override
+  String get errorLoadingOrders => 'Error loading orders. Please try again.';
+  @override
+  String get noActiveOrdersFound => 'No active orders found.';
+
   // Transaction History Screen
   @override
   String get transactionHistory => 'Transaction History';
-
   @override
   String get currentBalance => 'Current Balance';
-
   @override
   String get income => 'Income';
-
   @override
   String get expense => 'Expense';
-
   @override
-  String get searchTransactions => 'Search transactions...';
-
+  String get searchTransactions => 'Search Transactions';
   @override
   String get noTransactions => 'No transactions found.';
 
   // Product Detail Screen
   @override
   String get productDetail => 'Product Detail';
-
   @override
-  String get productsInCart => 'Products in Cart';
-
+  String get productsInCart => 'Products In Cart';
   @override
-  String get piece => 'pieces';
-
+  String get piece => 'Piece';
   @override
   String get removeProduct => 'Remove Product';
-
   @override
-  String get removeProductConfirm => 'Are you sure you want to remove this product from cart?';
-
+  String get removeProductConfirm => 'Are you sure you want to remove this product?';
   @override
   String get remove => 'Remove';
-
   @override
   String get colorSelection => 'Color Selection';
-
   @override
   String get sizeSelection => 'Size Selection';
-
   @override
-  String get noProductInCart => 'This product is not in your cart.';
+  String get noProductInCart => 'No products in cart for this item.';
 
   // Bottom Navigation Bar
   @override
   String get home => 'Home';
 
+  // Order Confirmation Dialog
   @override
   String get orderConfirmationTitle => 'Order Confirmation';
-
   @override
-  String orderConfirmationMessage(String companyName) => 'Are you sure you want to complete the order for $companyName?';
-
+  String orderConfirmationMessage(String companyName) => 'Your order for $companyName has been received and will be processed.';
   @override
   String get confirm => 'Confirm';
+
+  // Invoice PDF
+  @override
+  String get salesInvoice => 'Sales Invoice';
+
+  @override
+  String get invoiceDetails => 'INVOICE DETAILS';
+
+  @override
+  String get invoiceDate => 'Date';
+
+  @override
+  String get invoiceProductCode => 'Code';
+
+  @override
+  String get invoiceProductName => 'Product Name';
+
+  @override
+  String get invoiceQuantity => 'Quantity';
+
+  @override
+  String get unitPriceInvoice => 'Unit Price';
+
+  @override
+  String get totalInvoice => 'Total';
+
+  @override
+  String get subtotal => 'Subtotal';
+
+  @override
+  String get vatRate => 'VAT Rate';
+
+  @override
+  String get vatTotal => 'VAT Total';
+
+  @override
+  String get grandTotal => 'GRAND TOTAL';
+
+  @override
+  String get electronicInvoiceNote => 'This invoice was generated electronically.';
+
+  // Forgot Password
+  @override
+  String get verificationCodeSent => 'Verification code has been sent to your email';
+
+  @override
+  String get somethingWentWrong => 'Something went wrong. Please try again.';
+
+  @override
+  String get codeVerified => 'Code has been verified successfully';
+
+  @override
+  String get invalidCode => 'Invalid verification code';
+
+  @override
+  String get passwordsDoNotMatch => 'Passwords do not match';
+
+  @override
+  String get passwordResetSuccess => 'Password has been reset successfully';
+
+  @override
+  String get verificationCodeResent => 'Verification code has been resent to your email';
+
+  @override
+  String get emailRequired => 'Email is required';
+
+  @override
+  String get forgotPassword => 'Forgot Password';
+
+  @override
+  String get resetPassword => 'Reset Password';
+
+  @override
+  String get verifyCode => 'Verify Code';
+
+  @override
+  String get enterVerificationCode => 'Enter the verification code sent to your email';
+
+  @override
+  String get enterNewPassword => 'Enter your new password';
+
+  @override
+  String get confirmNewPassword => 'Confirm your new password';
+
+  @override
+  String get resendCode => 'Resend Code';
+
+  // Invoice Detail Screen
+  @override
+  String get invoiceDetail => 'Invoice Detail';
+
+  @override
+  String get productInformation => 'Product Information';
+
+  @override
+  String get invoiceDetailNotFound => 'Invoice detail not found';
+
+  @override
+  String get generateInvoicePdf => 'Generate Invoice PDF';
+
+  // Active Orders
+  @override
+  String get selectAccount => 'Select Account';
+
+  @override
+  String get exportToPdf => 'Export to PDF';
+
+  @override
+  String get noActiveOrders => 'No active orders found';
+
+  @override
+  String get remainingQuantity => 'Remaining Quantity';
 
   @override
   String get orderDeletedSuccessfully => 'Order successfully deleted';
@@ -490,103 +614,4 @@ class EnLocalization extends AppLocalizationLabel {
 
   @override
   String get currency => 'Currency';
-
-  // Invoice PDF
-  @override
-  String get salesInvoice => 'Sales Invoice';
-
-  @override
-  String get invoiceDetails => 'INVOICE DETAILS';
-
-  @override
-  String get invoiceDate => 'Date';
-
-  @override
-  String get invoiceProductCode => 'Code';
-
-  @override
-  String get invoiceProductName => 'Product Name';
-
-  @override
-  String get invoiceQuantity => 'Quantity';
-
-  @override
-  String get unitPriceInvoice => 'Unit Price';
-
-  @override
-  String get totalInvoice => 'Total';
-
-  @override
-  String get subtotal => 'Subtotal';
-
-  @override
-  String get vatRate => 'VAT Rate';
-
-  @override
-  String get vatTotal => 'VAT Total';
-
-  @override
-  String get grandTotal => 'GRAND TOTAL';
-
-  @override
-  String get electronicInvoiceNote => 'This invoice was generated electronically.';
-
-  // Forgot Password
-  @override
-  String get verificationCodeSent => 'Verification code has been sent to your email';
-  
-  @override
-  String get somethingWentWrong => 'Something went wrong. Please try again.';
-  
-  @override
-  String get codeVerified => 'Code has been verified successfully';
-  
-  @override
-  String get invalidCode => 'Invalid verification code';
-  
-  @override
-  String get passwordsDoNotMatch => 'Passwords do not match';
-  
-  @override
-  String get passwordResetSuccess => 'Password has been reset successfully';
-  
-  @override
-  String get verificationCodeResent => 'Verification code has been resent to your email';
-  
-  @override
-  String get emailRequired => 'Email is required';
-  
-  @override
-  String get forgotPassword => 'Forgot Password';
-  
-  @override
-  String get resetPassword => 'Reset Password';
-  
-  @override
-  String get verifyCode => 'Verify Code';
-  
-  @override
-  String get enterVerificationCode => 'Enter the verification code sent to your email';
-  
-  @override
-  String get enterNewPassword => 'Enter your new password';
-  
-  @override
-  String get confirmNewPassword => 'Confirm your new password';
-  
-  @override
-  String get resendCode => 'Resend Code';
-
-  // Invoice Detail Screen
-  @override
-  String get invoiceDetail => 'Invoice Detail';
-
-  @override
-  String get productInformation => 'Product Information';
-
-  @override
-  String get invoiceDetailNotFound => 'Invoice detail not found';
-
-  @override
-  String get generateInvoicePdf => 'Generate Invoice PDF';
 }

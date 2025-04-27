@@ -290,7 +290,7 @@ class RuLocalization extends AppLocalizationLabel {
   String get completed => 'Завершено';
 
   @override
-  String get preparing => 'В обработке';
+  String get preparing => 'Подготовка';
 
   @override
   String get transactionHistory => 'История транзакций';
@@ -308,16 +308,16 @@ class RuLocalization extends AppLocalizationLabel {
   String get searchTransactions => 'Поиск транзакций';
 
   @override
-  String get noTransactions => 'Нет транзакций';
+  String get noTransactions => 'Транзакций не найдено.';
 
   @override
-  String get productDetail => 'Детали товара';
+  String get productDetail => 'Детали продукта';
 
   @override
   String get productsInCart => 'Товары в корзине';
 
   @override
-  String get piece => 'шт.';
+  String get piece => 'Шт.';
 
   @override
   String get home => 'Главная';
@@ -326,7 +326,7 @@ class RuLocalization extends AppLocalizationLabel {
   String get colorSelection => 'Выбор цвета';
 
   @override
-  String get noProductInCart => 'В корзине нет товаров';
+  String get noProductInCart => 'Нет товаров в корзине для этого наименования.';
 
   @override
   String get remove => 'Удалить';
@@ -344,7 +344,7 @@ class RuLocalization extends AppLocalizationLabel {
   String get orderConfirmationTitle => 'Подтверждение заказа';
 
   @override
-  String orderConfirmationMessage(String companyName) => 'Вы уверены, что хотите оформить заказ для $companyName?';
+  String orderConfirmationMessage(String companyName) => 'Ваш заказ для $companyName получен и будет обработан.';
 
   @override
   String get confirm => 'Подтвердить';
@@ -551,46 +551,46 @@ class RuLocalization extends AppLocalizationLabel {
   // Forgot Password
   @override
   String get verificationCodeSent => 'Код подтверждения отправлен на вашу электронную почту';
-  
+
   @override
   String get somethingWentWrong => 'Что-то пошло не так. Пожалуйста, попробуйте еще раз.';
-  
+
   @override
   String get codeVerified => 'Код успешно подтвержден';
-  
+
   @override
   String get invalidCode => 'Неверный код подтверждения';
-  
+
   @override
   String get passwordsDoNotMatch => 'Пароли не совпадают';
-  
+
   @override
   String get passwordResetSuccess => 'Пароль успешно сброшен';
-  
+
   @override
   String get verificationCodeResent => 'Код подтверждения повторно отправлен на вашу электронную почту';
-  
+
   @override
   String get emailRequired => 'Требуется электронная почта';
-  
+
   @override
   String get forgotPassword => 'Забыли пароль';
-  
+
   @override
   String get resetPassword => 'Сбросить пароль';
-  
+
   @override
   String get verifyCode => 'Подтвердить код';
-  
+
   @override
   String get enterVerificationCode => 'Введите код подтверждения, отправленный на вашу электронную почту';
-  
+
   @override
   String get enterNewPassword => 'Введите новый пароль';
-  
+
   @override
   String get confirmNewPassword => 'Подтвердите новый пароль';
-  
+
   @override
   String get resendCode => 'Отправить код повторно';
 
@@ -606,4 +606,53 @@ class RuLocalization extends AppLocalizationLabel {
 
   @override
   String get generateInvoicePdf => 'Создать PDF счета';
+
+  // Active Orders
+  @override
+  String get activeOrders => 'Активные заказы';
+
+  @override
+  String get selectAccount => 'Выбрать аккаунт';
+
+  @override
+  String get exportToPdf => 'Экспорт в PDF';
+
+  @override
+  String get noActiveOrders => 'Активные заказы не найдены';
+
+  @override
+  String get remainingQuantity => 'Оставшееся количество';
+
+  @override
+  String get retry => 'Повторить';
+
+  @override
+  String get statusActive => 'Активен';
+
+  @override
+  String get statusPassive => 'Пассивен';
+
+  @override
+  String get productCodeLabel => 'Код товара';
+
+  @override
+  String get notAvailable => 'Н/Д';
+
+  @override
+  String get dateLabel => 'Дата';
+
+  @override
+  String get statusLabel => 'Статус';
+
+  @override
+  String get refresh => 'Обновить';
+
+  @override
+  String get viewPdf => 'Посмотреть PDF';
+
+  @override
+  String get errorLoadingOrders => 'Ошибка загрузки заказов. Пожалуйста, попробуйте еще раз.';
+
+  @override
+  String get noActiveOrdersFound => 'Активных заказов не найдено.';
 }

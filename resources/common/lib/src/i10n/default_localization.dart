@@ -70,7 +70,7 @@ abstract class AppLocalizationLabel {
 
   ///Login
   String get login;
-  
+
   ///E-Mail
   String get eMail;
 
@@ -97,7 +97,7 @@ abstract class AppLocalizationLabel {
 
   ///This field is required
   String get requiredText;
-  
+
   ///Please enter valid E-mail
   String get invalidMailText;
   ///Please enter valid name
@@ -192,8 +192,19 @@ abstract class AppLocalizationLabel {
   String get completed;
   String get preparing;
 
-  // Invoice
-  String get discount;
+  // Active Orders Screen specific keys
+  String get retry;
+  String get statusActive;
+  String get statusPassive;
+  String get productCodeLabel;
+  String get notAvailable;
+  String get dateLabel;
+  String get statusLabel;
+  String get activeOrders;
+  String get refresh;
+  String get viewPdf;
+  String get errorLoadingOrders;
+  String get noActiveOrdersFound;
 
   // Transaction History Screen
   String get transactionHistory;
@@ -221,6 +232,9 @@ abstract class AppLocalizationLabel {
   String get orderConfirmationTitle;
   String orderConfirmationMessage(String companyName);
   String get confirm;
+
+  // Invoice
+  String get discount;
 
   ///Order successfully deleted
   String get orderDeletedSuccessfully;
@@ -298,90 +312,90 @@ abstract class AppLocalizationLabel {
   String get page;
   String get totalQuantity;
   String get code;
-  
+
   // Forgot Password
   /// Verification code has been sent to your email
   String get verificationCodeSent;
-  
+
   /// Something went wrong. Please try again.
   String get somethingWentWrong;
-  
+
   /// Code has been verified successfully
   String get codeVerified;
-  
+
   /// Invalid verification code
   String get invalidCode;
-  
+
   /// Passwords do not match
   String get passwordsDoNotMatch;
-  
+
   /// Password has been reset successfully
   String get passwordResetSuccess;
-  
+
   /// Verification code has been resent to your email
   String get verificationCodeResent;
-  
+
   /// Email is required
   String get emailRequired;
-  
+
   /// Forgot Password
   String get forgotPassword;
-  
+
   /// Reset Password
   String get resetPassword;
-  
+
   /// Verify Code
   String get verifyCode;
-  
+
   /// Enter the verification code sent to your email
   String get enterVerificationCode;
-  
+
   /// Enter your new password
   String get enterNewPassword;
-  
+
   /// Confirm your new password
   String get confirmNewPassword;
-  
+
   /// Resend Code
   String get resendCode;
 
   // Invoice PDF
   /// Sales Invoice
   String get salesInvoice;
-  
+
   /// Invoice Details
   String get invoiceDetails;
-  
+
   /// Date
   String get invoiceDate;
-  
+
   /// Code (for invoice)
   String get invoiceProductCode;
-  
+
   /// Product Name (for invoice)
   String get invoiceProductName;
-  
+
   /// Quantity (for invoice)
   String get invoiceQuantity;
-  
+
   /// Unit Price (for invoice)
   String get unitPriceInvoice;
-  
+
   /// Total (for invoice)
   String get totalInvoice;
-  
+
   /// Subtotal
   String get subtotal;
-  
+
   /// VAT Rate
   String get vatRate;
-  
+
   /// VAT Total
   String get vatTotal;
-  
+
   /// Grand Total
   String get grandTotal;
-  
+
   /// This invoice was generated electronically
   String get electronicInvoiceNote;
 
@@ -396,4 +410,16 @@ abstract class AppLocalizationLabel {
 
   /// Generate Invoice PDF
   String get generateInvoicePdf;
+
+  /// Active Orders
+  String get selectAccount;
+
+  /// Export to PDF
+  String get exportToPdf;
+
+  /// No active orders
+  String get noActiveOrders;
+
+  /// Remaining Quantity
+  String get remainingQuantity;
 }

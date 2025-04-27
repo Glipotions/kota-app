@@ -291,12 +291,22 @@ class _CartState extends State<Cart> {
                 0,
                 (sum, product) => sum + product.quantity,
               );
-              final totalPrice = products.fold<double>(
+
+              // Calculate total price without discount
+              final totalPriceWithoutDiscount = products.fold<double>(
                 0,
                 (sum, product) => sum + (controller.isCurrencyTL
                     ? product.price * product.quantity
                     : product.currencyUnitPrice! * product.quantity),
               );
+
+              // Calculate total price with discount
+              final totalPrice = controller.cartDiscountRate.value > 0
+                  ? totalPriceWithoutDiscount * (1 - controller.cartDiscountRate.value / 100)
+                  : totalPriceWithoutDiscount;
+
+              // Calculate discount amount
+              final discountAmount = totalPriceWithoutDiscount - totalPrice;
 
               return pw.Container(
                 decoration: pw.BoxDecoration(
@@ -334,6 +344,58 @@ class _CartState extends State<Cart> {
                           ],
                         ),
                         pw.SizedBox(height: 8),
+
+                        // Show original price if discount is applied
+                        if (controller.cartDiscountRate.value > 0) ...[
+                          pw.Row(
+                            children: [
+                              pw.Text(
+                                'Toplam Tutar: ',
+                                style: pw.TextStyle(
+                                  font: ttf,
+                                  fontWeight: pw.FontWeight.bold,
+                                  fontSize: 12,
+                                  color: PdfColors.grey700,
+                                ),
+                              ),
+                              pw.Text(
+                                totalPriceWithoutDiscount.formatPrice(),
+                                style: pw.TextStyle(
+                                  font: ttf,
+                                  fontWeight: pw.FontWeight.bold,
+                                  fontSize: 12,
+                                  color: PdfColors.grey700,
+                                  decoration: pw.TextDecoration.lineThrough,
+                                ),
+                              ),
+                            ],
+                          ),
+                          pw.SizedBox(height: 4),
+                          pw.Row(
+                            children: [
+                              pw.Text(
+                                'İskonto (%${controller.cartDiscountRate.value.toStringAsFixed(2)}): ',
+                                style: pw.TextStyle(
+                                  font: ttf,
+                                  fontWeight: pw.FontWeight.bold,
+                                  fontSize: 12,
+                                  color: PdfColors.red,
+                                ),
+                              ),
+                              pw.Text(
+                                '- ${(totalPriceWithoutDiscount - totalPrice).formatPrice()}',
+                                style: pw.TextStyle(
+                                  font: ttf,
+                                  fontWeight: pw.FontWeight.bold,
+                                  fontSize: 12,
+                                  color: PdfColors.red,
+                                ),
+                              ),
+                            ],
+                          ),
+                          pw.SizedBox(height: 4),
+                        ],
+
                         pw.Row(
                           children: [
                             pw.Text(
@@ -458,22 +520,113 @@ class _CartState extends State<Cart> {
                         ),
                         child: Column(
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            Column(
                               children: [
-                                Text(
-                                  labels.totalAmount,
-                                  style: context.titleMedium,
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      labels.totalAmount,
+                                      style: context.titleMedium,
+                                    ),
+                                    Obx(
+                                      () => controller.cartDiscountRate.value > 0
+                                          ? Column(
+                                              crossAxisAlignment: CrossAxisAlignment.end,
+                                              children: [
+                                                Text(
+                                                  controller.totalAmount(withDiscount: false).formatPrice(),
+                                                  style: context.titleMedium.copyWith(
+                                                    decoration: TextDecoration.lineThrough,
+                                                    color: Colors.grey,
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 4),
+                                                Text(
+                                                  controller.totalAmount().formatPrice(),
+                                                  style: context.headlineSmall.copyWith(
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Theme.of(context).primaryColor,
+                                                  ),
+                                                ),
+                                              ],
+                                            )
+                                          : Text(
+                                              controller.totalAmount().formatPrice(),
+                                              style: context.headlineSmall.copyWith(
+                                                fontWeight: FontWeight.bold,
+                                                color: Theme.of(context).primaryColor,
+                                              ),
+                                            ),
+                                    ),
+                                  ],
                                 ),
-                                Obx(
-                                  () => Text(
-                                    controller.totalAmount().formatPrice(),
-                                    style: context.headlineSmall.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      color: Theme.of(context).primaryColor,
+
+                                // Show discount information if discount is applied
+                                Obx(() => controller.cartDiscountRate.value > 0
+                                  ? Padding(
+                                      padding: EdgeInsets.only(top: ModulePadding.xs.value),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            'İndirim (%${controller.cartDiscountRate.value.toStringAsFixed(2)}):',
+                                            style: context.titleSmall.copyWith(
+                                              color: Colors.red,
+                                            ),
+                                          ),
+                                          Text(
+                                            '- ${controller.discountAmount().formatPrice()}',
+                                            style: context.titleSmall.copyWith(
+                                              color: Colors.red,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  : const SizedBox.shrink(),
+                                ),
+
+                                // Show discount input field for admin users
+                                if (controller.hasAdminRights)
+                                  Padding(
+                                    padding: EdgeInsets.only(top: ModulePadding.s.value),
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.discount_outlined,
+                                          color: Theme.of(context).primaryColor,
+                                        ),
+                                        SizedBox(width: ModulePadding.xs.value),
+                                        Text(
+                                          'İskonto Oranı (%):',
+                                          style: context.titleSmall,
+                                        ),
+                                        SizedBox(width: ModulePadding.s.value),
+                                        Expanded(
+                                          child: TextField(
+                                            controller: controller.discountController,
+                                            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                                            decoration: InputDecoration(
+                                              hintText: '0-100',
+                                              border: OutlineInputBorder(
+                                                borderRadius: BorderRadius.circular(
+                                                  ModuleRadius.s.value,
+                                                ),
+                                              ),
+                                              contentPadding: EdgeInsets.symmetric(
+                                                horizontal: ModulePadding.s.value,
+                                                vertical: ModulePadding.xs.value,
+                                              ),
+                                              suffixText: '%',
+                                            ),
+                                            onChanged: controller.updateDiscountRate,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                ),
                               ],
                             ),
                             SizedBox(height: ModulePadding.xxs.value),

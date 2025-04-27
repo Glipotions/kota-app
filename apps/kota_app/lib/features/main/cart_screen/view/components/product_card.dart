@@ -139,25 +139,76 @@ class _ProductCard extends StatelessWidget {
                           ),
                           SizedBox(width: ModulePadding.xs.value),
                           Expanded(
-                            child: Text(
-                              isCurrencyTL
+                            child: item.discountRate > 0
+                              ? Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      isCurrencyTL
+                                          ? item.price.formatPrice()
+                                          : item.currencyUnitPrice!.formatPrice(),
+                                      style: context.labelSmall.copyWith(
+                                        decoration: TextDecoration.lineThrough,
+                                        color: Colors.grey,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    Text(
+                                      isCurrencyTL
+                                          ? (item.price * (1 - item.discountRate / 100)).formatPrice()
+                                          : (item.currencyUnitPrice! * (1 - item.discountRate / 100)).formatPrice(),
+                                      style: context.titleSmall,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ],
+                                )
+                              : Text(
+                                  isCurrencyTL
                                       ? item.price.formatPrice()
                                       : item.currencyUnitPrice!.formatPrice(),
-                              style: context.titleSmall,
-                              overflow: TextOverflow.ellipsis,
-                            ),
+                                  style: context.titleSmall,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                           ),
-                          Text(
-                            (isCurrencyTL
-                                    ? (item.price * item.quantity)
-                                    : (item.currencyUnitPrice! * item.quantity))
-                                .formatPrice(),
-                            style: context.titleMedium.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: Theme.of(context).primaryColor,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
+                          item.discountRate > 0
+                            ? Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    (isCurrencyTL
+                                            ? (item.price * item.quantity)
+                                            : (item.currencyUnitPrice! * item.quantity))
+                                        .formatPrice(),
+                                    style: context.labelSmall.copyWith(
+                                      decoration: TextDecoration.lineThrough,
+                                      color: Colors.grey,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  Text(
+                                    (isCurrencyTL
+                                            ? (item.price * (1 - item.discountRate / 100) * item.quantity)
+                                            : (item.currencyUnitPrice! * (1 - item.discountRate / 100) * item.quantity))
+                                        .formatPrice(),
+                                    style: context.titleMedium.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      color: Theme.of(context).primaryColor,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+                              )
+                            : Text(
+                                (isCurrencyTL
+                                        ? (item.price * item.quantity)
+                                        : (item.currencyUnitPrice! * item.quantity))
+                                    .formatPrice(),
+                                style: context.titleMedium.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
                         ],
                       ),
                       // SizedBox(height: ModulePadding.xs.value),

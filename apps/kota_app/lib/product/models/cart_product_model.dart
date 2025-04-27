@@ -11,6 +11,8 @@ class CartProductModel {
     this.productCodeGroupId,
     this.orderDetailId,
     this.currencyUnitPrice,
+    this.discountRate = 0,
+    this.remainingQuantity,
   });
 
   int id;
@@ -20,10 +22,12 @@ class CartProductModel {
   double price;
   double? currencyUnitPrice;
   int quantity;
+  int? remainingQuantity; // Kalan miktar
   String? pictureUrl;
   String? sizeName;
   String? colorName;
   int? orderDetailId;
+  double discountRate; // Discount rate as percentage (0-100)
 
   Map<String, dynamic> toJson() {
     return {
@@ -33,10 +37,12 @@ class CartProductModel {
       'price': price,
       'currencyUnitPrice': currencyUnitPrice,
       'quantity': quantity,
+      'remainingQuantity': remainingQuantity,
       'pictureUrl': pictureUrl,
       'sizeName': sizeName,
       'colorName': colorName,
       'productCodeGroupId': productCodeGroupId,
+      'discountRate': discountRate,
     };
   }
 
@@ -46,13 +52,19 @@ class CartProductModel {
       code: json['code'] as String,
       name: json['name'] as String?,
       price: (json['price'] as num).toDouble(),
-      currencyUnitPrice: (json['currencyUnitPrice'] as num).toDouble(),
+      currencyUnitPrice: json['currencyUnitPrice'] != null
+          ? (json['currencyUnitPrice'] as num).toDouble()
+          : null,
       quantity: json['quantity'] as int,
+      remainingQuantity: json['remainingQuantity'] as int?,
       pictureUrl: json['pictureUrl'] as String?,
       sizeName: json['sizeName'] as String?,
       colorName: json['colorName'] as String?,
       productCodeGroupId: json['productCodeGroupId'] as int?,
       orderDetailId: json['orderDetailId'] as int?,
+      discountRate: json['discountRate'] != null
+          ? (json['discountRate'] as num).toDouble()
+          : 0,
     );
   }
 
@@ -63,11 +75,13 @@ class CartProductModel {
     double? price,
     double? currencyUnitPrice,
     int? quantity,
+    int? remainingQuantity,
     String? pictureUrl,
     String? sizeName,
     String? colorName,
     int? productCodeGroupId,
     int? orderDetailId,
+    double? discountRate,
   }) {
     return CartProductModel(
       id: id ?? this.id,
@@ -76,11 +90,13 @@ class CartProductModel {
       price: price ?? this.price,
       currencyUnitPrice: currencyUnitPrice ?? this.currencyUnitPrice,
       quantity: quantity ?? this.quantity,
+      remainingQuantity: remainingQuantity ?? this.remainingQuantity,
       pictureUrl: pictureUrl ?? this.pictureUrl,
       sizeName: sizeName ?? this.sizeName,
       colorName: colorName ?? this.colorName,
       productCodeGroupId: productCodeGroupId ?? this.productCodeGroupId,
       orderDetailId: orderDetailId ?? this.orderDetailId,
+      discountRate: discountRate ?? this.discountRate,
     );
   }
 }

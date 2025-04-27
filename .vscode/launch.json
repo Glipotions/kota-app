@@ -5,7 +5,8 @@
             "name": "dev kota_app",
             "request": "launch",
             "type": "dart",
-            "program": "apps/kota_app/lib/main_development.dart",
+            "cwd": "apps/kota_app",
+            "program": "lib/main_development.dart",
             "args": [
                 "--flavor", 
                "development"
@@ -15,7 +16,8 @@
             "name": "prod kota_app",
             "request": "launch",
             "type": "dart",
-            "program": "apps/kota_app/lib/main_production.dart",
+            "cwd": "apps/kota_app",
+            "program": "lib/main_production.dart",
             "args": [
                 "--flavor",
                "product",
@@ -25,7 +27,8 @@
             "name": "dev preview kota_app",
             "request": "launch",
             "type": "dart",
-            "program": "apps/kota_app/lib/development/main_preview_development.dart",
+            "cwd": "apps/kota_app",
+            "program": "lib/development/main_preview_development.dart",
             "args": [
                 "--flavor", 
                "development"
@@ -35,7 +38,8 @@
             "name": "prod preview kota_app",
             "request": "launch",
             "type": "dart",
-            "program": "apps/kota_app/lib/development/main_preview_production.dart",
+            "cwd": "apps/kota_app",
+            "program": "lib/development/main_preview_production.dart",
             "args": [
                 "--flavor", 
                "product"

@@ -1,3 +1,4 @@
+import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:kota_app/product/models/cart_product_model.dart';
 import 'package:kota_app/product/utility/enums/module_padding_enums.dart';
@@ -6,11 +7,14 @@ import 'package:kota_app/product/widgets/card/bordered_image.dart';
 import 'package:values/values.dart';
 
 class ProductCard extends StatelessWidget {
-  const ProductCard(
-      {required this.item,
-      required this.isCurrencyTL,
-      this.onTapRemove,
-      this.onTap});
+  const ProductCard({
+    required this.item,
+    required this.isCurrencyTL,
+    this.onTapRemove,
+    this.onTap,
+    super.key,
+  });
+
   final VoidCallback? onTap;
   final VoidCallback? onTapRemove;
   final CartProductModel item;
@@ -35,7 +39,7 @@ class ProductCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: Colors.black.withAlpha(13), // withOpacity(0.05) yerine
                 blurRadius: 10,
                 offset: const Offset(0, 2),
               ),
@@ -106,7 +110,7 @@ class ProductCard extends StatelessWidget {
                             decoration: BoxDecoration(
                               color: Theme.of(context)
                                   .primaryColor
-                                  .withOpacity(0.1),
+                                  .withAlpha(25), // withOpacity(0.1) yerine
                               borderRadius: BorderRadius.circular(6),
                             ),
                             child: Text(
@@ -118,22 +122,59 @@ class ProductCard extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(width: 8),
-                          // Unit Price
-                          Expanded(
-                            child: Text(
-                              isCurrencyTL
-                                  ? item.price.formatPrice()
-                                  : item.currencyUnitPrice!.formatPrice(),
-                              style: context.bodyMedium.copyWith(
-                                color: isDarkMode
-                                    ? Colors.grey[300]
-                                    : Colors.grey[600],
+
+                          // Kalan miktar (eğer varsa)
+                          if (item.remainingQuantity != null)
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: ModulePadding.xs.value,
+                                vertical: 2,
                               ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
+                              decoration: BoxDecoration(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .secondary
+                                    .withAlpha(50), // withOpacity(0.2) yerine
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    AppLocalization.getLabels(context).remainingQuantity,
+                                    style: context.labelSmall.copyWith(
+                                      color: Theme.of(context).colorScheme.secondary,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    '${item.remainingQuantity}',
+                                    style: context.labelMedium.copyWith(
+                                      color: Theme.of(context).colorScheme.secondary,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
+
+                          const Spacer(),
+
+                          // Unit Price
+                          Text(
+                            isCurrencyTL
+                                ? item.price.formatPrice()
+                                : item.currencyUnitPrice!.formatPrice(),
+                            style: context.bodyMedium.copyWith(
+                              color: isDarkMode
+                                  ? Colors.grey[300]
+                                  : Colors.grey[600],
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
                           const SizedBox(width: 8),
+
                           // Total Price
                           Text(
                             isCurrencyTL

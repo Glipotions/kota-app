@@ -29,9 +29,16 @@ class OrderHistory extends StatelessWidget {
         forceMaterialTransparency: true,
         title: Text(labels.orderHistory),
         actions: [
+          // Active orders icon
+          IconButton(
+            icon: const Icon(Icons.assignment),
+            tooltip: labels.activeOrders,
+            onPressed: () => controller.showActiveOrders(context),
+          ),
           if (controller.sessionHandler.hasClaim(saleInvoiceAdminClaim))
             IconButton(
               icon: const Icon(Icons.account_balance),
+              tooltip: labels.selectAccount,
               onPressed: () async {
                 final result = await Navigator.push<GetCurrentAccount>(
                   context,
