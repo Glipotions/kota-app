@@ -13,8 +13,8 @@ class PredefinedCompanies {
     logoUrl: 'https://kota-app.b-cdn.net/logo.jpg',
     primaryColor: const Color(0xFFFBD4C6), // Peachy color from the app icon
     secondaryColor: const Color(0xFF333333),
-    // apiBaseUrl: '78.186.131.20:8200',
-    apiBaseUrl: '192.168.31.76:5278',
+    apiBaseUrl: '78.186.131.20:8200',
+    //apiBaseUrl: '192.168.31.76:5278',
     androidPackageId: 'com.glipotions.kota_app',
     iosAppId: 'com.glipotions.kota.app',
   );

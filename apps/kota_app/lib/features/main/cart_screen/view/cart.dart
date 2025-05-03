@@ -622,6 +622,16 @@ class _CartState extends State<Cart> {
                                               suffixText: '%',
                                             ),
                                             onChanged: controller.updateDiscountRate,
+                                            onEditingComplete: () {
+                                              // Force keyboard to dismiss
+                                              FocusScope.of(context).unfocus();
+                                              FocusManager.instance.primaryFocus?.unfocus();
+                                            },
+                                            onTapOutside: (_) {
+                                              // Dismiss keyboard when tapping outside
+                                              FocusScope.of(context).unfocus();
+                                            },
+                                            textInputAction: TextInputAction.done,
                                           ),
                                         ),
                                       ],
@@ -671,6 +681,16 @@ class _CartState extends State<Cart> {
                                         ),
                                       ),
                                       maxLines: 3,
+                                      onEditingComplete: () {
+                                        // Force keyboard to dismiss
+                                        FocusScope.of(context).unfocus();
+                                        FocusManager.instance.primaryFocus?.unfocus();
+                                      },
+                                      onTapOutside: (_) {
+                                        // Dismiss keyboard when tapping outside
+                                        FocusScope.of(context).unfocus();
+                                      },
+                                      textInputAction: TextInputAction.done,
                                     ),
                                     SizedBox(height: ModulePadding.s.value),
                                   ],
@@ -696,86 +716,90 @@ class _CartState extends State<Cart> {
               ),
             ),
           ),
-          body: Stack(
-            children: [
-              Obx(
-                () => CustomScrollView(
-                  controller: _scrollController,
-                  slivers: [
-                    SliverToBoxAdapter(
-                      child: AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 300),
-                        child: controller.itemList.isEmpty
-                            ? EmptyView(
-                                message: labels.emptyCartMessage,
-                              )
-                            : Padding(
-                                padding: EdgeInsets.all(ModulePadding.s.value),
-                                child: ListView.separated(
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  shrinkWrap: true,
-                                  padding: const EdgeInsets.only(
-                                    bottom:
-                                        180, // Add padding for the complete order section
-                                  ),
-                                  itemBuilder: (context, index) {
-                                    final item = controller.itemList[index];
-                                    return Dismissible(
-                                      key: Key(item.id.toString()),
-                                      direction: DismissDirection.endToStart,
-                                      background: Container(
-                                        alignment: Alignment.centerRight,
-                                        padding: EdgeInsets.only(
-                                          right: ModulePadding.m.value,
+          body: GestureDetector(
+            onTap: () => FocusScope.of(context).unfocus(),
+            behavior: HitTestBehavior.opaque,
+            child: Stack(
+              children: [
+                Obx(
+                  () => CustomScrollView(
+                    controller: _scrollController,
+                    slivers: [
+                      SliverToBoxAdapter(
+                        child: AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 300),
+                          child: controller.itemList.isEmpty
+                              ? EmptyView(
+                                  message: labels.emptyCartMessage,
+                                )
+                              : Padding(
+                                  padding: EdgeInsets.all(ModulePadding.s.value),
+                                  child: ListView.separated(
+                                    physics: const NeverScrollableScrollPhysics(),
+                                    shrinkWrap: true,
+                                    padding: const EdgeInsets.only(
+                                      bottom:
+                                          180, // Add padding for the complete order section
+                                    ),
+                                    itemBuilder: (context, index) {
+                                      final item = controller.itemList[index];
+                                      return Dismissible(
+                                        key: Key(item.id.toString()),
+                                        direction: DismissDirection.endToStart,
+                                        background: Container(
+                                          alignment: Alignment.centerRight,
+                                          padding: EdgeInsets.only(
+                                            right: ModulePadding.m.value,
+                                          ),
+                                          color: Colors.red,
+                                          child: const Icon(
+                                            Icons.delete_outline,
+                                            color: Colors.white,
+                                          ),
                                         ),
-                                        color: Colors.red,
-                                        child: const Icon(
-                                          Icons.delete_outline,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                      onDismissed: (_) =>
-                                          controller.onTapRemoveProduct(item),
-                                      child: _ProductCard(
-                                        item: item,
-                                        onTapRemove: () =>
+                                        onDismissed: (_) =>
                                             controller.onTapRemoveProduct(item),
-                                        isCurrencyTL: controller.isCurrencyTL,
-                                      ),
-                                    );
-                                  },
-                                  separatorBuilder: (_, __) => SizedBox(
-                                    height: ModulePadding.s.value,
+                                        child: _ProductCard(
+                                          item: item,
+                                          onTapRemove: () =>
+                                              controller.onTapRemoveProduct(item),
+                                          isCurrencyTL: controller.isCurrencyTL,
+                                        ),
+                                      );
+                                    },
+                                    separatorBuilder: (_, __) => SizedBox(
+                                      height: ModulePadding.s.value,
+                                    ),
+                                    itemCount: controller.itemList.length,
                                   ),
-                                  itemCount: controller.itemList.length,
                                 ),
-                              ),
+                        ),
                       ),
+                    ],
+                  ),
+                ),
+                if (_showScrollButton)
+                  Positioned(
+                    right: ModulePadding.m.value,
+                    bottom: ModulePadding.m.value + 180,
+                    child: FloatingActionButton(
+                      mini: true,
+                      onPressed: _scrollToTop,
+                      child: const Icon(Icons.keyboard_arrow_up),
                     ),
-                  ],
-                ),
-              ),
-              if (_showScrollButton)
-                Positioned(
-                  right: ModulePadding.m.value,
-                  bottom: ModulePadding.m.value + 180,
-                  child: FloatingActionButton(
-                    mini: true,
-                    onPressed: _scrollToTop,
-                    child: const Icon(Icons.keyboard_arrow_up),
                   ),
-                ),
-              if (_showScrollButton)
-                Positioned(
-                  right: ModulePadding.m.value,
-                  bottom: ModulePadding.m.value,
-                  child: FloatingActionButton(
-                    mini: true,
-                    onPressed: _scrollToBottom,
-                    child: const Icon(Icons.keyboard_arrow_down),
+                if (_showScrollButton)
+                  Positioned(
+                    right: ModulePadding.m.value,
+                    bottom: ModulePadding.m.value,
+                    child: FloatingActionButton(
+                      mini: true,
+                      onPressed: _scrollToBottom,
+                      child: const Icon(Icons.keyboard_arrow_down),
+                    ),
                   ),
-                ),
-            ],
+              ],
+            ),
           ),
         );
       },

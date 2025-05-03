@@ -31,7 +31,10 @@ class ActiveOrdersController extends BaseControllerInterface {
       activeOrders.clear(); 
 
       final response =
-          await client.appService.getActiveOrders(id: sessionHandler.currentUser!.currentAccountId!);
+          await client.appService.getActiveOrders(
+            id: sessionHandler.currentUser!.currentAccountId!,
+            branchCurrentInfoId: sessionHandler.currentUser!.connectedBranchCurrentInfoId,
+          );
 
       // Check the inner data and its 'items' list
       if (response.data?.items != null) {

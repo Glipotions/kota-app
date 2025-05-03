@@ -2,8 +2,9 @@ import 'dart:async';
 
 import 'package:api/api.dart';
 import 'package:flutter/material.dart';
-import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:common/common.dart';
 import 'package:kota_app/features/main/all_products_screen/controller/all_products_controller.dart';
 import 'package:kota_app/features/main/all_products_screen/view/components/filter_bottom_sheet.dart';
@@ -230,24 +231,114 @@ class CustomSearchDelegate extends SearchDelegate<ProductGroupItem?> {
 }
 
 Future<void> _scanBarcode(AllProductsController controller, BuildContext context) async {
+  controller.setProcessingBarcode(isProcessing: true);
+  
   try {
-    final result = await SimpleBarcodeScanner.scanBarcode(
-      context,
-      isShowFlashIcon: true,
-      barcodeAppBar: const BarcodeAppBar(
-        appBarTitle: 'Barkod Tara',
-        centerTitle: true,
-        enableBackButton: true,
-        backButtonIcon: Icon(Icons.arrow_back),
+    final String? barcodeResult = await Navigator.of(context).push<String>(
+      MaterialPageRoute<String>(
+        builder: (context) => const BarcodeScannerScreen(),
       ),
-      scanFormat: ScanFormat.ONLY_BARCODE,
     );
 
-    if (result != null && result != '-1' && result.isNotEmpty) {
-      await controller.getByBarcode(result);
+    // Check if context is still mounted before proceeding
+    if (!context.mounted) return;
+
+    if (barcodeResult != null && barcodeResult.isNotEmpty) {
+      await controller.getByBarcode(barcodeResult);
     }
   } catch (e) {
     // Handle error
-    controller.setProcessingBarcode(isProcessing: false);
+    controller.logger.e('Error during barcode scanning navigation or processing: $e');
+  } finally {
+    // Ensure the flag is always reset, even on error or if no barcode is returned
+    // Check if context is still mounted before accessing controller
+    if (context.mounted) {
+      controller.setProcessingBarcode(isProcessing: false);
+    }
+  }
+}
+
+/// A separate screen for barcode scanning to follow Single Responsibility Principle
+class BarcodeScannerScreen extends StatefulWidget {
+  const BarcodeScannerScreen({super.key});
+
+  @override
+  State<BarcodeScannerScreen> createState() => _BarcodeScannerScreenState();
+}
+
+class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
+  late MobileScannerController _scannerController;
+  bool _isFlashOn = false;
+  bool _isPopping = false; // Flag to prevent multiple pops
+
+  @override
+  void initState() {
+    super.initState();
+    _scannerController = MobileScannerController(
+      detectionSpeed: DetectionSpeed.normal,
+      facing: CameraFacing.back,
+    );
+  }
+
+  @override
+  void dispose() {
+    _scannerController.dispose();
+    super.dispose();
+  }
+
+  void _toggleFlash() {
+    setState(() {
+      _isFlashOn = !_isFlashOn;
+      _scannerController.toggleTorch();
+    });
+  }
+
+  void _switchCamera() {
+    _scannerController.switchCamera();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Barkod Tara'),
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(_isFlashOn ? Icons.flash_on : Icons.flash_off),
+            onPressed: _toggleFlash,
+          ),
+          IconButton(
+            icon: const Icon(Icons.cameraswitch),
+            onPressed: _switchCamera,
+          ),
+        ],
+      ),
+      body: MobileScanner(
+        controller: _scannerController,
+        onDetect: (BarcodeCapture capture) {
+          // If already popping, do nothing
+          if (_isPopping) return;
+
+          final List<Barcode> barcodes = capture.barcodes;
+          
+          if (barcodes.isNotEmpty) {
+            for (final barcode in barcodes) {
+              if (barcode.rawValue != null) {
+                // Set flag to true immediately before popping
+                _isPopping = true; 
+                // Return the first valid barcode value and close the scanner
+                Navigator.pop(context, barcode.rawValue);
+                break;
+              }
+            }
+          }
+        },
+      ),
+    );
   }
 }
