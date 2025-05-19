@@ -17,7 +17,7 @@ This document outlines potential improvements and new features for the Kota App.
 ## UI/UX Improvements
 
 - [x] **Implement Skeleton Loading**: Add skeleton loading screens for better UX during data fetching
-- [ ] **Enhance Dark Mode**: Improve dark mode contrast and readability
+- [x] **Enhance Dark Mode**: Improve dark mode contrast and readability
 - [ ] **Add Animations**: Implement subtle animations for transitions and interactions
 - [ ] **Improve Accessibility**: Enhance app accessibility with semantic labels and proper contrast
 - [ ] **Responsive Design**: Ensure the app works well on various screen sizes, including tablets
@@ -30,7 +30,7 @@ This document outlines potential improvements and new features for the Kota App.
 - [ ] **Barcode Scanner**: Enhance the existing barcode scanner for quick product lookup
 - [ ] **Wishlist Functionality**: Allow users to save products to a wishlist
 - [ ] **Push Notifications**: Implement push notifications for order updates and promotions
-- [ ] **Order Tracking**: Add real-time order tracking functionality
+- [x] **Order Tracking**: Add real-time order tracking functionality
 - [ ] **Product Recommendations**: Implement an algorithm for product recommendations
 - [ ] **Quick Reorder**: Allow users to quickly reorder previously purchased items
 - [ ] **Bulk Order**: Add functionality for bulk ordering
@@ -41,8 +41,8 @@ This document outlines potential improvements and new features for the Kota App.
 
 ## Performance Improvements
 
-- [ ] **Lazy Loading**: Implement lazy loading for all list views
-- [ ] **Image Optimization**: Optimize image loading and caching
+- [x] **Lazy Loading**: Implement lazy loading for all list views
+- [x] **Image Optimization**: Optimize image loading and caching
 - [ ] **Reduce App Size**: Optimize assets and code to reduce app size
 - [ ] **Memory Management**: Improve memory management for large lists
 - [ ] **Startup Time**: Optimize app startup time
@@ -63,7 +63,7 @@ This document outlines potential improvements and new features for the Kota App.
 - [ ] **Order Approval Workflow**: Implement multi-step approval for large orders
 - [ ] **Customer-Specific Pricing**: Support for customer-specific pricing models
 - [ ] **Credit Limit Warnings**: Add warnings when approaching credit limits
-- [ ] **Promotional Discounts**: Support for promotional codes and discounts
+- [x] **Promotional Discounts**: Support for promotional codes and discounts
 - [ ] **Tax Calculation**: Improve tax calculation for different regions
 - [ ] **Multi-Currency Support**: Enhance multi-currency support with real-time conversion
 

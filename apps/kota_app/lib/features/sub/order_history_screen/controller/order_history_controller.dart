@@ -223,7 +223,13 @@ class OrderHistoryController extends BaseControllerInterface {
     final currentAccountId =
         _currentAccountId ?? sessionHandler.currentUser!.currentAccountId!;
 
-    await client.appService.getActiveOrders(id: currentAccountId).handleRequest(
+    await client.appService
+        .getActiveOrders(
+          id: currentAccountId,
+          branchCurrentInfoId:
+              sessionHandler.currentUser!.connectedBranchCurrentInfoId,
+        )
+        .handleRequest(
           onSuccess: (res) {
             if (res?.items != null) {
               activeOrders = res!.items!;

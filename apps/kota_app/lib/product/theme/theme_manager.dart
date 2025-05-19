@@ -2,6 +2,7 @@ import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kota_app/product/init/theme/module_theme.dart';
+import 'package:kota_app/product/theme/enhanced_dark_colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ThemeManager extends GetxController {
@@ -22,7 +23,7 @@ class ThemeManager extends GetxController {
   void onInit() {
     super.onInit();
     _lightTheme = ModuleTheme(appColors: LightColors());
-    _darkTheme = ModuleTheme(appColors: DarkColors());
+    _darkTheme = ModuleTheme(appColors: EnhancedDarkColors());
   }
 
   Future<void> init() async {

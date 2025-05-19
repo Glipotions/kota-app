@@ -45,13 +45,11 @@ class OrderHistoryDetailController extends BaseControllerInterface {
     await onReadyGeneric(() async {
       _updateCurrencyValues();
 
-      if (isActiveOrder) {
-        // Eğer aktif sipariş ise, aktif siparişleri getir
-        await fetchActiveOrders();
-      } else {
-        // Normal sipariş detaylarını getir
-        await fetchOrderContent();
-      }
+      // Always fetch order content first
+      await fetchOrderContent();
+
+      // Then fetch active orders related to this order
+      await fetchActiveOrders();
     });
   }
 
@@ -88,13 +86,11 @@ class OrderHistoryDetailController extends BaseControllerInterface {
 
     final currentAccountId = sessionHandler.currentUser!.currentAccountId!;
 
-    await client.appService.getActiveOrders(id: currentAccountId).handleRequest(
+    await client.appService.getActiveOrders(id: currentAccountId, branchCurrentInfoId: sessionHandler.currentUser!.connectedBranchCurrentInfoId).handleRequest(
       onSuccess: (res) {
         if (res?.items != null) {
-          // Tüm aktif siparişleri al
           final allActiveOrders = res!.items!;
 
-          // Sadece seçili sipariş ID'sine ait olanları filtrele
           final filteredOrders = allActiveOrders
               .where((order) => order.alinanSiparisId == id)
               .toList();

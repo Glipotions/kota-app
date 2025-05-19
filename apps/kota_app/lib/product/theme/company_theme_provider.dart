@@ -2,6 +2,7 @@ import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:kota_app/product/init/theme/module_theme.dart';
 import 'package:kota_app/product/theme/company_colors.dart';
+import 'package:kota_app/product/theme/enhanced_dark_colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:values/values.dart';
 
@@ -60,15 +61,12 @@ class CompanyThemeProvider implements ICompanyThemeProvider {
     _lightTheme = ModuleTheme(
       appColors: CompanyColors(
         companyConfig: companyConfig,
-        isDark: false,
       ),
     );
 
+    // Use enhanced dark theme for better contrast and readability
     _darkTheme = ModuleTheme(
-      appColors: CompanyColors(
-        companyConfig: companyConfig,
-        isDark: true,
-      ),
+      appColors: EnhancedDarkColors(),
     );
   }
 
@@ -112,7 +110,7 @@ class DefaultThemeProvider implements ICompanyThemeProvider {
   /// Initialize themes
   void _initThemes() {
     _lightTheme = ModuleTheme(appColors: LightColors());
-    _darkTheme = ModuleTheme(appColors: DarkColors());
+    _darkTheme = ModuleTheme(appColors: EnhancedDarkColors());
   }
 
   @override
