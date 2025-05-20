@@ -191,6 +191,7 @@ abstract class AppLocalizationLabel {
   String get waiting;
   String get completed;
   String get preparing;
+  String get partiallyInvoiced;
 
   // Active Orders Screen specific keys
   String get retry;

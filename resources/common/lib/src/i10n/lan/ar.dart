@@ -296,6 +296,9 @@ class ArLocalization extends AppLocalizationLabel {
   String get preparing => 'جاري التحضير';
 
   @override
+  String get partiallyInvoiced => 'تمت فوترته جزئيًا';
+
+  @override
   String get transactionHistory => 'سجل المعاملات';
 
   @override

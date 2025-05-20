@@ -293,6 +293,9 @@ class RuLocalization extends AppLocalizationLabel {
   String get preparing => 'Подготовка';
 
   @override
+  String get partiallyInvoiced => 'Частично выставлен счет';
+
+  @override
   String get transactionHistory => 'История транзакций';
 
   @override

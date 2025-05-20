@@ -275,6 +275,9 @@ class EnLocalization extends AppLocalizationLabel {
   @override
   String get preparing => 'Preparing';
 
+  @override
+  String get partiallyInvoiced => 'Partially Invoiced';
+
   // Active Orders Screen specific keys
   @override
   String get retry => 'Retry';

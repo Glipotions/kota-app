@@ -301,13 +301,17 @@ class _OrderCard extends StatelessWidget {
                               ? Icons.schedule
                               : !item.durum!
                                   ? Icons.check_circle
-                                  : Icons.sync,
+                                  : item.isFaturalanmis! && item.durum!
+                                      ? Icons.receipt_long
+                                      : Icons.sync,
                           size: 16,
                           color: item.canBeDeleted!
                               ? Colors.amber.shade700
                               : !item.durum!
                                   ? Colors.green.shade700
-                                  : Colors.blue.shade700,
+                                  : item.isFaturalanmis! && item.durum!
+                                      ? Colors.purple.shade700
+                                      : Colors.blue.shade700,
                         ),
                         const SizedBox(width: 4),
                         Text(
@@ -315,13 +319,17 @@ class _OrderCard extends StatelessWidget {
                               ? labels.waiting
                               : !item.durum!
                                   ? labels.completed
-                                  : labels.preparing,
+                                  : item.isFaturalanmis! && item.durum!
+                                      ? labels.partiallyInvoiced
+                                      : labels.preparing,
                           style: context.labelMedium.copyWith(
                             color: item.canBeDeleted!
                                 ? Colors.amber.shade700
                                 : !item.durum!
                                     ? Colors.green.shade700
-                                    : Colors.blue.shade700,
+                                    : item.isFaturalanmis! && item.durum!
+                                        ? Colors.purple.shade700
+                                        : Colors.blue.shade700,
                             fontWeight: FontWeight.w600,
                           ),
                         ),

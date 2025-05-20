@@ -63,6 +63,7 @@ class OrderItem extends IBaseModel<OrderItem> {
     this.aciklama,
     this.durum,
     this.canBeDeleted = false,
+    this.isFaturalanmis = false,
     this.connectedBranchCurrentInfoId,
     this.connectedBranchCurrentInfoName,
   });
@@ -85,6 +86,7 @@ class OrderItem extends IBaseModel<OrderItem> {
   String? aciklama;
   bool? durum;
   bool? canBeDeleted;
+  bool? isFaturalanmis;
   int? connectedBranchCurrentInfoId;
   String? connectedBranchCurrentInfoName;
 
@@ -109,6 +111,7 @@ class OrderItem extends IBaseModel<OrderItem> {
         aciklama: json['aciklama'],
         durum: json['durum'],
         canBeDeleted: json['canBeDeleted'],
+        isFaturalanmis: json['isFaturalanmis'],
         connectedBranchCurrentInfoId:
             json['connectedBranchCurrentInfoId'],
         connectedBranchCurrentInfoName:

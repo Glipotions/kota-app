@@ -250,6 +250,9 @@ class TrLocalization extends AppLocalizationLabel {
   String get preparing => 'Hazırlanıyor';
 
   @override
+  String get partiallyInvoiced => 'Kısmen faturalandırıldı';
+
+  @override
   String get orderDeletedSuccessfully => 'Sipariş başarıyla silindi';
 
   @override
