@@ -38,7 +38,6 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
-
         coreLibraryDesugaringEnabled true
     }
 
@@ -56,7 +55,6 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutterVersionCode.toInteger()
         versionName = flutterVersionName
-        // Multidex desteği ekleyelim
         multiDexEnabled true
     }
 
@@ -78,68 +76,35 @@ android {
         }
     }
 
-    // Define flavor dimensions
+    // Çeşit boyutlarını (flavor dimensions) tanımlayın.
+    // Gradle, bu boyutlardaki çeşitlerin tüm kombinasyonlarını otomatik olarak oluşturacaktır.
     flavorDimensions "environment", "company"
 
     productFlavors {
-        // Environment dimension
+        // "environment" boyutu için ürün çeşitleri
         development {
             dimension "environment"
             applicationIdSuffix ".development"
             versionNameSuffix " Dev"
         }
-
         product {
             dimension "environment"
         }
 
-        // Company dimension
+        // "company" boyutu için ürün çeşitleri
         kotaTekstil {
             dimension "company"
-            // Default company, no suffix needed
+            // Varsayılan şirket olduğu için ek bir sonek veya değişiklik gerekmez.
         }
-
         company1 {
             dimension "company"
             applicationIdSuffix ".company1"
             resValue "string", "app_name", "Company 1"
         }
-
         company2 {
             dimension "company"
             applicationIdSuffix ".company2"
             resValue "string", "app_name", "Company 2"
-        }
-
-        // Combined flavors for easier command-line builds
-        developmentKotaTekstil {
-            dimension "environment"
-            matchingFallbacks = ["development", "kotaTekstil"]
-        }
-
-        productKotaTekstil {
-            dimension "environment"
-            matchingFallbacks = ["product", "kotaTekstil"]
-        }
-
-        developmentCompany1 {
-            dimension "environment"
-            matchingFallbacks = ["development", "company1"]
-        }
-
-        productCompany1 {
-            dimension "environment"
-            matchingFallbacks = ["product", "company1"]
-        }
-
-        developmentCompany2 {
-            dimension "environment"
-            matchingFallbacks = ["development", "company2"]
-        }
-
-        productCompany2 {
-            dimension "environment"
-            matchingFallbacks = ["product", "company2"]
         }
     }
 
