@@ -340,6 +340,25 @@ class _OrderCard extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
+                      // Show discount info if available
+                      if (item.iskontoOrani != null && item.iskontoOrani! > 0) ...[
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: Colors.green.withAlpha(50),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(color: Colors.green.withAlpha(100)),
+                          ),
+                          child: Text(
+                            '${item.iskontoOrani!.toStringAsFixed(0)}% İskonto',
+                            style: context.labelSmall.copyWith(
+                              color: Colors.green.shade700,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                      ],
                       Text(
                         labels.totalAmount,
                         style: context.labelSmall.copyWith(

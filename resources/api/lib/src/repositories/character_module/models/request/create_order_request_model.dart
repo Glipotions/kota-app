@@ -10,6 +10,7 @@ class CreateOrderRequestModel extends IBaseModel<CreateOrderRequestModel> {
     this.description,
     this.connectedBranchCurrentInfoId,
     this.currencyType,
+    this.generalDiscountRate,
   });
 
   int? id;
@@ -18,6 +19,7 @@ class CreateOrderRequestModel extends IBaseModel<CreateOrderRequestModel> {
   List<OrderDetail>? orderDetails;
   int? connectedBranchCurrentInfoId;
   int? currencyType;
+  double? generalDiscountRate;
 
   @override
   CreateOrderRequestModel fromJson(Map<String, dynamic> json) =>
@@ -33,6 +35,7 @@ class CreateOrderRequestModel extends IBaseModel<CreateOrderRequestModel> {
         connectedBranchCurrentInfoId:
             json['connectedBranchCurrentInfoId'],
         currencyType: json['currencyType'],
+        generalDiscountRate: json['generalDiscountRate']?.toDouble(),
       );
 
   @override
@@ -45,6 +48,7 @@ class CreateOrderRequestModel extends IBaseModel<CreateOrderRequestModel> {
         'aciklama': description,
         'connectedBranchCurrentInfoId': connectedBranchCurrentInfoId,
         'currencyType': currencyType,
+        'generalDiscountRate': generalDiscountRate,
       };
 }
 
@@ -55,6 +59,7 @@ class OrderDetail {
     this.amount,
     this.unitPrice,
     this.currencyUnitPrice,
+    this.discountRate,
   });
 
   factory OrderDetail.fromJson(Map<String, dynamic> json) => OrderDetail(
@@ -63,6 +68,7 @@ class OrderDetail {
         amount: json['amount'],
         unitPrice: json['unitPrice'],
         currencyUnitPrice: json['currencyUnitPrice'],
+        discountRate: json['discountRate']?.toDouble(),
       );
 
   int? id;
@@ -70,6 +76,7 @@ class OrderDetail {
   String? amount;
   String? unitPrice;
   String? currencyUnitPrice;
+  double? discountRate;
 
   Map<String, dynamic> toJson() => {
         'id': id ?? 0,
@@ -77,5 +84,6 @@ class OrderDetail {
         'amount': amount,
         'unitPrice': unitPrice,
         'currencyUnitPrice': currencyUnitPrice,
+        'discountRate': discountRate,
       };
 }

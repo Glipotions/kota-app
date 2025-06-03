@@ -297,28 +297,25 @@ class CartController extends BaseControllerInterface {
 
     LoadingProgress.start();
     try {
-      // Note: The discount rate is stored locally but not sent to the API yet
-      // The API model needs to be updated to include discount rate fields
+      // Send original prices and discount rate to the backend for server-side calculation
       final request = CreateOrderRequestModel(
         id: editingOrderId?.value,
         cariHesapId: cariHesapId,
         connectedBranchCurrentInfoId:
             SessionHandler.instance.currentUser!.connectedBranchCurrentInfoId,
-        description: descriptionController.text.trim() +
-            (cartDiscountRate.value > 0
-                ? ' (İskonto: %${cartDiscountRate.value.toStringAsFixed(2)})'
-                : ''),
+        description: _buildDescriptionWithDiscount(),
+        generalDiscountRate: cartDiscountRate.value > 0 ? cartDiscountRate.value : null,
         orderDetails: itemList
             .map(
               (e) => OrderDetail(
                 id: e.orderDetailId ?? 0,
                 amount: e.quantity.toString(),
                 productId: e.id.toString(),
-                // If discount is applied, send the discounted price
-                unitPrice: (e.price * (1 - e.discountRate / 100)).toString(),
-                currencyUnitPrice: e.currencyUnitPrice != null
-                    ? (e.currencyUnitPrice! * (1 - e.discountRate / 100)).toString()
-                    : null,
+                // Send original prices (without discount applied)
+                unitPrice: e.price.toString(),
+                currencyUnitPrice: e.currencyUnitPrice?.toString(),
+                // Send discount rate for item-level discounts (currently using general discount)
+                discountRate: e.discountRate > 0 ? e.discountRate : null,
               ),
             )
             .toList(),
@@ -361,6 +358,22 @@ class CartController extends BaseControllerInterface {
     } finally {
       LoadingProgress.stop();
     }
+  }
+
+  /// Builds description with discount information, preventing duplication
+  String _buildDescriptionWithDiscount() {
+    var description = descriptionController.text.trim();
+
+    // Remove any existing discount text to prevent duplication
+    final discountPattern = RegExp(r'\s*\(İskonto:?\s*%[\d.,]+\)');
+    description = description.replaceAll(discountPattern, '').trim();
+
+    // Add current discount if applicable
+    if (cartDiscountRate.value > 0) {
+      description += ' (İskonto: %${cartDiscountRate.value.toStringAsFixed(2)})';
+    }
+
+    return description;
   }
 
   @override

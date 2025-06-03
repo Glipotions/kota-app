@@ -156,6 +156,8 @@ class OrderHistoryController extends BaseControllerInterface {
               quantity: item.miktar!,
               name: item.name,
               pictureUrl: item.pictureUrl,
+              // Include discount rate if available from order level
+              discountRate: res.iskontoOrani ?? 0,
             ),
           );
         }
@@ -185,7 +187,18 @@ class OrderHistoryController extends BaseControllerInterface {
 
     await client.appService.orderHistoryDetail(id: id).handleRequest(
       onSuccess: (res) {
-        for (final item in res!.items!) {
+        // Set the general discount rate from the order FIRST
+        if (res!.iskontoOrani != null && res.iskontoOrani! > 0) {
+          cartController.cartDiscountRate.value = res.iskontoOrani!;
+          // Also update the discount controller text field
+          cartController.discountController.text = res.iskontoOrani!.toStringAsFixed(2);
+        } else {
+          // Reset discount if no discount in order
+          cartController.cartDiscountRate.value = 0;
+          cartController.discountController.text = '';
+        }
+
+        for (final item in res.items!) {
           final cartItem = CartProductModel(
             id: item.urunId!,
             code: item.code!,
@@ -198,15 +211,28 @@ class OrderHistoryController extends BaseControllerInterface {
             sizeName: item.sizeName,
             colorName: item.colorName,
             productCodeGroupId: item.productCodeGroupId,
+            // Set discount rate from order level
+            discountRate: res.iskontoOrani ?? 0,
           );
           cartController.onTapAddProduct(cartItem);
         }
-        cartController.descriptionController.text = res.aciklama ?? '';
+
+        // Clean description from existing discount text before setting
+        String cleanDescription = res.aciklama ?? '';
+        cleanDescription = _removeExistingDiscountText(cleanDescription);
+        cartController.descriptionController.text = cleanDescription;
       },
     );
 
     context.goNamed(BottomNavigationRouteEnum.cartScreen.name);
     bottomNavController.selectedIndex = 1;
+  }
+
+  /// Removes existing discount text from description to prevent duplication
+  String _removeExistingDiscountText(String description) {
+    // Remove patterns like "(İskonto: %10.00)" or "(İskonto %10.00)"
+    final discountPattern = RegExp(r'\s*\(İskonto:?\s*%[\d.,]+\)');
+    return description.replaceAll(discountPattern, '').trim();
   }
 
   Future<void> onCurrentAccountSelected(GetCurrentAccount account) async {

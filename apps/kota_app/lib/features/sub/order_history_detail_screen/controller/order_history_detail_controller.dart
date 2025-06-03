@@ -60,16 +60,21 @@ class OrderHistoryDetailController extends BaseControllerInterface {
     await client.appService.orderHistoryDetail(id: id).handleRequest(
       onSuccess: (res) {
         responseModel = res!;
+        cartProductItems.clear(); // Clear existing items to prevent duplication
+
         for (final item in res.items!) {
           cartProductItems.add(
             CartProductModel(
-              id: item.id!,
+              id: item.urunId!, // Use urunId instead of id for product identification
               code: item.code!,
               price: item.birimFiyat!,
               quantity: item.miktar!,
               name: item.name,
               pictureUrl: item.pictureUrl,
               currencyUnitPrice: item.dovizliBirimFiyat,
+              orderDetailId: item.id, // Keep order detail ID for reference
+              // Include discount rate from order level
+              discountRate: res.iskontoOrani ?? 0,
             ),
           );
         }
@@ -80,7 +85,7 @@ class OrderHistoryDetailController extends BaseControllerInterface {
     _isLoading.value = false;
   }
 
-  /// Aktif siparişleri getirir
+  /// Aktif siparişleri getirir ve mevcut ürünlerle birleştirir
   Future<void> fetchActiveOrders() async {
     _isLoading.value = true;
 
@@ -97,20 +102,34 @@ class OrderHistoryDetailController extends BaseControllerInterface {
 
           activeOrders = filteredOrders;
 
-          // Ayrıca CartProductModel listesine de ekle
+          // Merge active order information with existing cart products instead of duplicating
           for (final order in filteredOrders) {
-            cartProductItems.add(
-              CartProductModel(
-                id: order.id!,
-                code: order.urunKodu ?? '',
-                price: order.birimFiyat ?? 0,
-                quantity: order.miktar ?? 0,
-                name: order.urunAdi,
-                pictureUrl: null,
-                currencyUnitPrice: order.dovizliBirimFiyat,
-                remainingQuantity: order.kalanAdet,
-              ),
+            // Find existing product by product ID (urunId)
+            final existingProductIndex = cartProductItems.indexWhere(
+              (product) => product.id == order.urunId,
             );
+
+            if (existingProductIndex != -1) {
+              // Update existing product with remaining quantity information
+              final existingProduct = cartProductItems[existingProductIndex];
+              cartProductItems[existingProductIndex] = CartProductModel(
+                id: existingProduct.id,
+                code: existingProduct.code,
+                price: existingProduct.price,
+                quantity: existingProduct.quantity,
+                name: existingProduct.name,
+                pictureUrl: existingProduct.pictureUrl,
+                currencyUnitPrice: existingProduct.currencyUnitPrice,
+                orderDetailId: existingProduct.orderDetailId,
+                discountRate: existingProduct.discountRate,
+                remainingQuantity: order.kalanAdet, // Add remaining quantity info
+                sizeName: existingProduct.sizeName,
+                colorName: existingProduct.colorName,
+                productCodeGroupId: existingProduct.productCodeGroupId,
+              );
+            }
+            // If product doesn't exist in cart items, it means it's a separate active order
+            // We'll show these in the separate active orders section
           }
           cartProductItems = cartProductItems;
         }
