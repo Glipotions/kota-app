@@ -199,6 +199,11 @@ abstract class AppLocalizationLabel {
   String get statusPassive;
   String get productCodeLabel;
   String get notAvailable;
+
+  // Large Order Warning
+  String get largeOrderWarningTitle;
+  String get largeOrderWarningMessage;
+  String largeOrderWarningContent(int itemCount, int orderCount);
   String get dateLabel;
   String get statusLabel;
   String get activeOrders;

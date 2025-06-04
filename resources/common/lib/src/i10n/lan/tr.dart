@@ -200,6 +200,17 @@ class TrLocalization extends AppLocalizationLabel {
   @override
   String get supportDescription => 'Destek ile iletişime geçebilirsiniz.';
 
+  // Large Order Warning
+  @override
+  String get largeOrderWarningTitle => 'Büyük Sipariş Uyarısı';
+
+  @override
+  String get largeOrderWarningMessage => 'Devam etmek istiyor musunuz?';
+
+  @override
+  String largeOrderWarningContent(int itemCount, int orderCount) =>
+      'Sepetinizde $itemCount ürün var. Bu büyük bir sipariş olduğu için $orderCount ayrı siparişe bölünecek.';
+
   @override
   String get userAccountInfo => 'Kullanıcı Bilgilerim';
 

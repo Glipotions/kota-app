@@ -242,7 +242,17 @@ class RuLocalization extends AppLocalizationLabel {
   String get support => 'Поддержка';
 
   @override
-  String get supportDescription => 'Связаться с поддержкой';
+  String get supportDescription => 'Вы можете связаться с поддержкой.';
+
+  @override
+  String get largeOrderWarningTitle => 'Предупреждение о большом заказе';
+
+  @override
+  String get largeOrderWarningMessage => 'Хотите продолжить?';
+
+  @override
+  String largeOrderWarningContent(int itemCount, int orderCount) =>
+      'В вашей корзине $itemCount товаров. Поскольку это большой заказ, он будет разделен на $orderCount отдельных заказов.';
 
   @override
   String get userAccountInfo => 'Информация о пользователе';

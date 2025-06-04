@@ -295,6 +295,15 @@ class CartController extends BaseControllerInterface {
     // Dismiss keyboard before proceeding
     FocusScope.of(context).unfocus();
 
+    final labels = AppLocalization.getLabels(context);
+
+    // Check if order is too large and needs batching
+    const maxItemsPerOrder = 500;
+    if (itemList.length > maxItemsPerOrder) {
+      await _handleLargeOrder(cariHesapId, context, maxItemsPerOrder);
+      return;
+    }
+
     LoadingProgress.start();
     try {
       // Send original prices and discount rate to the backend for server-side calculation
@@ -326,14 +335,12 @@ class CartController extends BaseControllerInterface {
         // Sipariş güncelleme
         await client.appService.updateOrder(request: request).handleRequest(
               onSuccess: (res) async {
-                final labels = AppLocalization.getLabels(context);
                 await clearCart();
                 showSuccessToastMessage(labels.orderUpdatedSuccessfully);
                 // context.pop();
               },
               onIgnoreException: (error) {
-                final labels = AppLocalization.getLabels(context);
-                showErrorToastMessage(labels.orderUpdateError);
+                _handleOrderError(error, labels.orderUpdateError, context);
               },
               ignoreException: true,
               defaultResponse: CreateOrderResponseModel(),
@@ -342,14 +349,12 @@ class CartController extends BaseControllerInterface {
         // Yeni sipariş oluşturma
         await client.appService.createOrder(request: request).handleRequest(
               onSuccess: (res) async {
-                final labels = AppLocalization.getLabels(context);
                 await clearCart();
                 showSuccessToastMessage(labels.orderCreatedSuccessfully);
                 // context.pop();
               },
               onIgnoreException: (error) {
-                final labels = AppLocalization.getLabels(context);
-                showErrorToastMessage(labels.orderCreateError);
+                _handleOrderError(error, labels.orderCreateError, context);
               },
               ignoreException: true,
               defaultResponse: CreateOrderResponseModel(),
@@ -358,6 +363,136 @@ class CartController extends BaseControllerInterface {
     } finally {
       LoadingProgress.stop();
     }
+  }
+
+  /// Handles large orders by batching them into smaller chunks
+  Future<void> _handleLargeOrder(String cariHesapId, BuildContext context, int maxItemsPerOrder) async {
+    final labels = AppLocalization.getLabels(context);
+
+    // Show confirmation dialog for large orders
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(labels.largeOrderWarningTitle),
+          content: RichText(
+            text: TextSpan(
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Theme.of(context).textTheme.bodyMedium?.color,
+                  ),
+              children: [
+                TextSpan(
+                  text: labels.largeOrderWarningContent(
+                    itemList.length,
+                    (itemList.length / maxItemsPerOrder).ceil(),
+                  ),
+                ),
+                TextSpan(text: '\n\n'),
+                TextSpan(text: labels.largeOrderWarningMessage),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: Text(labels.cancel),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: Text(labels.confirm),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (confirmed != true) return;
+
+    LoadingProgress.start();
+    try {
+      // Split items into chunks
+      final chunks = <List<CartProductModel>>[];
+      for (var i = 0; i < itemList.length; i += maxItemsPerOrder) {
+        final end = (i + maxItemsPerOrder < itemList.length) ? i + maxItemsPerOrder : itemList.length;
+        chunks.add(itemList.sublist(i, end));
+      }
+
+      var successCount = 0;
+      var failureCount = 0;
+
+      // Process each chunk
+      for (var i = 0; i < chunks.length; i++) {
+        final chunk = chunks[i];
+        final chunkDescription = '${_buildDescriptionWithDiscount()} - Bölüm ${i + 1}/${chunks.length}';
+
+        final request = CreateOrderRequestModel(
+          cariHesapId: cariHesapId,
+          connectedBranchCurrentInfoId:
+              SessionHandler.instance.currentUser!.connectedBranchCurrentInfoId,
+          description: chunkDescription,
+          generalDiscountRate: cartDiscountRate.value > 0 ? cartDiscountRate.value : null,
+          orderDetails: chunk
+              .map(
+                (e) => OrderDetail(
+                  amount: e.quantity.toString(),
+                  productId: e.id.toString(),
+                  unitPrice: e.price.toString(),
+                  currencyUnitPrice: e.currencyUnitPrice?.toString(),
+                  discountRate: e.discountRate > 0 ? e.discountRate : null,
+                ),
+              )
+              .toList(),
+          currencyType: currencyType,
+        );
+
+        try {
+          await client.appService.createOrder(request: request).handleRequest(
+                onSuccess: (res) async {
+                  successCount++;
+                },
+                onIgnoreException: (error) {
+                  failureCount++;
+                },
+                ignoreException: true,
+                defaultResponse: CreateOrderResponseModel(),
+              );
+        } catch (e) {
+          failureCount++;
+        }
+      }
+
+      // Show results
+      if (successCount > 0) {
+        await clearCart();
+        if (failureCount == 0) {
+          showSuccessToastMessage('Tüm siparişler başarıyla oluşturuldu ($successCount sipariş)');
+        } else {
+          showSuccessToastMessage('$successCount sipariş oluşturuldu, $failureCount sipariş başarısız oldu');
+        }
+      } else {
+        showErrorToastMessage('Hiçbir sipariş oluşturulamadı. Lütfen tekrar deneyin.');
+      }
+    } finally {
+      LoadingProgress.stop();
+    }
+  }
+
+  /// Handles order creation errors with specific error messages
+  void _handleOrderError(dynamic error, String defaultMessage, BuildContext context) {
+    String errorMessage = defaultMessage;
+
+    // Check for specific error types
+    if (error.toString().contains('timeout') || error.toString().contains('Timeout')) {
+      errorMessage = 'Sipariş oluşturma zaman aşımına uğradı. Sepetinizdeki ürün sayısını azaltıp tekrar deneyin.';
+    } else if (error.toString().contains('too large') || error.toString().contains('payload')) {
+      errorMessage = 'Sipariş çok büyük. Lütfen sepetinizdeki ürün sayısını azaltın.';
+    } else if (error.toString().contains('network') || error.toString().contains('connection')) {
+      errorMessage = 'Ağ bağlantısı sorunu. Lütfen internet bağlantınızı kontrol edin.';
+    } else if (error.toString().contains('server') || error.toString().contains('500')) {
+      errorMessage = 'Sunucu hatası. Lütfen daha sonra tekrar deneyin.';
+    }
+
+    showErrorToastMessage(errorMessage);
   }
 
   /// Builds description with discount information, preventing duplication

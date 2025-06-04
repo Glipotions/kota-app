@@ -1,11 +1,12 @@
 // ignore_for_file: lines_longer_than_80_chars
 
-import 'dart:io';
+import 'dart:async';
 
 import 'package:common/common.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:kota_app/features/main/cart_screen/controller/cart_pdf_controller.dart';
 import 'package:kota_app/product/managers/cart_controller.dart';
 import 'package:kota_app/product/models/cart_product_model.dart';
 import 'package:kota_app/product/utility/enums/module_padding_enums.dart';
@@ -14,10 +15,6 @@ import 'package:kota_app/product/utility/extentions/num_extension.dart';
 import 'package:kota_app/product/widgets/button/module_button.dart';
 import 'package:kota_app/product/widgets/card/bordered_image.dart';
 import 'package:kota_app/product/widgets/other/empty_view.dart';
-import 'package:open_file/open_file.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:pdf/pdf.dart';
-import 'package:pdf/widgets.dart' as pw;
 import 'package:values/values.dart';
 
 part 'components/product_card.dart';
@@ -132,328 +129,152 @@ class _CartState extends State<Cart> {
   Future<void> _generateAndOpenPdf(
     BuildContext context,
     List<CartProductModel> products,
-    CartController controller
+    CartController controller,
   ) async {
+    final pdfController = CartPdfController();
+    await pdfController.generateAndOpenCartPdf(context, products, controller);
+  }
+
+  /// Debug method to populate cart with test items for testing chunking functionality
+  Future<void> _populateCartWithTestItems(BuildContext context, CartController controller) async {
     final labels = AppLocalization.getLabels(context);
-    if (products.isEmpty) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(labels.noDataToReport)),
-        );
-      }
-      return;
-    }
 
-    final pdf = pw.Document();
-    const baseAssetPath = 'assets/fonts/work_sans/';
-
-    try {
-      final ttfRegular =
-          await rootBundle.load('${baseAssetPath}WorkSans-Regular.ttf');
-      final ttf = pw.Font.ttf(ttfRegular);
-
-      // Group products by productCodeGroupId
-      final groupedProducts = <int?, List<CartProductModel>>{};
-      for (final product in products) {
-        if (!groupedProducts.containsKey(product.productCodeGroupId)) {
-          groupedProducts[product.productCodeGroupId] = [];
-        }
-        groupedProducts[product.productCodeGroupId]!.add(product);
-      }
-
-      final columnWidths = {
-        0: const pw.FlexColumnWidth(4), // Product Name
-        1: const pw.FlexColumnWidth(1.6), // Code
-        2: const pw.FlexColumnWidth(1.2), // Size
-        3: const pw.FlexColumnWidth(1.5), // Color
-        4: const pw.FlexColumnWidth(), // Quantity
-        5: const pw.FlexColumnWidth(1.2), // Price
-        6: const pw.FlexColumnWidth(1.5), // Total
-      };
-
-      final headers = [
-        labels.productName,
-        labels.code,
-        labels.size,
-        labels.color,
-        labels.quantity,
-        labels.price,
-        labels.total,
-      ];
-
-      final headerRow = pw.TableRow(
-        decoration: const pw.BoxDecoration(
-          color: PdfColors.blue900,
-          borderRadius: pw.BorderRadius.vertical(top: pw.Radius.circular(4)),
-        ),
-        children: headers
-            .map(
-              (header) => pw.Padding(
-                padding:
-                    const pw.EdgeInsets.symmetric(vertical: 8, horizontal: 4),
-                child: pw.Text(
-                  header,
-                  style: pw.TextStyle(
-                    font: ttf,
-                    fontWeight: pw.FontWeight.bold,
-                    color: PdfColors.white,
-                  ),
-                ),
-              ),
-            )
-            .toList(),
-      );
-
-      final allRows = groupedProducts.entries.expand((entry) {
-        final isEvenGroup =
-            groupedProducts.keys.toList().indexOf(entry.key) % 2 == 0;
-        return entry.value.map(
-          (product) => pw.TableRow(
-            decoration: pw.BoxDecoration(
-              color: isEvenGroup ? PdfColors.white : PdfColors.grey400,
+    // Show confirmation dialog
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Debug: Add Test Items'),
+          content: const Text(
+            'This will add 500 test items to your cart for testing purposes. '
+            'This will clear your current cart first. Continue?'
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: Text(labels.cancel),
             ),
+            ElevatedButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: const Text('Add Test Items'),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (confirmed != true) return;
+
+    // Show progress dialog
+    unawaited(showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return const AlertDialog(
+          content: Row(
             children: [
-              pw.Padding(
-                padding: const pw.EdgeInsets.all(2),
-                child: pw.Text(
-                  product.name ?? '',
-                  style: pw.TextStyle(font: ttf),
-                ),
-              ),
-              pw.Padding(
-                padding: const pw.EdgeInsets.all(2),
-                child: pw.Text(product.code, style: pw.TextStyle(font: ttf)),
-              ),
-              pw.Padding(
-                padding: const pw.EdgeInsets.all(2),
-                child: pw.Text(
-                  product.sizeName ?? '-',
-                  style: pw.TextStyle(font: ttf),
-                ),
-              ),
-              pw.Padding(
-                padding: const pw.EdgeInsets.all(2),
-                child: pw.Text(
-                  product.colorName ?? '-',
-                  style: pw.TextStyle(font: ttf),
-                ),
-              ),
-              pw.Padding(
-                padding: const pw.EdgeInsets.all(2),
-                child: pw.Text(
-                  product.quantity.toString(),
-                  style: pw.TextStyle(font: ttf),
-                ),
-              ),
-              pw.Padding(
-                padding: const pw.EdgeInsets.all(2),
-                child: pw.Text(
-                  controller.isCurrencyTL
-                      ? product.price.formatPrice()
-                      : product.currencyUnitPrice!.formatPrice(),
-                  style: pw.TextStyle(font: ttf),
-                ),
-              ),
-              pw.Padding(
-                padding: const pw.EdgeInsets.all(2),
-                child: pw.Text(
-                  controller.isCurrencyTL
-                      ? (product.price * product.quantity).formatPrice()
-                      : (product.currencyUnitPrice! * product.quantity)
-                          .formatPrice(),
-                  style: pw.TextStyle(font: ttf),
-                ),
-              ),
+              CircularProgressIndicator(),
+              SizedBox(width: 20),
+              Text('Adding test items...'),
             ],
           ),
         );
-      }).toList();
+      },
+    ),);
 
-      pdf.addPage(
-        pw.MultiPage(
-          pageFormat: PdfPageFormat.a4.copyWith(
-            marginLeft: 30,
-            marginRight: 30,
-            marginTop: 40,
-            marginBottom: 40,
-          ),
-          header: (context) => pw.Text(
-            '${labels.cartProducts} - ${labels.page} ${context.pageNumber}',
-            style: pw.TextStyle(
-              font: ttf,
-              fontSize: 20,
-              fontWeight: pw.FontWeight.bold,
-            ),
-          ),
-          footer: (context) {
-            if (context.pageNumber == context.pagesCount) {
-              final totalQuantity = products.fold<int>(
-                0,
-                (sum, product) => sum + product.quantity,
-              );
+    try {
+      // Clear existing cart
+      await controller.clearCart();
 
-              // Calculate total price without discount
-              final totalPriceWithoutDiscount = products.fold<double>(
-                0,
-                (sum, product) => sum + (controller.isCurrencyTL
-                    ? product.price * product.quantity
-                    : product.currencyUnitPrice! * product.quantity),
-              );
+      // Generate test data
+      final testItems = _generateTestCartItems();
 
-              // Calculate total price with discount
-              final totalPrice = controller.cartDiscountRate.value > 0
-                  ? totalPriceWithoutDiscount * (1 - controller.cartDiscountRate.value / 100)
-                  : totalPriceWithoutDiscount;
+      // Add items to cart (simulate adding one by one with small delay for realism)
+      for (var i = 0; i < testItems.length; i++) {
+        controller.onTapAddProduct(testItems[i]);
 
-              // Calculate discount amount
-              final discountAmount = totalPriceWithoutDiscount - totalPrice;
+        // Add small delay every 50 items to prevent UI blocking
+        if (i % 50 == 0) {
+          await Future<void>.delayed(const Duration(milliseconds: 10));
+        }
+      }
 
-              return pw.Container(
-                decoration: pw.BoxDecoration(
-                  color: PdfColors.grey100,
-                  borderRadius:
-                      const pw.BorderRadius.all(pw.Radius.circular(4)),
-                  border: pw.Border.all(color: PdfColors.grey400),
-                ),
-                padding: const pw.EdgeInsets.all(10),
-                margin: const pw.EdgeInsets.only(top: 20),
-                child: pw.Row(
-                  mainAxisAlignment: pw.MainAxisAlignment.end,
-                  children: [
-                    pw.Column(
-                      crossAxisAlignment: pw.CrossAxisAlignment.end,
-                      children: [
-                        pw.Row(
-                          children: [
-                            pw.Text(
-                              '${labels.totalQuantity}: ',
-                              style: pw.TextStyle(
-                                font: ttf,
-                                fontWeight: pw.FontWeight.bold,
-                                color: PdfColors.blue900,
-                              ),
-                            ),
-                            pw.Text(
-                              totalQuantity.toString(),
-                              style: pw.TextStyle(
-                                font: ttf,
-                                fontWeight: pw.FontWeight.bold,
-                                color: PdfColors.blue900,
-                              ),
-                            ),
-                          ],
-                        ),
-                        pw.SizedBox(height: 8),
+      // Close progress dialog
+      if (context.mounted) {
+        Navigator.pop(context);
 
-                        // Show original price if discount is applied
-                        if (controller.cartDiscountRate.value > 0) ...[
-                          pw.Row(
-                            children: [
-                              pw.Text(
-                                'Toplam Tutar: ',
-                                style: pw.TextStyle(
-                                  font: ttf,
-                                  fontWeight: pw.FontWeight.bold,
-                                  fontSize: 12,
-                                  color: PdfColors.grey700,
-                                ),
-                              ),
-                              pw.Text(
-                                totalPriceWithoutDiscount.formatPrice(),
-                                style: pw.TextStyle(
-                                  font: ttf,
-                                  fontWeight: pw.FontWeight.bold,
-                                  fontSize: 12,
-                                  color: PdfColors.grey700,
-                                  decoration: pw.TextDecoration.lineThrough,
-                                ),
-                              ),
-                            ],
-                          ),
-                          pw.SizedBox(height: 4),
-                          pw.Row(
-                            children: [
-                              pw.Text(
-                                'İskonto (%${controller.cartDiscountRate.value.toStringAsFixed(2)}): ',
-                                style: pw.TextStyle(
-                                  font: ttf,
-                                  fontWeight: pw.FontWeight.bold,
-                                  fontSize: 12,
-                                  color: PdfColors.red,
-                                ),
-                              ),
-                              pw.Text(
-                                '- ${(totalPriceWithoutDiscount - totalPrice).formatPrice()}',
-                                style: pw.TextStyle(
-                                  font: ttf,
-                                  fontWeight: pw.FontWeight.bold,
-                                  fontSize: 12,
-                                  color: PdfColors.red,
-                                ),
-                              ),
-                            ],
-                          ),
-                          pw.SizedBox(height: 4),
-                        ],
-
-                        pw.Row(
-                          children: [
-                            pw.Text(
-                              '${labels.totalAmount}: ',
-                              style: pw.TextStyle(
-                                font: ttf,
-                                fontWeight: pw.FontWeight.bold,
-                                fontSize: 14,
-                                color: PdfColors.blue900,
-                              ),
-                            ),
-                            pw.Text(
-                              totalPrice.formatPrice(),
-                              style: pw.TextStyle(
-                                font: ttf,
-                                fontWeight: pw.FontWeight.bold,
-                                fontSize: 14,
-                                color: PdfColors.blue900,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              );
-            }
-            return pw.Container();
-          },
-          build: (context) => [
-            pw.SizedBox(height: 10),
-            pw.Table(
-              border: pw.TableBorder.all(
-                color: PdfColors.grey400,
-                width: 0.5,
-              ),
-              columnWidths: columnWidths,
-              children: [
-                headerRow,
-                ...allRows,
-              ],
-            ),
-          ],
-        ),
-      );
-
-      final output = await getTemporaryDirectory();
-      final file = File('${output.path}/sepet_urunleri.pdf');
-      await file.writeAsBytes(await pdf.save());
-      await OpenFile.open(file.path);
-    } catch (e) {
-      if (mounted) {
+        // Show success message
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('PDF oluşturulurken bir hata oluştu: $e')),
+          SnackBar(
+            content: Text('Added ${testItems.length} test items to cart'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+    } catch (e) {
+      // Close progress dialog
+      if (context.mounted) {
+        Navigator.pop(context);
+
+        // Show error message
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error adding test items: $e'),
+            backgroundColor: Colors.red,
+          ),
         );
       }
     }
+  }
+
+  /// Generates 500 test cart items with realistic data
+  List<CartProductModel> _generateTestCartItems() {
+    final testItems = <CartProductModel>[];
+
+    // Product categories for realistic names
+    final categories = ['Shirt', 'Pants', 'Dress', 'Jacket', 'Skirt', 'Blouse', 'Sweater', 'Coat'];
+    final materials = ['Cotton', 'Silk', 'Wool', 'Linen', 'Polyester', 'Denim', 'Leather'];
+    final styles = ['Classic', 'Modern', 'Vintage', 'Casual', 'Formal', 'Sport', 'Elegant'];
+    final sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL', '36', '38', '40', '42', '44', '46'];
+    final colors = [
+      'Black', 'White', 'Navy', 'Gray', 'Brown', 'Beige', 'Red', 'Blue',
+      'Green', 'Yellow', 'Pink', 'Purple', 'Orange', 'Maroon', 'Khaki',
+    ];
+
+    for (var i = 1; i <= 500; i++) {
+      final category = categories[i % categories.length];
+      final material = materials[i % materials.length];
+      final style = styles[i % styles.length];
+      final size = sizes[i % sizes.length];
+      final color = colors[i % colors.length];
+
+      // Generate realistic prices (between 50-500)
+      final basePrice = 50.0 + (i % 450);
+      final currencyPrice = basePrice * 0.85; // Slightly different currency price
+
+      // Generate quantities (1-10)
+      final quantity = 1 + (i % 10);
+
+      // Group products (every 10 products in same group for testing grouping)
+      final groupId = (i / 10).floor();
+
+      final testItem = CartProductModel(
+        id: 1000 + i, // Start from 1000 to avoid conflicts
+        code: 'TEST${i.toString().padLeft(3, '0')}',
+        name: '$style $material $category',
+        price: basePrice,
+        currencyUnitPrice: currencyPrice,
+        quantity: quantity,
+        sizeName: size,
+        colorName: color,
+        productCodeGroupId: groupId,
+        pictureUrl: 'https://placehold.jp/150x150.png',
+      );
+
+      testItems.add(testItem);
+    }
+
+    return testItems;
   }
 
   @override
@@ -467,6 +288,13 @@ class _CartState extends State<Cart> {
           appBar: AppBar(
             title: Text(labels.cart),
             actions: [
+              // Debug button - only visible in debug mode
+              if (kDebugMode)
+                IconButton(
+                  icon: const Icon(Icons.bug_report, color: Colors.orange),
+                  tooltip: 'Add 500 test items',
+                  onPressed: () => _populateCartWithTestItems(context, controller),
+                ),
               if (controller.itemList.isNotEmpty)
                 IconButton(
                   icon: const Icon(Icons.picture_as_pdf),

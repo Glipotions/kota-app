@@ -245,7 +245,17 @@ class ArLocalization extends AppLocalizationLabel {
   String get support => 'الدعم';
 
   @override
-  String get supportDescription => 'تواصل مع الدعم';
+  String get supportDescription => 'يمكنك التواصل مع الدعم.';
+
+  @override
+  String get largeOrderWarningTitle => 'تحذير طلب كبير';
+
+  @override
+  String get largeOrderWarningMessage => 'هل تريد المتابعة؟';
+
+  @override
+  String largeOrderWarningContent(int itemCount, int orderCount) =>
+      'لديك $itemCount منتج في سلة التسوق. نظرًا لأن هذا طلب كبير، سيتم تقسيمه إلى $orderCount طلبات منفصلة.';
 
   @override
   String get userAccountInfo => 'معلومات المستخدم';

@@ -222,6 +222,17 @@ class EnLocalization extends AppLocalizationLabel {
   @override
   String get supportDescription => 'You can contact support.';
 
+  // Large Order Warning
+  @override
+  String get largeOrderWarningTitle => 'Large Order Warning';
+
+  @override
+  String get largeOrderWarningMessage => 'Do you want to continue?';
+
+  @override
+  String largeOrderWarningContent(int itemCount, int orderCount) =>
+      'You have $itemCount items in your cart. Since this is a large order, it will be split into $orderCount separate orders.';
+
   // Invoice
   @override
   String get discount => 'Discount';

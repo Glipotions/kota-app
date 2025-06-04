@@ -26,8 +26,8 @@ class DioClient {
     required String baseUrl,
     Function? onUnauthorized,
     Map<String, dynamic>? headerParam,
-    int connectTimeoutSecond = 15,
-    int receiveTimeoutSecond = 15,
+    int connectTimeoutSecond = 30,
+    int receiveTimeoutSecond = 60,
   }) {
     _instance ??= DioClient._internal(
       baseUrl: baseUrl,
