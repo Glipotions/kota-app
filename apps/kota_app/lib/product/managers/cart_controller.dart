@@ -31,10 +31,12 @@ class CartController extends BaseControllerInterface {
 
   // Discount rate for the entire cart (0-100%)
   final RxDouble cartDiscountRate = RxDouble(0);
-  final TextEditingController discountController = TextEditingController(text: '0');
+  final TextEditingController discountController =
+      TextEditingController(text: '0');
 
   // Check if user has admin rights
-  bool get hasAdminRights => SessionHandler.instance.hasClaim(saleInvoiceAdminClaim);
+  bool get hasAdminRights =>
+      SessionHandler.instance.hasClaim(saleInvoiceAdminClaim);
 
   List<CartProductModel> get itemList => _itemList.value;
   set itemList(List<CartProductModel> value) => _itemList
@@ -46,7 +48,8 @@ class CartController extends BaseControllerInterface {
 
   void updateCurrencyValues() {
     _currencyType.value = sessionHandler.currentUser?.currencyType ?? 1;
-    _isCurrencyTL.value = CurrencyType.tl == CurrencyType.fromValue(_currencyType.value);
+    _isCurrencyTL.value =
+        CurrencyType.tl == CurrencyType.fromValue(_currencyType.value);
   }
 
   @override
@@ -121,6 +124,24 @@ class CartController extends BaseControllerInterface {
   CartProductModel? inChartItemById(int id) =>
       itemList.firstWhereOrNull((element) => element.id == id);
 
+  /// Navigate to product detail screen from cart item
+  void onTapProductDetail(CartProductModel item) {
+    // Use mainProductCode if available, otherwise fall back to code
+    final productCodeGroupId = item.productCodeGroupId;
+
+    if (productCodeGroupId != null &&
+        item.name != null &&
+        item.name!.isNotEmpty) {
+      context.pushNamed(
+        SubRouteEnums.productDetail.name,
+        pathParameters: {
+          'id': item.mainProductCode!,
+          'productCode': item.code,
+        },
+      );
+    }
+  }
+
   double totalAmount({bool withDiscount = true}) {
     double totalAmount = 0;
     double totalCurrencyAmount = 0;
@@ -128,8 +149,8 @@ class CartController extends BaseControllerInterface {
     for (final element in itemList) {
       totalAmount = totalAmount + (element.price * element.quantity);
       if (element.currencyUnitPrice != null) {
-        totalCurrencyAmount =
-            totalCurrencyAmount + (element.currencyUnitPrice! * element.quantity);
+        totalCurrencyAmount = totalCurrencyAmount +
+            (element.currencyUnitPrice! * element.quantity);
       }
     }
 
@@ -313,7 +334,8 @@ class CartController extends BaseControllerInterface {
         connectedBranchCurrentInfoId:
             SessionHandler.instance.currentUser!.connectedBranchCurrentInfoId,
         description: _buildDescriptionWithDiscount(),
-        generalDiscountRate: cartDiscountRate.value > 0 ? cartDiscountRate.value : null,
+        generalDiscountRate:
+            cartDiscountRate.value > 0 ? cartDiscountRate.value : null,
         orderDetails: itemList
             .map(
               (e) => OrderDetail(
@@ -366,7 +388,8 @@ class CartController extends BaseControllerInterface {
   }
 
   /// Handles large orders by batching them into smaller chunks
-  Future<void> _handleLargeOrder(String cariHesapId, BuildContext context, int maxItemsPerOrder) async {
+  Future<void> _handleLargeOrder(
+      String cariHesapId, BuildContext context, int maxItemsPerOrder) async {
     final labels = AppLocalization.getLabels(context);
 
     // Show confirmation dialog for large orders
@@ -413,7 +436,9 @@ class CartController extends BaseControllerInterface {
       // Split items into chunks
       final chunks = <List<CartProductModel>>[];
       for (var i = 0; i < itemList.length; i += maxItemsPerOrder) {
-        final end = (i + maxItemsPerOrder < itemList.length) ? i + maxItemsPerOrder : itemList.length;
+        final end = (i + maxItemsPerOrder < itemList.length)
+            ? i + maxItemsPerOrder
+            : itemList.length;
         chunks.add(itemList.sublist(i, end));
       }
 
@@ -423,14 +448,16 @@ class CartController extends BaseControllerInterface {
       // Process each chunk
       for (var i = 0; i < chunks.length; i++) {
         final chunk = chunks[i];
-        final chunkDescription = '${_buildDescriptionWithDiscount()} - Bölüm ${i + 1}/${chunks.length}';
+        final chunkDescription =
+            '${_buildDescriptionWithDiscount()} - Bölüm ${i + 1}/${chunks.length}';
 
         final request = CreateOrderRequestModel(
           cariHesapId: cariHesapId,
           connectedBranchCurrentInfoId:
               SessionHandler.instance.currentUser!.connectedBranchCurrentInfoId,
           description: chunkDescription,
-          generalDiscountRate: cartDiscountRate.value > 0 ? cartDiscountRate.value : null,
+          generalDiscountRate:
+              cartDiscountRate.value > 0 ? cartDiscountRate.value : null,
           orderDetails: chunk
               .map(
                 (e) => OrderDetail(
@@ -465,12 +492,15 @@ class CartController extends BaseControllerInterface {
       if (successCount > 0) {
         await clearCart();
         if (failureCount == 0) {
-          showSuccessToastMessage('Tüm siparişler başarıyla oluşturuldu ($successCount sipariş)');
+          showSuccessToastMessage(
+              'Tüm siparişler başarıyla oluşturuldu ($successCount sipariş)');
         } else {
-          showSuccessToastMessage('$successCount sipariş oluşturuldu, $failureCount sipariş başarısız oldu');
+          showSuccessToastMessage(
+              '$successCount sipariş oluşturuldu, $failureCount sipariş başarısız oldu');
         }
       } else {
-        showErrorToastMessage('Hiçbir sipariş oluşturulamadı. Lütfen tekrar deneyin.');
+        showErrorToastMessage(
+            'Hiçbir sipariş oluşturulamadı. Lütfen tekrar deneyin.');
       }
     } finally {
       LoadingProgress.stop();
@@ -478,17 +508,25 @@ class CartController extends BaseControllerInterface {
   }
 
   /// Handles order creation errors with specific error messages
-  void _handleOrderError(dynamic error, String defaultMessage, BuildContext context) {
+  void _handleOrderError(
+      dynamic error, String defaultMessage, BuildContext context) {
     String errorMessage = defaultMessage;
 
     // Check for specific error types
-    if (error.toString().contains('timeout') || error.toString().contains('Timeout')) {
-      errorMessage = 'Sipariş oluşturma zaman aşımına uğradı. Sepetinizdeki ürün sayısını azaltıp tekrar deneyin.';
-    } else if (error.toString().contains('too large') || error.toString().contains('payload')) {
-      errorMessage = 'Sipariş çok büyük. Lütfen sepetinizdeki ürün sayısını azaltın.';
-    } else if (error.toString().contains('network') || error.toString().contains('connection')) {
-      errorMessage = 'Ağ bağlantısı sorunu. Lütfen internet bağlantınızı kontrol edin.';
-    } else if (error.toString().contains('server') || error.toString().contains('500')) {
+    if (error.toString().contains('timeout') ||
+        error.toString().contains('Timeout')) {
+      errorMessage =
+          'Sipariş oluşturma zaman aşımına uğradı. Sepetinizdeki ürün sayısını azaltıp tekrar deneyin.';
+    } else if (error.toString().contains('too large') ||
+        error.toString().contains('payload')) {
+      errorMessage =
+          'Sipariş çok büyük. Lütfen sepetinizdeki ürün sayısını azaltın.';
+    } else if (error.toString().contains('network') ||
+        error.toString().contains('connection')) {
+      errorMessage =
+          'Ağ bağlantısı sorunu. Lütfen internet bağlantınızı kontrol edin.';
+    } else if (error.toString().contains('server') ||
+        error.toString().contains('500')) {
       errorMessage = 'Sunucu hatası. Lütfen daha sonra tekrar deneyin.';
     }
 
@@ -505,7 +543,8 @@ class CartController extends BaseControllerInterface {
 
     // Add current discount if applicable
     if (cartDiscountRate.value > 0) {
-      description += ' (İskonto: %${cartDiscountRate.value.toStringAsFixed(2)})';
+      description +=
+          ' (İskonto: %${cartDiscountRate.value.toStringAsFixed(2)})';
     }
 
     return description;

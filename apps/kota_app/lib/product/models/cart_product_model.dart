@@ -13,6 +13,7 @@ class CartProductModel {
     this.currencyUnitPrice,
     this.discountRate = 0,
     this.remainingQuantity,
+    this.mainProductCode, // Main product code for API calls
   });
 
   int id;
@@ -28,6 +29,7 @@ class CartProductModel {
   String? colorName;
   int? orderDetailId;
   double discountRate; // Discount rate as percentage (0-100)
+  String? mainProductCode; // Main product code for navigation to product detail
 
   Map<String, dynamic> toJson() {
     return {
@@ -43,6 +45,7 @@ class CartProductModel {
       'colorName': colorName,
       'productCodeGroupId': productCodeGroupId,
       'discountRate': discountRate,
+      'mainProductCode': mainProductCode,
     };
   }
 
@@ -65,6 +68,7 @@ class CartProductModel {
       discountRate: json['discountRate'] != null
           ? (json['discountRate'] as num).toDouble()
           : 0,
+      mainProductCode: json['mainProductCode'] as String?,
     );
   }
 
@@ -82,6 +86,7 @@ class CartProductModel {
     int? productCodeGroupId,
     int? orderDetailId,
     double? discountRate,
+    String? mainProductCode,
   }) {
     return CartProductModel(
       id: id ?? this.id,
@@ -97,6 +102,7 @@ class CartProductModel {
       productCodeGroupId: productCodeGroupId ?? this.productCodeGroupId,
       orderDetailId: orderDetailId ?? this.orderDetailId,
       discountRate: discountRate ?? this.discountRate,
+      mainProductCode: mainProductCode ?? this.mainProductCode,
     );
   }
 }

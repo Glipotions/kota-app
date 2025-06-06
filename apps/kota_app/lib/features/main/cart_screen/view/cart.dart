@@ -17,7 +17,7 @@ import 'package:kota_app/product/widgets/card/bordered_image.dart';
 import 'package:kota_app/product/widgets/other/empty_view.dart';
 import 'package:values/values.dart';
 
-part 'components/product_card.dart';
+// part 'components/product_card.dart'; // Removed to inline the component
 
 class Cart extends StatefulWidget {
   const Cart({super.key});
@@ -587,11 +587,12 @@ class _CartState extends State<Cart> {
                                         ),
                                         onDismissed: (_) =>
                                             controller.onTapRemoveProduct(item),
-                                        child: _ProductCard(
-                                          item: item,
-                                          onTapRemove: () =>
-                                              controller.onTapRemoveProduct(item),
-                                          isCurrencyTL: controller.isCurrencyTL,
+                                        child: _buildProductCard(
+                                          context,
+                                          item,
+                                          () => controller.onTapProductDetail(item),
+                                          () => controller.onTapRemoveProduct(item),
+                                          controller.isCurrencyTL,
                                         ),
                                       );
                                     },
@@ -631,6 +632,231 @@ class _CartState extends State<Cart> {
           ),
         );
       },
+    );
+  }
+
+  Widget _buildProductCard(
+    BuildContext context,
+    CartProductModel item,
+    VoidCallback? onTap,
+    VoidCallback? onTapRemove,
+    bool isCurrencyTL,
+  ) {
+    return Card(
+      elevation: 2,
+      margin: EdgeInsets.zero,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(ModuleRadius.m.value),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: 100,
+            height: 100,
+            child: Hero(
+              tag: 'product_${item.id}',
+              child: ClipRRect(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(ModuleRadius.m.value),
+                  bottomLeft: Radius.circular(ModuleRadius.m.value),
+                ),
+                child: BorderedImage(
+                  radius: BorderRadius.only(
+                    bottomLeft: Radius.circular(ModuleRadius.m.value),
+                    topLeft: Radius.circular(ModuleRadius.m.value),
+                  ),
+                  aspectRatio: 1,
+                  imageUrl: item.pictureUrl ??
+                      'https://kota-app.b-cdn.net/logo.jpg',
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.all(ModulePadding.xs.value),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Make only the product name clickable
+                  InkWell(
+                    onTap: onTap,
+                    borderRadius: BorderRadius.circular(ModuleRadius.xs.value),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: ModulePadding.xxxs.value,
+                        vertical: ModulePadding.xxxs.value,
+                      ),
+                      child: Text(
+                        item.name!,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: context.labelMedium.copyWith(
+                          fontWeight: FontWeight.w500,
+                          color: Theme.of(context).primaryColor,
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                    ),
+                  ),
+                  if (item.sizeName != null || item.colorName != null)
+                    Padding(
+                      padding: EdgeInsets.only(top: ModulePadding.xxs.value),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              children: [
+                                _buildChip(
+                                  context,
+                                  Icons.local_offer,
+                                  item.code,
+                                  Colors.grey.shade100,
+                                ),
+                                SizedBox(width: ModulePadding.xxs.value),
+                                if (item.sizeName != null)
+                                  _buildChip(
+                                    context,
+                                    Icons.straighten,
+                                    item.sizeName!,
+                                    Colors.blue.shade50,
+                                  ),
+                              ],
+                            ),
+                          ),
+                          if (item.colorName != null)
+                            SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Padding(
+                                padding: EdgeInsets.only(
+                                  top: ModulePadding.xxs.value,
+                                ),
+                                child: _buildChip(
+                                  context,
+                                  Icons.palette_outlined,
+                                  item.colorName!,
+                                  Colors.orange.shade50,
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                  SizedBox(height: ModulePadding.xs.value),
+                  Row(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: ModulePadding.xs.value,
+                          vertical: ModulePadding.xxxs.value,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context)
+                              .primaryColor
+                              .withOpacity(0.1),
+                          borderRadius:
+                              BorderRadius.circular(ModuleRadius.s.value),
+                        ),
+                        child: Text(
+                          '${item.quantity}x',
+                          style: context.titleSmall.copyWith(
+                            color: Theme.of(context).primaryColor,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: ModulePadding.xs.value),
+                      Expanded(
+                        child: item.discountRate > 0
+                            ? Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    isCurrencyTL
+                                        ? item.price.formatPrice()
+                                        : item.currencyUnitPrice!.formatPrice(),
+                                    style: context.labelSmall.copyWith(
+                                      decoration: TextDecoration.lineThrough,
+                                      color: Colors.grey,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  Text(
+                                    isCurrencyTL
+                                        ? (item.price * (1 - item.discountRate / 100)).formatPrice()
+                                        : (item.currencyUnitPrice! * (1 - item.discountRate / 100)).formatPrice(),
+                                    style: context.titleSmall,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+                              )
+                            : Text(
+                                isCurrencyTL
+                                    ? item.price.formatPrice()
+                                    : item.currencyUnitPrice!.formatPrice(),
+                                style: context.titleSmall,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildChip(
+    BuildContext context,
+    IconData icon,
+    String text,
+    Color bgColor,
+  ) {
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: ModulePadding.xxxs.value,
+        vertical: 2,
+      ),
+      decoration: BoxDecoration(
+        color: bgColor,
+        border: Border.all(
+          color: Theme.of(context).dividerColor,
+        ),
+        borderRadius: BorderRadius.circular(ModuleRadius.xs.value),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 0,
+            blurRadius: 1,
+            offset: const Offset(0, 1),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            icon,
+            size: 14,
+            color: Colors.black87,
+          ),
+          const SizedBox(width: 4),
+          Text(
+            text,
+            style: context.labelSmall.copyWith(
+              color: Colors.black87,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

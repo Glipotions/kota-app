@@ -146,6 +146,7 @@ class ProductDetailController extends BaseControllerInterface {
       sizeName: selectedProductVariant!.sizeName,
       colorName: selectedProductVariant!.colorName,
       productCodeGroupId: selectedProductVariant!.productCodeGroupId,
+      mainProductCode: code, // Store the main product code for navigation
     );
   }
 
