@@ -668,4 +668,14 @@ class RuLocalization extends AppLocalizationLabel {
 
   @override
   String get noActiveOrdersFound => 'Активных заказов не найдено.';
+
+  // Price hiding for non-members
+  @override
+  String get loginToSeePrices => 'Войдите, чтобы увидеть цены';
+
+  @override
+  String get memberPricesAvailable => 'Цены для участников доступны';
+
+  @override
+  String get priceHiddenPlaceholder => '?';
 }

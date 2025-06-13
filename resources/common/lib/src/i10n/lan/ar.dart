@@ -668,4 +668,14 @@ class ArLocalization extends AppLocalizationLabel {
 
   @override
   String get noActiveOrdersFound => 'لم يتم العثور على طلبات نشطة.';
+
+  // Price hiding for non-members
+  @override
+  String get loginToSeePrices => 'سجل الدخول لرؤية الأسعار';
+
+  @override
+  String get memberPricesAvailable => 'أسعار الأعضاء متاحة';
+
+  @override
+  String get priceHiddenPlaceholder => '؟';
 }

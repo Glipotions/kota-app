@@ -652,4 +652,14 @@ class TrLocalization extends AppLocalizationLabel {
 
   @override
   String get noActiveOrdersFound => 'Aktif sipariş bulunamadı.';
+
+  // Price hiding for non-members
+  @override
+  String get loginToSeePrices => 'Fiyatları görmek için giriş yapın';
+
+  @override
+  String get memberPricesAvailable => 'Üye fiyatları mevcut';
+
+  @override
+  String get priceHiddenPlaceholder => '?';
 }

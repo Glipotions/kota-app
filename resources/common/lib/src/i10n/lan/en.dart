@@ -628,4 +628,14 @@ class EnLocalization extends AppLocalizationLabel {
 
   @override
   String get currency => 'Currency';
+
+  // Price hiding for non-members
+  @override
+  String get loginToSeePrices => 'Login to see prices';
+
+  @override
+  String get memberPricesAvailable => 'Member prices available';
+
+  @override
+  String get priceHiddenPlaceholder => '?';
 }

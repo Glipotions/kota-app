@@ -8,7 +8,6 @@ import 'package:kota_app/product/utility/enums/module_padding_enums.dart';
 import 'package:kota_app/product/utility/extentions/num_extension.dart';
 import 'package:kota_app/product/widgets/app_bar/general_app_bar.dart';
 import 'package:kota_app/product/widgets/other/empty_view.dart';
-import 'package:printing/printing.dart';
 
 // ignore: always_use_package_imports
 import '../controller/order_history_detail_controller.dart';

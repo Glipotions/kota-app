@@ -254,6 +254,16 @@ abstract class AppLocalizationLabel {
   ///Order successfully created
   String get orderCreatedSuccessfully;
 
+  // Price hiding for non-members
+  ///Login to see prices
+  String get loginToSeePrices;
+
+  ///Member prices available
+  String get memberPricesAvailable;
+
+  ///Price placeholder for non-members
+  String get priceHiddenPlaceholder;
+
   ///Error creating order
   String get orderCreateError;
 

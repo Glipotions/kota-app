@@ -6,7 +6,7 @@ packages:
 
 publish_to: 'none' 
 
-version: 1.0.34+1
+version: 1.0.35+1
 
 environment:
   sdk: '>=3.1.5 <4.0.0'

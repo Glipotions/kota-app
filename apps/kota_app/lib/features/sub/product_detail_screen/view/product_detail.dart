@@ -8,7 +8,7 @@ import 'package:kota_app/features/sub/product_detail_screen/controller/product_d
 import 'package:kota_app/product/managers/cart_controller.dart';
 import 'package:kota_app/product/utility/enums/module_padding_enums.dart';
 import 'package:kota_app/product/utility/enums/module_radius_enums.dart';
-import 'package:kota_app/product/utility/extentions/num_extension.dart';
+import 'package:kota_app/product/utility/extentions/price_display_extension.dart';
 import 'package:kota_app/product/widgets/app_bar/general_app_bar.dart';
 import 'package:kota_app/product/widgets/button/quantity_selection_button.dart';
 import 'package:kota_app/product/widgets/card/bordered_image.dart';
@@ -417,71 +417,84 @@ class ProductDetail extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(height: 8),
+
+                            // Product Code Display
+                            Obx(() {
+                              // Only show product code when both color and size are selected
+                              final isColorSelected =
+                                  controller.selectedColor.value >= 0;
+                              final isSizeSelected =
+                                  controller.selectedSize.value >= 0;
+                              final productCode = controller
+                                  .selectedProductVariant?.productCode;
+
+                              if (!isColorSelected ||
+                                  !isSizeSelected ||
+                                  productCode == null ||
+                                  productCode.isEmpty) {
+                                return const SizedBox();
+                              }
+
+                              return _buildChip(
+                                context,
+                                Icons.local_offer,
+                                productCode,
+                                Colors.grey.shade100,
+                              );
+                            }),
+                            const SizedBox(height: 8),
                             Obx(
                               () {
-                                final cartController = Get.find<CartController>();
-                                final originalPrice = controller.showUnitPrice?.value ?? 0.0;
-                                final hasDiscount = cartController.cartDiscountRate.value > 0;
+                                final cartController =
+                                    Get.find<CartController>();
+                                final originalPrice =
+                                    controller.showUnitPrice?.value ?? 0.0;
+                                final hasDiscount =
+                                    cartController.cartDiscountRate.value > 0;
 
                                 if (hasDiscount) {
-                                  final discountRate = cartController.cartDiscountRate.value;
-                                  final discountedPrice = originalPrice * (1 - discountRate / 100);
+                                  final discountRate =
+                                      cartController.cartDiscountRate.value;
+                                  final discountedPrice =
+                                      originalPrice * (1 - discountRate / 100);
 
-                                  return Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Text(
-                                            originalPrice.formatPrice(),
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .titleLarge
-                                                ?.copyWith(
-                                                  decoration: TextDecoration.lineThrough,
-                                                  color: Colors.grey,
-                                                ),
-                                          ),
-                                          SizedBox(width: ModulePadding.xs.value),
-                                          Container(
-                                            padding: EdgeInsets.symmetric(
-                                              horizontal: ModulePadding.xs.value,
-                                              vertical: ModulePadding.xxxs.value,
-                                            ),
-                                            decoration: BoxDecoration(
-                                              color: Colors.red.withOpacity(0.1),
-                                              borderRadius: BorderRadius.circular(ModuleRadius.s.value),
-                                            ),
-                                            child: Text(
-                                              '%${discountRate.toStringAsFixed(0)}',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodySmall
-                                                  ?.copyWith(
-                                                    color: Colors.red,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(height: 4),
-                                      Text(
-                                        discountedPrice.formatPrice(),
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleLarge
-                                            ?.copyWith(
-                                              color: Theme.of(context).primaryColor,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                      ),
-                                    ],
+                                  return PriceDisplayHelper
+                                      .buildDiscountedPriceWidget(
+                                    context,
+                                    originalPrice: originalPrice,
+                                    discountedPrice: discountedPrice,
+                                    discountRate: discountRate,
+                                    originalPriceStyle:
+                                        Theme.of(context).textTheme.titleLarge,
+                                    discountedPriceStyle: Theme.of(context)
+                                        .textTheme
+                                        .titleLarge
+                                        ?.copyWith(
+                                          color: Theme.of(context).primaryColor,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                    discountBadgeStyle:
+                                        Theme.of(context).textTheme.bodySmall,
+                                    placeholderStyle: Theme.of(context)
+                                        .textTheme
+                                        .titleLarge
+                                        ?.copyWith(
+                                          color: Theme.of(context).primaryColor,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                   );
                                 } else {
-                                  return Text(
-                                    originalPrice.formatPrice(),
-                                    style: Theme.of(context)
+                                  return PriceDisplayHelper.buildPriceWidget(
+                                    context,
+                                    price: originalPrice,
+                                    priceStyle: Theme.of(context)
+                                        .textTheme
+                                        .titleLarge
+                                        ?.copyWith(
+                                          color: Theme.of(context).primaryColor,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                    placeholderStyle: Theme.of(context)
                                         .textTheme
                                         .titleLarge
                                         ?.copyWith(
