@@ -678,4 +678,7 @@ class ArLocalization extends AppLocalizationLabel {
 
   @override
   String get priceHiddenPlaceholder => '؟';
+
+  @override
+  String get newProduct => 'جديد';
 }

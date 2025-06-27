@@ -54,7 +54,7 @@ class ModuleTheme implements AppTheme {
       );
 
   @override
-  CardTheme get cardTheme => CardTheme(
+  CardThemeData get cardThemeData => CardThemeData(
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(
@@ -300,7 +300,7 @@ class ModuleTheme implements AppTheme {
       );
 
   @override
-  TabBarTheme get tabBarTheme => TabBarTheme(
+  TabBarThemeData get tabBarTheme => TabBarThemeData(
         labelColor: appColors.primary,
         labelStyle: TextStyle(
           fontSize: 14,
@@ -325,7 +325,7 @@ class ModuleTheme implements AppTheme {
       );
 
   @override
-  DialogTheme get dialogTheme => DialogTheme(
+  DialogThemeData get dialogTheme => DialogThemeData(
         backgroundColor: Colors.black54,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(ModuleRadius.m.value),

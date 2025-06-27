@@ -7,7 +7,7 @@ import 'package:values/values.dart';
 /// flutter run --flavor product lib/companies/kota_tekstil/main_production.dart
 /// flutter build apk --release --flavor product lib/companies/kota_tekstil/main_production.dart
 /// flutter build appbundle --release --flavor product lib/companies/kota_tekstil/main_production.dart
-
+/// flutter build appbundle --flavor productKotaTekstil --target lib/companies/kota_tekstil/main_production.dart
 void main() {
   run(
     EnvironmentConfigModel(

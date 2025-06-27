@@ -49,6 +49,11 @@ class _CartState extends State<Cart> {
           _showScrollButton = showButton;
         });
       }
+
+      // Handle lazy loading for pagination
+      if (currentScroll >= maxScroll - 200) {
+        cartController.loadMoreItems();
+      }
     });
   }
 
@@ -550,62 +555,63 @@ class _CartState extends State<Cart> {
             child: Stack(
               children: [
                 Obx(
-                  () => CustomScrollView(
-                    controller: _scrollController,
-                    slivers: [
-                      SliverToBoxAdapter(
-                        child: AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 300),
-                          child: controller.itemList.isEmpty
-                              ? EmptyView(
-                                  message: labels.emptyCartMessage,
-                                )
-                              : Padding(
-                                  padding: EdgeInsets.all(ModulePadding.s.value),
-                                  child: ListView.separated(
-                                    physics: const NeverScrollableScrollPhysics(),
-                                    shrinkWrap: true,
-                                    padding: const EdgeInsets.only(
-                                      bottom:
-                                          180, // Add padding for the complete order section
-                                    ),
-                                    itemBuilder: (context, index) {
-                                      final item = controller.itemList[index];
-                                      return Dismissible(
-                                        key: Key(item.id.toString()),
-                                        direction: DismissDirection.endToStart,
-                                        background: Container(
-                                          alignment: Alignment.centerRight,
-                                          padding: EdgeInsets.only(
-                                            right: ModulePadding.m.value,
-                                          ),
-                                          color: Colors.red,
-                                          child: const Icon(
-                                            Icons.delete_outline,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                        onDismissed: (_) =>
-                                            controller.onTapRemoveProduct(item),
-                                        child: _buildProductCard(
-                                          context,
-                                          item,
-                                          () => controller.onTapProductDetail(item),
-                                          () => controller.onTapRemoveProduct(item),
-                                          controller.isCurrencyTL,
-                                        ),
-                                      );
-                                    },
-                                    separatorBuilder: (_, __) => SizedBox(
-                                      height: ModulePadding.s.value,
-                                    ),
-                                    itemCount: controller.itemList.length,
+                  () => controller.itemList.isEmpty
+                      ? EmptyView(
+                          message: labels.emptyCartMessage,
+                        )
+                      : ListView.builder(
+                          controller: _scrollController,
+                          padding: EdgeInsets.only(
+                            left: ModulePadding.s.value,
+                            right: ModulePadding.s.value,
+                            top: ModulePadding.s.value,
+                            bottom: 200, // Add padding for the complete order section
+                          ),
+                          itemCount: controller.displayedItems.length +
+                              (controller.hasMoreItems ? 1 : 0),
+                          itemBuilder: (context, index) {
+                            // Show loading indicator at the end if there are more items
+                            if (index == controller.displayedItems.length) {
+                              return Padding(
+                                padding: EdgeInsets.all(ModulePadding.m.value),
+                                child: const Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                              );
+                            }
+
+                            final item = controller.displayedItems[index];
+                            return Padding(
+                              padding: EdgeInsets.only(
+                                bottom: ModulePadding.s.value,
+                              ),
+                              child: Dismissible(
+                                key: Key(item.id.toString()),
+                                direction: DismissDirection.endToStart,
+                                background: Container(
+                                  alignment: Alignment.centerRight,
+                                  padding: EdgeInsets.only(
+                                    right: ModulePadding.m.value,
+                                  ),
+                                  color: Colors.red,
+                                  child: const Icon(
+                                    Icons.delete_outline,
+                                    color: Colors.white,
                                   ),
                                 ),
+                                onDismissed: (_) =>
+                                    controller.onTapRemoveProduct(item),
+                                child: _buildProductCard(
+                                  context,
+                                  item,
+                                  () => controller.onTapProductDetail(item),
+                                  () => controller.onTapRemoveProduct(item),
+                                  controller.isCurrencyTL,
+                                ),
+                              ),
+                            );
+                          },
                         ),
-                      ),
-                    ],
-                  ),
                 ),
                 if (_showScrollButton)
                   Positioned(
@@ -651,27 +657,9 @@ class _CartState extends State<Cart> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(
-            width: 100,
-            height: 100,
-            child: Hero(
-              tag: 'product_${item.id}',
-              child: ClipRRect(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(ModuleRadius.m.value),
-                  bottomLeft: Radius.circular(ModuleRadius.m.value),
-                ),
-                child: BorderedImage(
-                  radius: BorderRadius.only(
-                    bottomLeft: Radius.circular(ModuleRadius.m.value),
-                    topLeft: Radius.circular(ModuleRadius.m.value),
-                  ),
-                  aspectRatio: 1,
-                  imageUrl: item.pictureUrl ??
-                      'https://kota-app.b-cdn.net/logo.jpg',
-                ),
-              ),
-            ),
+          _ProductImage(
+            item: item,
+            radius: ModuleRadius.m.value,
           ),
           Expanded(
             child: Padding(
@@ -856,6 +844,42 @@ class _CartState extends State<Cart> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// Optimized product image widget for better performance
+class _ProductImage extends StatelessWidget {
+  const _ProductImage({
+    required this.item,
+    required this.radius,
+  });
+
+  final CartProductModel item;
+  final double radius;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 100,
+      height: 100,
+      child: Hero(
+        tag: 'product_${item.id}',
+        child: ClipRRect(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(radius),
+            bottomLeft: Radius.circular(radius),
+          ),
+          child: BorderedImage(
+            radius: BorderRadius.only(
+              bottomLeft: Radius.circular(radius),
+              topLeft: Radius.circular(radius),
+            ),
+            aspectRatio: 1,
+            imageUrl: item.pictureUrl ?? 'https://kota-app.b-cdn.net/logo.jpg',
+          ),
+        ),
       ),
     );
   }

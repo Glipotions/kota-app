@@ -23,14 +23,27 @@ class ProductCard extends StatelessWidget {
             children: [
               AspectRatio(
                 aspectRatio: 1, // Oranı artırdım (daha büyük resim)
-                child: BorderedImage(
-                  aspectRatio: 4,
-                  imageUrl: (item.pictureUrl != '' && item.pictureUrl != null)
-                      ? item.pictureUrl!
-                      : 'https://kota-app.b-cdn.net/logo.jpg',
-                  radius: const BorderRadius.vertical(
-                    top: Radius.circular(8),
-                  ), // Üst köşeleri yuvarlak
+                child: Stack(
+                  children: [
+                    BorderedImage(
+                      aspectRatio: 1, // Dış AspectRatio ile aynı oran
+                      fit: BoxFit.contain, // Resmin tamamını göster
+                      imageUrl:
+                          (item.pictureUrl != '' && item.pictureUrl != null)
+                              ? item.pictureUrl!
+                              : 'https://kota-app.b-cdn.net/logo.jpg',
+                      radius: const BorderRadius.vertical(
+                        top: Radius.circular(8),
+                      ), // Üst köşeleri yuvarlak
+                    ),
+                    // New product badge positioned at top-right corner
+                    if (item.isNew ?? false)
+                      const Positioned(
+                        top: 8,
+                        right: 8,
+                        child: NewProductBadge(),
+                      ),
+                  ],
                 ),
               ),
               SizedBox(height: ModulePadding.xs.value),
@@ -48,7 +61,6 @@ class ProductCard extends StatelessWidget {
                       maxLines: 1,
                     ),
                     SizedBox(height: ModulePadding.xxs.value),
-
                     Text(
                       item.productName ?? '',
                       style: context.labelMedium

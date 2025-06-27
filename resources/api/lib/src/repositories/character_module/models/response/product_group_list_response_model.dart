@@ -51,7 +51,7 @@ class ProductGroupItem extends IBaseModel<ProductGroupItem> {
     this.price,
     this.pictureUrl,
     this.productName,
-
+    this.isNew,
   });
   int? id;
   String? code;
@@ -59,6 +59,7 @@ class ProductGroupItem extends IBaseModel<ProductGroupItem> {
   double? price;
   String? pictureUrl;
   String? productName;
+  bool? isNew;
 
   @override
   ProductGroupItem fromJson(Map<String, dynamic> json) => ProductGroupItem(
@@ -68,6 +69,7 @@ class ProductGroupItem extends IBaseModel<ProductGroupItem> {
         productName: json['productName'],
         pictureUrl: json['pictureUrl'],
         price: json['price']?.toDouble(),
+        isNew: json['isNew'] ?? false,
       );
 
   @override

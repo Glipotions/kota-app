@@ -678,4 +678,7 @@ class RuLocalization extends AppLocalizationLabel {
 
   @override
   String get priceHiddenPlaceholder => '?';
+
+  @override
+  String get newProduct => 'Новый';
 }

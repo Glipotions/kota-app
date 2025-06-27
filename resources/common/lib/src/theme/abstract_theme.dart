@@ -14,7 +14,7 @@ abstract class AppTheme {
   ColorScheme get colorScheme;
 
   /// Returns the card theme for the app.
-  CardTheme get cardTheme;
+  CardThemeData get cardThemeData;
 
   /// Returns the text theme for the app.
   TextTheme get textTheme;
@@ -47,7 +47,7 @@ abstract class AppTheme {
   AppBarTheme get appBarTheme;
 
   /// Returns the tab bar theme for the app.
-  TabBarTheme get tabBarTheme;
+  TabBarThemeData get tabBarTheme;
 
   /// Returns the color for the indicator in the app.
   Color get indicatorColor;
@@ -56,7 +56,7 @@ abstract class AppTheme {
   BottomAppBarTheme get bottomAppBarTheme;
 
   /// Returns the dialog theme for the app.
-  DialogTheme get dialogTheme;
+  DialogThemeData get dialogTheme;
 
   /// Returns the progress indicator theme data for the app.
   ProgressIndicatorThemeData get progressIndicatorTheme;
@@ -65,7 +65,7 @@ abstract class AppTheme {
 /// Function to generate ThemeData based on the provided AppTheme.
 ThemeData getTheme<T extends AppTheme>(T theme) => ThemeData(
       progressIndicatorTheme: theme.progressIndicatorTheme,
-      cardTheme: theme.cardTheme,
+      cardTheme: theme.cardThemeData,
       fontFamily: theme.fontFamily,
       textTheme: theme.textTheme,
       appBarTheme: theme.appBarTheme,

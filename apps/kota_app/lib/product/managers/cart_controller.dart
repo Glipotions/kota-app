@@ -34,6 +34,19 @@ class CartController extends BaseControllerInterface {
   final TextEditingController discountController =
       TextEditingController(text: '0');
 
+  // Performance optimization properties
+  static const int _itemsPerPage = 50;
+  final RxInt _currentPage = 0.obs;
+  final RxBool _isLoadingMore = false.obs;
+  final RxBool _hasMoreItems = true.obs;
+  final Rx<List<CartProductModel>> _displayedItems = Rx([]);
+
+  // Getters for performance properties
+  int get currentPage => _currentPage.value;
+  bool get isLoadingMore => _isLoadingMore.value;
+  bool get hasMoreItems => _hasMoreItems.value;
+  List<CartProductModel> get displayedItems => _displayedItems.value;
+
   // Check if user has admin rights
   bool get hasAdminRights =>
       SessionHandler.instance.hasClaim(saleInvoiceAdminClaim);
@@ -73,10 +86,51 @@ class CartController extends BaseControllerInterface {
               (item) => CartProductModel.fromJson(item as Map<String, dynamic>),
             )
             .toList();
+
+        // Initialize pagination after loading items
+        _initializePagination();
       }
     } catch (e) {
       debugPrint('Error loading cart items: $e');
     }
+  }
+
+  /// Initialize pagination for cart items
+  void _initializePagination() {
+    _currentPage.value = 0;
+    _hasMoreItems.value = itemList.length > _itemsPerPage;
+    _loadDisplayedItems();
+  }
+
+  /// Load items for current page
+  void _loadDisplayedItems() {
+    final startIndex = 0;
+    final endIndex = (_currentPage.value + 1) * _itemsPerPage;
+    final actualEndIndex = endIndex > itemList.length ? itemList.length : endIndex;
+
+    _displayedItems.value = itemList.sublist(startIndex, actualEndIndex);
+    _hasMoreItems.value = actualEndIndex < itemList.length;
+  }
+
+  /// Load more items when scrolling
+  Future<void> loadMoreItems() async {
+    if (_isLoadingMore.value || !_hasMoreItems.value) return;
+
+    _isLoadingMore.value = true;
+
+    // Simulate loading delay for better UX
+    await Future.delayed(const Duration(milliseconds: 300));
+
+    _currentPage.value++;
+    _loadDisplayedItems();
+
+    _isLoadingMore.value = false;
+  }
+
+  /// Reset pagination when cart changes
+  void _resetPagination() {
+    _currentPage.value = 0;
+    _initializePagination();
   }
 
   Future<void> _saveCartItems() async {
@@ -93,6 +147,9 @@ class CartController extends BaseControllerInterface {
   Future<void> clearCart() async {
     editingOrderId?.value = 0;
     itemList = [];
+    _displayedItems.value = [];
+    _currentPage.value = 0;
+    _hasMoreItems.value = false;
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_cartKey);
     descriptionController.text = '';
@@ -104,6 +161,7 @@ class CartController extends BaseControllerInterface {
     // updateCurrencyValues();
     if (item.quantity == 0) {
       onTapRemoveProduct(item);
+      return;
     }
     if (itemList.indexWhere((element) => element.id == item.id) != -1) {
       itemList.removeWhere((element) => element.id == item.id);
@@ -111,6 +169,7 @@ class CartController extends BaseControllerInterface {
     itemList.add(item);
     itemList = itemList;
     _saveCartItems();
+    _initializePagination(); // Refresh pagination after adding item
   }
 
   void onTapRemoveProduct(CartProductModel item) {
@@ -119,6 +178,7 @@ class CartController extends BaseControllerInterface {
     }
     itemList = itemList;
     _saveCartItems();
+    _initializePagination(); // Refresh pagination after removing item
   }
 
   CartProductModel? inChartItemById(int id) =>

@@ -442,6 +442,9 @@ class TrLocalization extends AppLocalizationLabel {
   @override
   String get resendCode => 'Kodu Tekrar Gönder';
 
+  @override
+  String get newProduct => 'Yeni';
+
   // Bottom Navigation Bar
   @override
   String get home => 'Anasayfa';

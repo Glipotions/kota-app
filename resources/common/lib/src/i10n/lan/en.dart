@@ -447,6 +447,9 @@ class EnLocalization extends AppLocalizationLabel {
   @override
   String get resendCode => 'Resend Code';
 
+  @override
+  String get newProduct => 'New';
+
   // Invoice Detail Screen
   @override
   String get invoiceDetail => 'Invoice Detail';

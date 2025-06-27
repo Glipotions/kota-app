@@ -375,6 +375,9 @@ abstract class AppLocalizationLabel {
   /// Resend Code
   String get resendCode;
 
+  /// New product indicator
+  String get newProduct;
+
   // Invoice PDF
   /// Sales Invoice
   String get salesInvoice;

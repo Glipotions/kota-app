@@ -12,6 +12,7 @@ import 'package:kota_app/product/base/base_view.dart';
 import 'package:kota_app/product/utility/enums/module_padding_enums.dart';
 import 'package:kota_app/product/widgets/app_bar/general_app_bar.dart';
 import 'package:kota_app/product/widgets/card/bordered_image.dart';
+import 'package:kota_app/product/widgets/badge/new_product_badge.dart';
 import 'package:values/values.dart';
 
 part 'components/product_card.dart';
