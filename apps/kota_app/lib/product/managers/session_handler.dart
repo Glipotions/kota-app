@@ -98,6 +98,11 @@ class SessionHandler extends ChangeNotifier {
   }
 
   Future<void> logOut() async {
+    // Clear discount data for the current user before logging out
+    if (currentUser?.id != null) {
+      await CartController.clearDiscountDataForUser(currentUser!.id!);
+    }
+
     await Future.wait([
       LocaleManager.instance.removeAt(CacheKey.token.name),
       setLoggedIn(value: false),

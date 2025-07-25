@@ -13,6 +13,7 @@ import 'package:kota_app/product/consts/claims.dart';
 import 'package:kota_app/product/managers/session_handler.dart';
 import 'package:kota_app/product/models/cart_product_model.dart';
 import 'package:kota_app/product/navigation/modules/sub_route/sub_route_enums.dart';
+import 'package:kota_app/product/utility/enums/cache_enums.dart';
 import 'package:kota_app/product/utility/enums/currency_type.dart';
 import 'package:kota_app/product/utility/enums/general.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -33,6 +34,7 @@ class CartController extends BaseControllerInterface {
   final RxDouble cartDiscountRate = RxDouble(0);
   final TextEditingController discountController =
       TextEditingController(text: '0');
+  final FocusNode discountFocusNode = FocusNode();
 
   // Performance optimization properties
   static const int _itemsPerPage = 50;
@@ -71,6 +73,17 @@ class CartController extends BaseControllerInterface {
     await onReadyGeneric(() async {
       updateCurrencyValues();
       await loadCartItems();
+      _setupDiscountFocusListener();
+    });
+  }
+
+  /// Setup focus listener for discount field to format on focus loss
+  void _setupDiscountFocusListener() {
+    discountFocusNode.addListener(() {
+      if (!discountFocusNode.hasFocus) {
+        // Format the discount rate when focus is lost
+        formatDiscountRate();
+      }
     });
   }
 
@@ -90,6 +103,9 @@ class CartController extends BaseControllerInterface {
         // Initialize pagination after loading items
         _initializePagination();
       }
+
+      // Load discount data after loading cart items
+      await _loadDiscountData();
     } catch (e) {
       debugPrint('Error loading cart items: $e');
     }
@@ -139,8 +155,70 @@ class CartController extends BaseControllerInterface {
       final String cartJson =
           json.encode(itemList.map((item) => item.toJson()).toList());
       await prefs.setString(_cartKey, cartJson);
+
+      // Also save discount data when saving cart items
+      await _saveDiscountData();
     } catch (e) {
       debugPrint('Error saving cart items: $e');
+    }
+  }
+
+  /// Save discount data to local storage with user-specific keys
+  Future<void> _saveDiscountData() async {
+    try {
+      // Only save discount data if user is logged in
+      if (sessionHandler.userAuthStatus != UserAuthStatus.authorized ||
+          sessionHandler.currentUser?.id == null) {
+        return;
+      }
+
+      final userId = sessionHandler.currentUser!.id!;
+      final discountRateKey = '${CacheKey.cartDiscountRate.name}_$userId';
+      final descriptionKey = '${CacheKey.cartDescription.name}_$userId';
+
+      await LocaleManager.instance.setStringValue(
+        key: discountRateKey,
+        value: cartDiscountRate.value.toString(),
+      );
+
+      await LocaleManager.instance.setStringValue(
+        key: descriptionKey,
+        value: descriptionController.text,
+      );
+    } catch (e) {
+      debugPrint('Error saving discount data: $e');
+    }
+  }
+
+  /// Load discount data from local storage with user-specific keys
+  Future<void> _loadDiscountData() async {
+    try {
+      // Only load discount data if user is logged in
+      if (sessionHandler.userAuthStatus != UserAuthStatus.authorized ||
+          sessionHandler.currentUser?.id == null) {
+        return;
+      }
+
+      final userId = sessionHandler.currentUser!.id!;
+      final discountRateKey = '${CacheKey.cartDiscountRate.name}_$userId';
+      final descriptionKey = '${CacheKey.cartDescription.name}_$userId';
+
+      final savedDiscountRate = LocaleManager.instance.getStringValue(key: discountRateKey);
+      final savedDescription = LocaleManager.instance.getStringValue(key: descriptionKey);
+
+      if (savedDiscountRate != null) {
+        final discountValue = double.tryParse(savedDiscountRate) ?? 0.0;
+        if (discountValue >= 0 && discountValue <= 100) {
+          cartDiscountRate.value = discountValue;
+          discountController.text = discountValue.toString();
+        }
+      }
+
+      if (savedDescription != null) {
+        descriptionController.text = savedDescription;
+      }
+    } catch (e) {
+      debugPrint('Error loading discount data: $e');
     }
   }
 
@@ -155,6 +233,47 @@ class CartController extends BaseControllerInterface {
     descriptionController.text = '';
     discountController.text = '0';
     cartDiscountRate.value = 0;
+
+    // Clear discount data from storage
+    await _clearDiscountData();
+  }
+
+  /// Clear discount data from local storage for the current user
+  Future<void> _clearDiscountData() async {
+    try {
+      // Only clear discount data if user is logged in
+      if (sessionHandler.userAuthStatus != UserAuthStatus.authorized ||
+          sessionHandler.currentUser?.id == null) {
+        return;
+      }
+
+      final userId = sessionHandler.currentUser!.id!;
+      final discountRateKey = '${CacheKey.cartDiscountRate.name}_$userId';
+      final descriptionKey = '${CacheKey.cartDescription.name}_$userId';
+
+      await LocaleManager.instance.removeAt(discountRateKey);
+      await LocaleManager.instance.removeAt(descriptionKey);
+    } catch (e) {
+      debugPrint('Error clearing discount data: $e');
+    }
+  }
+
+  /// Save description data when it changes
+  void onDescriptionChanged() {
+    _saveDiscountData();
+  }
+
+  /// Clear discount data for a specific user (used during logout)
+  static Future<void> clearDiscountDataForUser(int userId) async {
+    try {
+      final discountRateKey = '${CacheKey.cartDiscountRate.name}_$userId';
+      final descriptionKey = '${CacheKey.cartDescription.name}_$userId';
+
+      await LocaleManager.instance.removeAt(discountRateKey);
+      await LocaleManager.instance.removeAt(descriptionKey);
+    } catch (e) {
+      debugPrint('Error clearing discount data for user $userId: $e');
+    }
   }
 
   void onTapAddProduct(CartProductModel item) {
@@ -234,7 +353,25 @@ class CartController extends BaseControllerInterface {
   // Update discount rate from the text field
   void updateDiscountRate(String value) {
     try {
-      final newRate = double.parse(value);
+      // Allow empty input or just decimal separators during typing
+      if (value.isEmpty || value == '.' || value == ',') {
+        cartDiscountRate.value = 0;
+
+        // Apply zero discount rate to all items in the cart
+        for (final item in itemList) {
+          item.discountRate = 0;
+        }
+
+        // Update the cart items to trigger UI refresh
+        itemList = List<CartProductModel>.from(itemList);
+        _saveCartItems();
+        return;
+      }
+
+      // Replace comma with dot for parsing
+      final normalizedValue = value.replaceAll(',', '.');
+      final newRate = double.parse(normalizedValue);
+
       if (newRate >= 0 && newRate <= 100) {
         cartDiscountRate.value = newRate;
 
@@ -249,6 +386,47 @@ class CartController extends BaseControllerInterface {
       }
     } catch (e) {
       debugPrint('Error parsing discount rate: $e');
+    }
+  }
+
+  // Format discount rate when user finishes editing (called on focus loss)
+  void formatDiscountRate() {
+    try {
+      final currentText = discountController.text.trim();
+
+      // Handle empty input
+      if (currentText.isEmpty) {
+        discountController.text = '0';
+        cartDiscountRate.value = 0;
+        return;
+      }
+
+      // Replace comma with dot for parsing
+      final normalizedValue = currentText.replaceAll(',', '.');
+      final rate = double.parse(normalizedValue);
+
+      if (rate >= 0 && rate <= 100) {
+        // Format the number properly - remove unnecessary decimal places
+        final formattedRate = rate == rate.toInt() ? rate.toInt().toString() : rate.toString();
+
+        // Only update if the formatted value is different from current text
+        if (discountController.text != formattedRate) {
+          discountController.text = formattedRate;
+        }
+
+        cartDiscountRate.value = rate;
+      } else {
+        // Reset to valid range
+        final clampedRate = rate.clamp(0.0, 100.0);
+        final formattedRate = clampedRate == clampedRate.toInt() ? clampedRate.toInt().toString() : clampedRate.toString();
+        discountController.text = formattedRate;
+        cartDiscountRate.value = clampedRate;
+      }
+    } catch (e) {
+      debugPrint('Error formatting discount rate: $e');
+      // Reset to 0 on error
+      discountController.text = '0';
+      cartDiscountRate.value = 0;
     }
   }
 
@@ -614,6 +792,7 @@ class CartController extends BaseControllerInterface {
   void onClose() {
     descriptionController.dispose();
     discountController.dispose();
+    discountFocusNode.dispose();
     super.onClose();
   }
 }

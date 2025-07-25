@@ -14,6 +14,12 @@ enum CacheKey {
   isRemember,
   /// Key that holds user roles
   userRoles,
+
+  /// Key that holds cart discount rate for logged-in users
+  cartDiscountRate,
+
+  /// Key that holds cart description for logged-in users
+  cartDescription,
 }
 
 

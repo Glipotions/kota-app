@@ -1,18 +1,17 @@
 import 'dart:async';
 
 import 'package:api/api.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:get/get.dart';
-import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:common/common.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:kota_app/features/main/all_products_screen/controller/all_products_controller.dart';
 import 'package:kota_app/features/main/all_products_screen/view/components/filter_bottom_sheet.dart';
 import 'package:kota_app/product/base/base_view.dart';
 import 'package:kota_app/product/utility/enums/module_padding_enums.dart';
 import 'package:kota_app/product/widgets/app_bar/general_app_bar.dart';
-import 'package:kota_app/product/widgets/card/bordered_image.dart';
 import 'package:kota_app/product/widgets/badge/new_product_badge.dart';
+import 'package:kota_app/product/widgets/card/bordered_image.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:values/values.dart';
 
 part 'components/product_card.dart';

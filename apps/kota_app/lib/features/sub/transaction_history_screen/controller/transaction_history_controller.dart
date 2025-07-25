@@ -380,7 +380,7 @@ class TransactionHistoryController extends BaseControllerInterface {
                             ? '${tx.tarih!.day}/${tx.tarih!.month}/${tx.tarih!.year}'
                             : '',
                         style: pw.TextStyle(
-                            font: ttfRegular, fontSize: rowFontSize),
+                            font: ttfRegular, fontSize: rowFontSize,),
                       ),
                     ),
                     pw.Padding(
@@ -388,7 +388,7 @@ class TransactionHistoryController extends BaseControllerInterface {
                       child: pw.Text(
                         tx.fisNo ?? '',
                         style: pw.TextStyle(
-                            font: ttfRegular, fontSize: rowFontSize),
+                            font: ttfRegular, fontSize: rowFontSize,),
                       ),
                     ),
                     pw.Padding(
@@ -396,7 +396,7 @@ class TransactionHistoryController extends BaseControllerInterface {
                       child: pw.Text(
                         tx.fisTuru ?? '',
                         style: pw.TextStyle(
-                            font: ttfRegular, fontSize: rowFontSize),
+                            font: ttfRegular, fontSize: rowFontSize,),
                       ),
                     ),
                     pw.Padding(
@@ -404,7 +404,7 @@ class TransactionHistoryController extends BaseControllerInterface {
                       child: pw.Text(
                         tx.aciklama ?? '',
                         style: pw.TextStyle(
-                            font: ttfRegular, fontSize: rowFontSize),
+                            font: ttfRegular, fontSize: rowFontSize,),
                       ),
                     ),
                     pw.Padding(
@@ -414,7 +414,7 @@ class TransactionHistoryController extends BaseControllerInterface {
                             ? debitValue.formatPrice()
                             : 0.formatPrice(),
                         style: pw.TextStyle(
-                            font: ttfRegular, fontSize: rowFontSize),
+                            font: ttfRegular, fontSize: rowFontSize,),
                         textAlign: pw.TextAlign.right,
                       ),
                     ),
@@ -425,7 +425,7 @@ class TransactionHistoryController extends BaseControllerInterface {
                             ? creditValue.formatPrice()
                             : 0.formatPrice(),
                         style: pw.TextStyle(
-                            font: ttfRegular, fontSize: rowFontSize),
+                            font: ttfRegular, fontSize: rowFontSize,),
                         textAlign: pw.TextAlign.right,
                       ),
                     ),
@@ -436,7 +436,7 @@ class TransactionHistoryController extends BaseControllerInterface {
                             ? balanceValue.formatPrice()
                             : 0.formatPrice(),
                         style: pw.TextStyle(
-                            font: ttfRegular, fontSize: rowFontSize),
+                            font: ttfRegular, fontSize: rowFontSize,),
                         textAlign: pw.TextAlign.right,
                       ),
                     ),

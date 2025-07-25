@@ -1,10 +1,8 @@
 import 'package:api/api.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kota_app/product/base/controller/base_controller.dart';
 import 'package:kota_app/product/models/cart_product_model.dart';
 import 'package:kota_app/product/utility/enums/currency_type.dart';
-import 'package:widgets/widget.dart';
 
 class OrderHistoryDetailController extends BaseControllerInterface {
   OrderHistoryDetailController({required this.id, this.isActiveOrder = false});

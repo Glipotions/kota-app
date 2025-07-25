@@ -440,6 +440,7 @@ class _CartState extends State<Cart> {
                                         Expanded(
                                           child: TextField(
                                             controller: controller.discountController,
+                                            focusNode: controller.discountFocusNode,
                                             keyboardType: const TextInputType.numberWithOptions(decimal: true),
                                             decoration: InputDecoration(
                                               hintText: '0-100',
@@ -514,6 +515,7 @@ class _CartState extends State<Cart> {
                                         ),
                                       ),
                                       maxLines: 3,
+                                      onChanged: (_) => controller.onDescriptionChanged(),
                                       onEditingComplete: () {
                                         // Force keyboard to dismiss
                                         FocusScope.of(context).unfocus();
